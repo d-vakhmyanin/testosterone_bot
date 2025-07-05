@@ -1,7 +1,9 @@
 import { Telegraf } from 'telegraf';
 
 import { COMMANDS } from './commands';
-import { getRandom } from '../utils';
+import { addUserToList } from './register';
+
+import { getRandom } from '../utils/getRandom';
 
 const welcomeText = `
 🔥 <b>TESTOSTERONE BOT</b> 🔥
@@ -66,7 +68,18 @@ export const start = () => {
 
     bot.action('not_lox', async (ctx) => {
         await ctx.answerCbQuery();
-        ctx.replyWithHTML(getRandom(motivators));
+
+        const chatId = ctx.chat?.id;
+
+        if (chatId) {
+            if (addUserToList(chatId, ctx.from)) {
+                return ctx.replyWithHTML(getRandom(motivators));
+            } else {
+                ctx.reply('Ты долбоёб? Ты и так зареган');
+            }
+        } else {
+            ctx.reply('Что-то пошло не так. Скорее всего в этом виноват ты');
+        }
     });
 
     bot.action('im_weak', async (ctx) => {

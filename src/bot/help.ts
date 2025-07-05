@@ -1,4 +1,5 @@
-import { Command, COMMAND_LIST } from './commands';
+import { Command, COMMAND_LIST, COMMANDS } from './commands';
+
 import { Bot } from '../types';
 
 const getDescription = (command: Command) => {
@@ -7,6 +8,10 @@ const getDescription = (command: Command) => {
             return 'Показать эпичное приветствие снова';
         case 'register':
             return 'Записаться в ряды железных братьев (ОБЯЗАТЕЛЬНО!)';
+        case 'unregister':
+            return 'Официально заявить о своей слабохарактерности и выйти из списка качков (после этого твои "яйца" растворятся в воздухе)';
+        case 'list':
+            return 'ТОП-10 людей, которые делают вид, что качаются';
         case 'gym':
             return 'Отметить сегодняшнюю битву с железом';
         case 'stats':
@@ -38,7 +43,7 @@ const postfix = `
   `;
 
 export const help = (bot: Bot) => {
-    bot.command('help', (ctx) => {
+    bot.command(COMMANDS.help, (ctx) => {
         const helpText = `${prefix}
         ${descriprions}
         ${postfix}`;

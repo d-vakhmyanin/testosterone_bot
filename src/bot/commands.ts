@@ -1,6 +1,8 @@
 export const COMMAND_LIST = [
     'start',
     'register',
+    'unregister',
+    'list',
     'gym',
     'stats',
     'shame',
