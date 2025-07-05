@@ -3,6 +3,9 @@ import { help } from './help';
 import { register } from './register';
 import { unregister } from './unregister';
 import { list } from './list';
+import { gym } from './gym';
+import { shame } from './shame';
+import { stats } from './stats';
 
 // Запуск бота
 export const launchBot = () => {
@@ -12,6 +15,9 @@ export const launchBot = () => {
     register(bot);
     unregister(bot);
     list(bot);
+    gym(bot);
+    shame(bot);
+    stats(bot);
 
     bot.launch();
 };

@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { User } from 'telegraf/typings/core/types/typegram';
+
+import { ChatData } from '../types';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -12,10 +13,6 @@ const getPaths = (chatId: number) => {
 
     return { dirPath, filePath };
 };
-
-type ChatData = Partial<{
-    participants: User[];
-}>;
 
 // Функция для загрузки данных чата
 export const loadChatData = (chatId: number): ChatData => {
