@@ -1,7 +1,14 @@
-const commandList = ['start', 'gym', 'stats', 'shame'] as const;
+export const COMMAND_LIST = [
+    'start',
+    'register',
+    'gym',
+    'stats',
+    'shame',
+    'help',
+] as const;
 
-type Command = (typeof commandList)[number];
+export type Command = (typeof COMMAND_LIST)[number];
 
-export const COMMANDS = commandList.reduce<{
+export const COMMANDS = COMMAND_LIST.reduce<{
     [K in Command]: K;
 }>((acc, cur) => ({ ...acc, [cur]: cur }), {} as any);
