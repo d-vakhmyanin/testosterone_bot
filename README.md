@@ -114,4 +114,3 @@ ISC. Качайся на здоровье.
 
 ---
 
-> Для тех, кто не ищет лёгких путей | [@iron_developer](https://t.me/dVakhmyanin)
