@@ -1,5 +1,6 @@
 import { Context, NarrowedContext } from 'telegraf';
 import { Message, Update } from 'telegraf/typings/core/types/typegram';
+
 import { Bot } from '../types';
 import { loadChatData, saveChatData } from '../utils/fs';
 import { getUsername } from '../utils/getUsername';

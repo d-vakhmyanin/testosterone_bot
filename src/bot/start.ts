@@ -1,10 +1,8 @@
-import { Telegraf } from 'telegraf';
-
 import { COMMANDS } from './commands';
 import { addUserToList } from './register';
 
 import { getRandom } from '../utils/getRandom';
-import { createCronJob } from '../cron/cron';
+import { Bot } from '../types';
 
 const welcomeText = `
 🔥 <b>TESTOSTERONE BOT</b> 🔥
@@ -49,15 +47,7 @@ const motivators = [
 ];
 
 // создание и обработка команды /start
-export const start = () => {
-    const token = process.env.TG_TOKEN;
-
-    if (typeof token !== 'string') {
-        throw new Error('No tg token');
-    }
-
-    const bot = new Telegraf(token);
-
+export const start = (bot: Bot) => {
     bot.command(COMMANDS.start, (ctx) => {
         ctx.replyWithHTML(welcomeText, {
             reply_markup: {
@@ -67,8 +57,6 @@ export const start = () => {
                 ],
             },
         });
-
-        createCronJob(bot, ctx.chat.id);
     });
 
     bot.action('not_lox', async (ctx) => {
@@ -98,6 +86,4 @@ export const start = () => {
 
         ctx.replyWithHTML(`${userTag}${reply}`);
     });
-
-    return bot;
 };

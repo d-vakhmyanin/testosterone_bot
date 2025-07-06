@@ -4,6 +4,8 @@ import { calculateAllStats } from '../bot/stats';
 import { saveChatData } from '../utils/fs';
 import { Bot } from '../types';
 
+const mapNames = (arr: { name: unknown }[]) => arr.map(({ name }) => name).join(', ').slice(0, -2);
+
 // 1. Функция для ежемесячного расчета статистики
 const calculateMonthlyStats = (bot: Bot, chatId: number) => {
     const now = new Date();
@@ -19,14 +21,8 @@ const calculateMonthlyStats = (bot: Bot, chatId: number) => {
     const isWorstUserFound =
         bestStat.totalScore > worstStat.totalScore && worstStat.perfectCount < idealDays.length;
 
-    const bestUserNames = bestStats
-        .map(({ name }) => name)
-        .join(', ')
-        .slice(0, -2);
-    const worstUserNames = worstStats
-        .map(({ name }) => name)
-        .join(', ')
-        .slice(0, -2);
+    const bestUserNames = mapNames(bestStats)
+    const worstUserNames = mapNames(worstStats)
 
     let fullMessage = `
 <b> ❗ВСЕМ ВНИМАНИЕ❗ </b>
@@ -67,8 +63,8 @@ const handleTick = async (...params: Parameters<typeof calculateMonthlyStats>) =
 
 const chatIdsMap: Record<number, boolean> = {};
 
-export const createCronJob = (...[bot, chatId]: Parameters<typeof calculateMonthlyStats>) => {
-    if (chatId in chatIdsMap) {
+export const createCronJob = (...[bot, chatId]: Partial<Parameters<typeof calculateMonthlyStats>>) => {
+    if (!chatId || !bot || chatId in chatIdsMap) {
         return;
     }
 

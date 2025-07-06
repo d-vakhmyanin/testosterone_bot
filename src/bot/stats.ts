@@ -5,7 +5,6 @@ import { loadChatData } from '../utils/fs';
 import { getRandom } from '../utils/getRandom';
 import { getIdealDaysForMonth } from '../utils/getIdealDaysForMonth';
 import { getUserDataStat } from '../utils/getUserDataStat';
-import { MONTH_NAMES } from '../utils/monthNames';
 
 const notRegisteredResponses = ['Петух раскомандовался. /register, для начала!', 'Нет. Иди нахуй /register'];
 
@@ -56,11 +55,11 @@ export const calculateAllStats = (chatId: number, currentDate: Date) => {
     const footer = `<code>└────────────┴────┴────┴────┴────┴───────┘</code>`;
 
     // 5. Формируем сообщение
-    const monthName = MONTH_NAMES[month];
+    const monthName =  new Date(2023, month, 1).toLocaleString('ru-RU', { month: 'long' }).toUpperCase();
     let message = `
 <b> ПОВЕРНИ МОБИЛУ ГОРИЗОНТАЛЬНО</b>
 
-<b>📊 СТАТИСТИКА | ${monthName.toUpperCase()}</b>
+<b>📊 СТАТИСТИКА | ${monthName}</b>
 
 ${header}
 ${rows.join('\n')}
