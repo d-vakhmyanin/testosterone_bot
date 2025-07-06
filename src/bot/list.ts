@@ -3,6 +3,7 @@ import { COMMANDS } from './commands';
 import { Bot } from '../types';
 import { loadChatData } from '../utils/fs';
 import { getRandom } from '../utils/getRandom';
+import { getUsername } from '../utils/getUsername';
 
 const emptyListresponses = [
     'Ноль. Столько же раз ты вспоминал о приседе.',
@@ -32,9 +33,7 @@ export const list = (bot: Bot) => {
 
         ctx.replyWithHTML(
             `📋 <b>${getRandom(responses)}</b>\n\n` +
-                participants
-                    .map(({ first_name, last_name }) => first_name + last_name)
-                    .join('\n') +
+                participants.map(getUsername).join('\n') +
                 `\n\nВсего: <b>${participants.length}</b> человек\n` +
                 '<code>Не числом, а упорством!</code>'
         );

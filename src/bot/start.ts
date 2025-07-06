@@ -75,21 +75,28 @@ export const start = () => {
         await ctx.answerCbQuery();
 
         const chatId = ctx.chat?.id;
+        const userTag = ctx.from.username ? `@${ctx.from.username} ` : '';
 
         if (chatId) {
             if (addUserToList(chatId, ctx.from)) {
-                return ctx.replyWithHTML(getRandom(motivators));
+                const reply = getRandom(motivators);
+
+                return ctx.replyWithHTML(`${userTag}${reply}`);
             } else {
-                ctx.reply('Ты долбоёб? Ты и так зареган');
+                ctx.reply(`${userTag}Ты долбоёб? Ты и так зареган`);
             }
         } else {
-            ctx.reply('Что-то пошло не так. Скорее всего в этом виноват ты');
+            ctx.reply(`${userTag}Ты долбоёб? Что-то пошло не так. Скорее всего в этом виноват ты`);
         }
     });
 
     bot.action('im_weak', async (ctx) => {
+        const userTag = ctx.from.username ? `@${ctx.from.username} ` : '';
+
         await ctx.answerCbQuery();
-        ctx.replyWithHTML(getRandom(roastMessages));
+        const reply = getRandom(roastMessages);
+
+        ctx.replyWithHTML(`${userTag}${reply}`);
     });
 
     return bot;

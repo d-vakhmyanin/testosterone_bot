@@ -72,8 +72,9 @@ export const message = (bot: Bot) => {
             const usersToCheck = isAdmin ? chatData.participants?.map(({ id }) => id) || [userId] : [userId];
 
             usersToCheck.forEach((uId) => {
-                const data = chatData[month]![uId][day];
-                if (data.message_id === messageId) {
+                const data = chatData[month]?.[uId]?.[day];
+
+                if (data && data.message_id === messageId) {
                     const newData = { ...chatData };
                     const user = chatData.participants?.find(({ id }) => id === uId);
                     const userName = user ? ` ${getUsername(user)}` : '';
