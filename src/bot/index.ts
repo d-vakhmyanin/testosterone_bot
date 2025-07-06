@@ -6,6 +6,8 @@ import { list } from './list';
 import { gym } from './gym';
 import { shame } from './shame';
 import { stats } from './stats';
+import { details } from './details';
+import { message } from './message';
 
 // Запуск бота
 export const launchBot = () => {
@@ -18,6 +20,9 @@ export const launchBot = () => {
     gym(bot);
     shame(bot);
     stats(bot);
+    details(bot);
+
+    message(bot);
 
     bot.launch();
 };

@@ -7,6 +7,7 @@ import { UserTrainsData } from '../types';
 
 type UserDataStat = {
     name: string;
+    userId: number;
     perfectCount: number;
     goodCount: number;
     extraCount: number;
@@ -17,7 +18,7 @@ type UserDataStat = {
 export const getUserDataStat = (
     idealDays: number[],
     user: User,
-    userTrainsData: UserTrainsData
+    userTrainsData: UserTrainsData = {}
 ): UserDataStat => {
     let perfectCount = 0;
     let goodCount = 0;
@@ -44,6 +45,7 @@ export const getUserDataStat = (
 
     return {
         name: getUsername(user),
+        userId: user.id,
         perfectCount,
         goodCount,
         extraCount,

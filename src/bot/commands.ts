@@ -6,6 +6,7 @@ export const COMMAND_LIST = [
     'gym',
     'stats',
     'shame',
+    'details',
     'help',
 ] as const;
 

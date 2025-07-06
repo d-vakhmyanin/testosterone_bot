@@ -4,6 +4,7 @@ import { COMMANDS } from './commands';
 import { addUserToList } from './register';
 
 import { getRandom } from '../utils/getRandom';
+import { createCronJob } from '../cron/cron';
 
 const welcomeText = `
 🔥 <b>TESTOSTERONE BOT</b> 🔥
@@ -66,6 +67,8 @@ export const start = () => {
                 ],
             },
         });
+
+        createCronJob(bot, ctx.chat.id);
     });
 
     bot.action('not_lox', async (ctx) => {

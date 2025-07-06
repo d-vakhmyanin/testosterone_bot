@@ -70,6 +70,19 @@ export const gym = (bot: Bot) => {
 
         const count = Object.keys(newData[month]![userId]).length;
 
-        ctx.reply(getRandom(successResponses)(count));
+        ctx.reply(getRandom(successResponses)(count)).then((data) => {
+            const dataWithMessageId = {
+                ...newData,
+                [month]: {
+                    ...newData[month],
+                    [userId]: {
+                        ...newData[month]![userId],
+                        [date]: { ...newData[month]![userId][date], message_id: data.message_id },
+                    },
+                },
+            };
+
+            saveChatData(chatId, dataWithMessageId);
+        });
     });
 };

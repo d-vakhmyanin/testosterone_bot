@@ -16,65 +16,48 @@ const trainingQuotes = [
     'Здесь каждый найдет свой уровень слабости',
 ];
 
-export const stats = (bot: Bot) => {
-    bot.command(COMMANDS.stats, (ctx) => {
-        const userId = ctx.from.id;
-        const chatId = ctx.chat.id;
+export const calculateAllStats = (chatId: number, currentDate: Date) => {
+    // Загружаем данные чата
+    const chatData = loadChatData(chatId);
 
-        // Загружаем данные чата
-        const chatData = loadChatData(chatId);
-        const { participants = [] } = chatData;
+    const month = currentDate.getMonth();
+    const date = currentDate.getDate();
+    const monthData = chatData[month];
 
-        // Проверяем регистрацию
-        if (!participants.map(({ id }) => id).includes(userId)) {
-            return ctx.reply(getRandom(notRegisteredResponses));
-        }
+    // 2. Собираем статистику по каждому
+    const allStats: ReturnType<typeof getUserDataStat>[] = [];
 
-        const currentDate = new Date();
-        const month = currentDate.getMonth();
-        const date = currentDate.getDate();
-        const monthData = chatData[month];
+    const idealDays = getIdealDaysForMonth(month);
+    const passedIdealDays = idealDays.filter((day) => day <= date);
 
-        if (!monthData || !chatData.participants) {
-            return ctx.reply(
-                '🔧 <b>Ошибка:</b> Не удалось загрузить статистику\n<code>Скорее всего, вы, маслята, слишком мало ходите в качалку</code>'
-            );
-        }
+    chatData.participants?.forEach((user) => {
+        const userTrainsData = monthData?.[user.id];
+        allStats.push(getUserDataStat(passedIdealDays, user, userTrainsData));
+    });
 
-        // 2. Собираем статистику по каждому
-        const allStats: ReturnType<typeof getUserDataStat>[] = [];
+    // 3. Сортируем по убыванию баллов
+    allStats.sort((a, b) => b.totalScore - a.totalScore);
 
-        const idealDays = getIdealDaysForMonth(month);
-        const passedIdealDays = idealDays.filter((day) => day <= date);
-
-        chatData.participants.forEach((user) => {
-            const userTrainsData = monthData[user.id];
-            allStats.push(getUserDataStat(passedIdealDays, user, userTrainsData));
-        });
-
-        // 3. Сортируем по убыванию баллов
-        allStats.sort((a, b) => b.totalScore - a.totalScore);
-
-        // 4. Формируем строки таблицы
-        const header = `
+    // 4. Формируем строки таблицы
+    const header = `
 <code>┌────────────┬────┬────┬────┬────┬───────┐
 │ Участник   │ ✅ │ ⏱ │ 📅 │ 💀│ Балл  │
 ├────────────┼────┼────┼────┼────┼───────┤</code>`;
 
-        const rows = allStats.map((user) => {
-            const name = user.name.padEnd(10).slice(0, 10);
-            return `<code>│ ${name} │ ${user.perfectCount.toString().padStart(2)} │ ${user.goodCount
-                .toString()
-                .padStart(2)} │ ${user.extraCount.toString().padStart(2)} │ ${user.missedCount
-                .toString()
-                .padStart(2)} │ ${user.totalScore.toFixed(1).padStart(5)} │</code>`;
-        });
+    const rows = allStats.map((user) => {
+        const name = user.name.padEnd(10).slice(0, 10);
+        return `<code>│ ${name} │ ${user.perfectCount.toString().padStart(2)} │ ${user.goodCount
+            .toString()
+            .padStart(2)} │ ${user.extraCount.toString().padStart(2)} │ ${user.missedCount
+            .toString()
+            .padStart(2)} │ ${user.totalScore.toFixed(1).padStart(5)} │</code>`;
+    });
 
-        const footer = `<code>└────────────┴────┴────┴────┴────┴───────┘</code>`;
+    const footer = `<code>└────────────┴────┴────┴────┴────┴───────┘</code>`;
 
-        // 5. Формируем сообщение
-        const monthName = MONTH_NAMES[month];
-        let message = `
+    // 5. Формируем сообщение
+    const monthName = MONTH_NAMES[month];
+    let message = `
 <b> ПОВЕРНИ МОБИЛУ ГОРИЗОНТАЛЬНО</b>
 
 <b>📊 СТАТИСТИКА | ${monthName.toUpperCase()}</b>
@@ -92,7 +75,38 @@ ${footer}
 📊 Всего тренировок в месяце: ${idealDays.length}
 `;
 
-        message += `\n<code>${getRandom(trainingQuotes)}</code>`;
+    message += `\n<code>${getRandom(trainingQuotes)}</code>`;
+    message += `\n\nКак рассчитывается конечный бал - /details`;
+
+    return {
+        chatData,
+        allStats,
+        message,
+        idealDays,
+    };
+};
+
+export const stats = (bot: Bot) => {
+    bot.command(COMMANDS.stats, (ctx) => {
+        const userId = ctx.from.id;
+        const chatId = ctx.chat.id;
+        const currentDate = new Date();
+
+        const { chatData, message } = calculateAllStats(chatId, currentDate);
+        const { participants = [] } = chatData;
+
+        // Проверяем регистрацию
+        if (!participants.map(({ id }) => id).includes(userId)) {
+            return ctx.reply(getRandom(notRegisteredResponses));
+        }
+
+        const monthData = chatData[currentDate.getMonth()];
+
+        if (!monthData || !chatData.participants) {
+            return ctx.reply(
+                '🔧 <b>Ошибка:</b> Не удалось загрузить статистику\n<code>Скорее всего, вы, маслята, слишком мало ходите в качалку</code>'
+            );
+        }
 
         // 6. Отправляем сообщение
         ctx.replyWithHTML(message);
