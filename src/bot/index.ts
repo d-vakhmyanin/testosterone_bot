@@ -28,8 +28,7 @@ const init = () => {
     });
 
     return bot;
-}
-
+};
 
 // Запуск бота
 export const launchBot = () => {

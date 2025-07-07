@@ -4,7 +4,11 @@ import { calculateAllStats } from '../bot/stats';
 import { saveChatData } from '../utils/fs';
 import { Bot } from '../types';
 
-const mapNames = (arr: { name: unknown }[]) => arr.map(({ name }) => name).join(', ').slice(0, -2);
+const mapNames = (arr: { name: unknown }[]) =>
+    arr
+        .map(({ name }) => name)
+        .join(', ')
+        .slice(0, -2);
 
 // 1. Функция для ежемесячного расчета статистики
 const calculateMonthlyStats = (bot: Bot, chatId: number) => {
@@ -21,8 +25,8 @@ const calculateMonthlyStats = (bot: Bot, chatId: number) => {
     const isWorstUserFound =
         bestStat.totalScore > worstStat.totalScore && worstStat.perfectCount < idealDays.length;
 
-    const bestUserNames = mapNames(bestStats)
-    const worstUserNames = mapNames(worstStats)
+    const bestUserNames = mapNames(bestStats);
+    const worstUserNames = mapNames(worstStats);
 
     let fullMessage = `
 <b> ❗ВСЕМ ВНИМАНИЕ❗ </b>
@@ -42,7 +46,7 @@ ${worstUserNames}! БЛИЖАЙШИЙ МЕСЯЦ НАДОЛГО ЗАПОМНИТ
         const worstUserIds = worstStats.map(({ userId }) => userId);
         const worstUsers = chatData.participants?.filter(({ id }) => worstUserIds.includes(id));
 
-        // 5. Сохраняем статистику в БД
+        // 5. Сохраняем статистику
         saveChatData(chatId, { ...chatData, [month]: { ...chatData[month], shame: worstUsers } });
     }
 

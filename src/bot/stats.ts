@@ -55,7 +55,7 @@ export const calculateAllStats = (chatId: number, currentDate: Date) => {
     const footer = `<code>└────────────┴────┴────┴────┴────┴───────┘</code>`;
 
     // 5. Формируем сообщение
-    const monthName =  new Date(2023, month, 1).toLocaleString('ru-RU', { month: 'long' }).toUpperCase();
+    const monthName = new Date(2023, month, 1).toLocaleString('ru-RU', { month: 'long' }).toUpperCase();
     let message = `
 <b> ПОВЕРНИ МОБИЛУ ГОРИЗОНТАЛЬНО</b>
 

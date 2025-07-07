@@ -52,7 +52,7 @@ export const message = (bot: Bot) => {
 
         if (
             ctx.message.reply_to_message &&
-            ctx.message.reply_to_message.from?.username === 'testosterone_super_bot' &&
+            ctx.message.reply_to_message.from?.username === process.env.BOT_USERNAME &&
             (isCancell || isWrongTime)
         ) {
             const chatId = ctx.chat.id;

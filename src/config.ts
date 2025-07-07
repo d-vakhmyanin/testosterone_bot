@@ -1,9 +1,4 @@
-const TRAINING_TIER = [
-    'PERFECT',
-    'GOOD_DAY_BAD_TIME',
-    'BAD_DAY',
-    'SKIP',
-] as const;
+const TRAINING_TIER = ['PERFECT', 'GOOD_DAY_BAD_TIME', 'BAD_DAY', 'SKIP'] as const;
 
 type TrainingTierType = (typeof TRAINING_TIER)[number];
 
