@@ -22,6 +22,8 @@ const getDescription = (command: Command) => {
             return 'Если вдруг забыл, как пользоваться кнопками (опять)';
         case 'details':
             return 'Подробнее о том, как рассчитывается итоговый балл';
+        case 'shame_details':
+            return 'Подробнее о процессе выявления маслят';
         default:
             return 'Ваще хз что делает';
     }

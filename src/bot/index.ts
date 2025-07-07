@@ -10,6 +10,7 @@ import { shame } from './shame';
 import { stats } from './stats';
 import { details } from './details';
 import { message } from './message';
+import { shame_details } from './shame_details';
 
 import { createCronJob } from '../cron/cron';
 
@@ -43,6 +44,7 @@ export const launchBot = () => {
     shame(bot);
     stats(bot);
     details(bot);
+    shame_details(bot);
 
     message(bot);
 

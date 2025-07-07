@@ -8,6 +8,7 @@ export const COMMAND_LIST = [
     'shame',
     'details',
     'help',
+    'shame_details',
 ] as const;
 
 export type Command = (typeof COMMAND_LIST)[number];

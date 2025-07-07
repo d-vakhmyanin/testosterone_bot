@@ -3,7 +3,7 @@ import { COMMANDS } from './commands';
 import { Bot } from '../types';
 import { loadChatData } from '../utils/fs';
 import { getRandom } from '../utils/getRandom';
-import { getUsername } from '../utils/getUsername';
+import { getUsernameTag } from '../utils/getUsername';
 
 const noUserResponses = [
     'Система не видит явного лоха. Но это ненадолго!',
@@ -74,9 +74,9 @@ export const shame = (bot: Bot) => {
         if (!shameUsers?.length) {
             return ctx.replyWithHTML(getRandom(noUserResponses));
         } else if (shameUsers.length === 1) {
-            return ctx.replyWithHTML(getRandom(singleShameResponses)(getUsername(shameUsers[0])));
+            return ctx.replyWithHTML(getRandom(singleShameResponses)(getUsernameTag(shameUsers[0])));
         } else {
-            return ctx.replyWithHTML(getGroupShameMessage(shameUsers.map(getUsername), shameUsers.length));
+            return ctx.replyWithHTML(getGroupShameMessage(shameUsers.map(getUsernameTag), shameUsers.length));
         }
     });
 };
