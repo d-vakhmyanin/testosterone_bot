@@ -12,7 +12,9 @@ import { details } from './details';
 import { message } from './message';
 import { shame_details } from './shame_details';
 
-import { createCronJob } from '../cron/cron';
+import { createMonthlyCronJob } from '../cron/monthlyСron';
+import { replyToMessage } from '../utils/replyToMessage';
+import { createDailyCronJob } from '../cron/dailyCron';
 
 const init = () => {
     const token = process.env.TG_TOKEN;
@@ -24,8 +26,13 @@ const init = () => {
     const bot = new Telegraf(token);
 
     bot.use(async (ctx, next) => {
-        createCronJob(bot, ctx.chat?.id);
+        createMonthlyCronJob(bot, ctx.chat?.id);
+        createDailyCronJob(bot, ctx.chat?.id);
         await next();
+    });
+
+    bot.catch((err, ctx) => {
+        replyToMessage(ctx, `Ошибка: ${err}`);
     });
 
     return bot;

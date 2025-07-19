@@ -1,5 +1,6 @@
 import { Context, NarrowedContext } from 'telegraf';
 import { Message, Update } from 'telegraf/typings/core/types/typegram';
+import { message as messageFilter } from 'telegraf/filters';
 
 import { COMMANDS } from './commands';
 
@@ -35,7 +36,7 @@ const checkAdminStatus = async (
 
 export const message = (bot: Bot) => {
     // Обработчик ответов на сообщения бота
-    bot.on('message', async (ctx) => {
+    bot.on(messageFilter('text'), async (ctx) => {
         if (!('text' in ctx.message)) {
             return;
         }

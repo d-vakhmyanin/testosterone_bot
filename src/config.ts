@@ -7,6 +7,7 @@ type Rule = Record<TrainingTierType, { score: number; desc: string }>;
 type TrainingConfig = {
     idealDaysOfWeek: number[]; // 0-воскресенье, 1-понедельник и т.д.
     rules: Rule;
+    dailyCronConfig: { hour: number; minute: number };
 };
 
 export const TRAINING_CONFIG: TrainingConfig = {
@@ -31,4 +32,5 @@ export const TRAINING_CONFIG: TrainingConfig = {
             desc: 'Пропуск дня из idealDaysOfWeek',
         },
     },
+    dailyCronConfig: { hour: 17, minute: 0 },
 };

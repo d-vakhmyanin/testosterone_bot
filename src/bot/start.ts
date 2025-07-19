@@ -70,12 +70,12 @@ export const start = (bot: Bot) => {
             if (addUserToList(chatId, ctx.from)) {
                 const reply = getRandom(motivators);
 
-                return replyToMessage(ctx, `${userTag}${reply}`);
+                return replyToMessage(ctx, `${userTag} ${reply}`);
             } else {
-                replyToMessage(ctx, `${userTag}Ты долбоёб? Ты и так зареган`);
+                replyToMessage(ctx, `${userTag} Ты долбоёб? Ты и так зареган`);
             }
         } else {
-            replyToMessage(ctx, `${userTag}Что-то пошло не так. Скорее всего в этом виноват ты`);
+            replyToMessage(ctx, `${userTag} Что-то пошло не так. Скорее всего в этом виноват ты`);
         }
     });
 
@@ -85,6 +85,6 @@ export const start = (bot: Bot) => {
         await ctx.answerCbQuery();
         const reply = getRandom(roastMessages);
 
-        replyToMessage(ctx, `${userTag}${reply}`);
+        replyToMessage(ctx, `${userTag} ${reply}`);
     });
 };

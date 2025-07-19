@@ -1,8 +1,9 @@
 import { CronJob } from 'cron';
 
+import { ChatIdsMap, CronJobParameters } from './common';
+
 import { calculateAllStats } from '../bot/stats';
 import { saveChatData } from '../utils/fs';
-import { Bot } from '../types';
 
 const mapNames = (arr: { name: unknown }[]) =>
     arr
@@ -11,7 +12,7 @@ const mapNames = (arr: { name: unknown }[]) =>
         .slice(0, -2);
 
 // 1. Функция для ежемесячного расчета статистики
-const calculateMonthlyStats = (bot: Bot, chatId: number) => {
+const calculateMonthlyStats = (...[bot, chatId]: CronJobParameters) => {
     const now = new Date();
     const month = now.getMonth();
 
@@ -54,7 +55,7 @@ ${worstUserNames}! БЛИЖАЙШИЙ МЕСЯЦ НАДОЛГО ЗАПОМНИТ
     bot.telegram.sendMessage(chatId, fullMessage, { parse_mode: 'HTML' });
 };
 
-const handleTick = async (...params: Parameters<typeof calculateMonthlyStats>) => {
+const handleTick = async (...params: CronJobParameters) => {
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -65,9 +66,9 @@ const handleTick = async (...params: Parameters<typeof calculateMonthlyStats>) =
     }
 };
 
-const chatIdsMap: Record<number, boolean> = {};
+const chatIdsMap: ChatIdsMap = {};
 
-export const createCronJob = (...[bot, chatId]: Partial<Parameters<typeof calculateMonthlyStats>>) => {
+export const createMonthlyCronJob = (...[bot, chatId]: Partial<CronJobParameters>) => {
     if (!chatId || !bot || chatId in chatIdsMap) {
         return;
     }
