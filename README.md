@@ -60,7 +60,6 @@ npm install
 
 ```env
 TG_TOKEN=ваш_токен_бота
-BOT_USERNAME=ваш_юзернейм_бота
 ```
 
 4. Запустите:
