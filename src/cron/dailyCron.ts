@@ -62,7 +62,7 @@ const sendDailyMessage = async (...[bot, chatId]: CronJobParameters) => {
     const participants = chatData.participants || [];
     const slackers = participants.filter(({ id }) => !chatData[month]?.[id]?.[date]);
 
-    const isMolodchikiParni = true;
+    const isMolodchikiParni = slackers.length === 0;
     const videoFileName = isMolodchikiParni ? 'success' : 'angry_cat';
     const audioFileName = isMolodchikiParni ? 'davai' : 'wake_up';
 
@@ -104,6 +104,8 @@ export const createDailyCronJob = (...[bot, chatId]: Partial<CronJobParameters>)
         true, // start
         'Europe/Moscow'
     );
+
+    chatIdsMap[chatId] = true;
 
     return job;
 };
