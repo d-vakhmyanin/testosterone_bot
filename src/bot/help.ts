@@ -1,6 +1,7 @@
 import { Command, COMMAND_LIST, COMMANDS } from './commands';
 
 import { Bot } from '../types';
+import { replyToMessage } from '../utils/replyToMessage';
 
 const getDescription = (command: Command) => {
     switch (command) {
@@ -52,6 +53,6 @@ export const help = (bot: Bot) => {
         ${descriprions}
         ${postfix}`;
 
-        ctx.replyWithHTML(helpText);
+        replyToMessage(ctx, helpText);
     });
 };

@@ -4,6 +4,7 @@ import { Bot } from '../types';
 import { loadChatData } from '../utils/fs';
 import { getRandom } from '../utils/getRandom';
 import { getUsername } from '../utils/getUsername';
+import { replyToMessage } from '../utils/replyToMessage';
 
 const emptyListresponses = [
     'Ноль. Столько же раз ты вспоминал о приседе.',
@@ -28,10 +29,11 @@ export const list = (bot: Bot) => {
         const { participants = [] } = chatData;
 
         if (participants.length === 0) {
-            return ctx.replyWithHTML(getRandom(emptyListresponses));
+            return replyToMessage(ctx, getRandom(emptyListresponses));
         }
 
-        ctx.replyWithHTML(
+        replyToMessage(
+            ctx,
             `📋 <b>${getRandom(responses)}</b>\n\n` +
                 participants.map(getUsername).join('\n') +
                 `\n\nВсего: <b>${participants.length}</b> человек\n` +

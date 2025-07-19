@@ -4,6 +4,7 @@ import { Bot } from '../types';
 import { loadChatData } from '../utils/fs';
 import { getRandom } from '../utils/getRandom';
 import { getUsernameTag } from '../utils/getUsername';
+import { replyToMessage } from '../utils/replyToMessage';
 
 const noUserResponses = [
     'Система не видит явного лоха. Но это ненадолго!',
@@ -72,11 +73,14 @@ export const shame = (bot: Bot) => {
         const shameUsers = chatData[month]?.shame || chatData[prevMonth]?.shame;
 
         if (!shameUsers?.length) {
-            return ctx.replyWithHTML(getRandom(noUserResponses));
+            return replyToMessage(ctx, getRandom(noUserResponses));
         } else if (shameUsers.length === 1) {
-            return ctx.replyWithHTML(getRandom(singleShameResponses)(getUsernameTag(shameUsers[0])));
+            return replyToMessage(ctx, getRandom(singleShameResponses)(getUsernameTag(shameUsers[0])));
         } else {
-            return ctx.replyWithHTML(getGroupShameMessage(shameUsers.map(getUsernameTag), shameUsers.length));
+            return replyToMessage(
+                ctx,
+                getGroupShameMessage(shameUsers.map(getUsernameTag), shameUsers.length)
+            );
         }
     });
 };

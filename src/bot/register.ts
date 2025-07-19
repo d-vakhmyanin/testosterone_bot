@@ -5,6 +5,7 @@ import { COMMANDS } from './commands';
 import { Bot } from '../types';
 import { loadChatData, saveChatData } from '../utils/fs';
 import { getRandom } from '../utils/getRandom';
+import { replyToMessage } from '../utils/replyToMessage';
 
 const insults = [
     'Ого, повторная регистрация! Может, сначала хоть раз на тренировку сходишь?',
@@ -38,9 +39,9 @@ export const addUserToList = (chatId: number, user: User) => {
 export const register = (bot: Bot) => {
     bot.command(COMMANDS.register, (ctx) => {
         if (addUserToList(ctx.chat.id, ctx.from)) {
-            return ctx.replyWithHTML(getRandom(responses));
+            return replyToMessage(ctx, getRandom(responses));
         }
 
-        return ctx.replyWithHTML(getRandom(insults));
+        return replyToMessage(ctx, getRandom(insults));
     });
 };

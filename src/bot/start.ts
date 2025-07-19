@@ -3,6 +3,8 @@ import { addUserToList } from './register';
 
 import { getRandom } from '../utils/getRandom';
 import { Bot } from '../types';
+import { replyToMessage } from '../utils/replyToMessage';
+import { getUsernameTag } from '../utils/getUsername';
 
 const welcomeText = `
 🔥 <b>TESTOSTERONE BOT</b> 🔥
@@ -46,10 +48,9 @@ const motivators = [
     "Добро пожаловать в мир, где 'устал' — не оправдание! 🚀",
 ];
 
-// создание и обработка команды /start
 export const start = (bot: Bot) => {
     bot.command(COMMANDS.start, (ctx) => {
-        ctx.replyWithHTML(welcomeText, {
+        replyToMessage(ctx, welcomeText, true, {
             reply_markup: {
                 inline_keyboard: [
                     [{ text: 'Я НЕ ЛОХ!', callback_data: 'not_lox' }],
@@ -63,27 +64,27 @@ export const start = (bot: Bot) => {
         await ctx.answerCbQuery();
 
         const chatId = ctx.chat?.id;
-        const userTag = ctx.from.username ? `@${ctx.from.username} ` : '';
+        const userTag = getUsernameTag(ctx.from);
 
         if (chatId) {
             if (addUserToList(chatId, ctx.from)) {
                 const reply = getRandom(motivators);
 
-                return ctx.replyWithHTML(`${userTag}${reply}`);
+                return replyToMessage(ctx, `${userTag}${reply}`);
             } else {
-                ctx.reply(`${userTag}Ты долбоёб? Ты и так зареган`);
+                replyToMessage(ctx, `${userTag}Ты долбоёб? Ты и так зареган`);
             }
         } else {
-            ctx.reply(`${userTag}Что-то пошло не так. Скорее всего в этом виноват ты`);
+            replyToMessage(ctx, `${userTag}Что-то пошло не так. Скорее всего в этом виноват ты`);
         }
     });
 
     bot.action('im_weak', async (ctx) => {
-        const userTag = ctx.from.username ? `@${ctx.from.username} ` : '';
+        const userTag = getUsernameTag(ctx.from);
 
         await ctx.answerCbQuery();
         const reply = getRandom(roastMessages);
 
-        ctx.replyWithHTML(`${userTag}${reply}`);
+        replyToMessage(ctx, `${userTag}${reply}`);
     });
 };

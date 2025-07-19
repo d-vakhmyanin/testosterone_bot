@@ -1,4 +1,5 @@
 import { Bot } from '../types';
+import { replyToMessage } from '../utils/replyToMessage';
 
 import { COMMANDS } from './commands';
 
@@ -34,6 +35,6 @@ const message = `
 
 export const shame_details = (bot: Bot) => {
     bot.command(COMMANDS.shame_details, (ctx) => {
-        return ctx.replyWithHTML(message);
+        return replyToMessage(ctx, message);
     });
 };

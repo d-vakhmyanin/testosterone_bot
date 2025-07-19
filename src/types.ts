@@ -6,7 +6,7 @@ export type Bot = Telegraf<Context<Update>>;
 type Month = number;
 type UserId = number;
 type Day = number;
-export type UserTrainsData = Record<Day, { is_right_time: boolean; message_id?: number }>;
+export type UserTrainsData = Record<Day, { is_right_time: boolean }>;
 
 type MonthData = Record<Month, Record<UserId, UserTrainsData> & { shame?: User[] }>;
 

@@ -2,6 +2,7 @@ import { COMMANDS } from './commands';
 
 import { Bot } from '../types';
 import { TRAINING_CONFIG } from '../config';
+import { replyToMessage } from '../utils/replyToMessage';
 
 const getWeekDayNames = (weekdays: number[]) =>
     weekdays
@@ -26,7 +27,9 @@ export const details = (bot: Bot) => {
     bot.command(COMMANDS.details, (ctx) => {
         const weekdayNames = getWeekDayNames(TRAINING_CONFIG.idealDaysOfWeek);
 
-        ctx.replyWithHTML(`
+        replyToMessage(
+            ctx,
+            `
 <b>📊 Система начисления баллов:</b>
 
 ✔ <u>Идеальная тренировка</u> (${weekdayNames}):
@@ -42,6 +45,7 @@ export const details = (bot: Bot) => {
 <b>${TRAINING_CONFIG.rules.SKIP.score} балла</b> (ЭТО ЗАЛЁТ, ВОИН)  
 
 <code>Ходи в нужные дни — и не станешь лохом!</code>
-`);
+`
+        );
     });
 };

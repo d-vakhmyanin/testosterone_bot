@@ -5,6 +5,7 @@ import { loadChatData } from '../utils/fs';
 import { getRandom } from '../utils/getRandom';
 import { getIdealDaysForMonth } from '../utils/getIdealDaysForMonth';
 import { getUserDataStat } from '../utils/getUserDataStat';
+import { replyToMessage } from '../utils/replyToMessage';
 
 const notRegisteredResponses = ['Петух раскомандовался. /register, для начала!', 'Нет. Иди нахуй /register'];
 
@@ -60,7 +61,6 @@ export const calculateAllStats = (chatId: number, currentDate: Date) => {
 <b> ПОВЕРНИ МОБИЛУ ГОРИЗОНТАЛЬНО</b>
 
 <b>📊 СТАТИСТИКА | ${monthName}</b>
-
 ${header}
 ${rows.join('\n')}
 ${footer}
@@ -96,18 +96,19 @@ export const stats = (bot: Bot) => {
 
         // Проверяем регистрацию
         if (!participants.map(({ id }) => id).includes(userId)) {
-            return ctx.reply(getRandom(notRegisteredResponses));
+            return replyToMessage(ctx, getRandom(notRegisteredResponses));
         }
 
         const monthData = chatData[currentDate.getMonth()];
 
         if (!monthData || !chatData.participants) {
-            return ctx.replyWithHTML(
+            return replyToMessage(
+                ctx,
                 '🔧<b>Ошибка:</b> Не удалось загрузить статистику\n<code>Скорее всего, вы, маслята, слишком мало ходите в качалку</code>'
             );
         }
 
         // 6. Отправляем сообщение
-        ctx.replyWithHTML(message);
+        replyToMessage(ctx, message);
     });
 };

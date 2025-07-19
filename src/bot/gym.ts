@@ -3,6 +3,7 @@ import { COMMANDS } from './commands';
 import { Bot } from '../types';
 import { loadChatData, saveChatData } from '../utils/fs';
 import { getRandom } from '../utils/getRandom';
+import { replyToMessage } from '../utils/replyToMessage';
 
 const notRegisteredResponses = [
     'Ты даже не зарегистрирован! Сначала /register, дебик!',
@@ -37,7 +38,7 @@ export const gym = (bot: Bot) => {
 
         // Проверяем регистрацию
         if (!participants.map(({ id }) => id).includes(userId)) {
-            return ctx.reply(getRandom(notRegisteredResponses));
+            return replyToMessage(ctx, getRandom(notRegisteredResponses));
         }
 
         const currentDate = new Date();
@@ -47,7 +48,7 @@ export const gym = (bot: Bot) => {
 
         // Проверяем, тренировался ли сегодня
         if (userData?.[date]) {
-            return ctx.reply(getRandom(alreadyTrainedResponses));
+            return replyToMessage(ctx, getRandom(alreadyTrainedResponses));
         }
 
         // Обновляем данные
@@ -69,20 +70,6 @@ export const gym = (bot: Bot) => {
         saveChatData(chatId, newData);
 
         const count = Object.keys(newData[month]![userId]).length;
-
-        ctx.reply(getRandom(successResponses)(count)).then((data) => {
-            const dataWithMessageId = {
-                ...newData,
-                [month]: {
-                    ...newData[month],
-                    [userId]: {
-                        ...newData[month]![userId],
-                        [date]: { ...newData[month]![userId][date], message_id: data.message_id },
-                    },
-                },
-            };
-
-            saveChatData(chatId, dataWithMessageId);
-        });
+        replyToMessage(ctx, getRandom(successResponses)(count));
     });
 };

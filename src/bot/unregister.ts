@@ -3,6 +3,7 @@ import { COMMANDS } from './commands';
 import { Bot } from '../types';
 import { loadChatData, saveChatData } from '../utils/fs';
 import { getRandom } from '../utils/getRandom';
+import { replyToMessage } from '../utils/replyToMessage';
 
 const notFoundResponses = [
     'Тебя нет в списках. Как и в списках тех, кто реально качается.',
@@ -32,13 +33,13 @@ export const unregister = (bot: Bot) => {
         const userIndex = participants.map(({ id }) => id).indexOf(userId);
 
         if (userIndex === -1) {
-            return ctx.replyWithHTML(getRandom(notFoundResponses));
+            return replyToMessage(ctx, getRandom(notFoundResponses));
         }
 
         // Удаляем пользователя
         participants.splice(userIndex, 1);
         saveChatData(chatId, { ...chatData, participants });
 
-        ctx.replyWithHTML(getRandom(successResponses));
+        replyToMessage(ctx, getRandom(successResponses));
     });
 };
