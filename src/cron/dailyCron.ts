@@ -75,7 +75,7 @@ const sendDailyMessage = async (...[bot, chatId]: CronJobParameters) => {
                 ? getRandom(allMarkedMessages)
                 : getRandom(slackersMessages).replace(
                       'users',
-                      slackers.map(getUsernameTag).join(', ').slice(0, -2)
+                      slackers.map(getUsernameTag).join(', ')
                   ),
         }
     );

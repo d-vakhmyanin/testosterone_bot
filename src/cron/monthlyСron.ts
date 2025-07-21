@@ -5,11 +5,7 @@ import { ChatIdsMap, CronJobParameters } from './common';
 import { calculateAllStats } from '../bot/stats';
 import { saveChatData } from '../utils/fs';
 
-const mapNames = (arr: { name: unknown }[]) =>
-    arr
-        .map(({ name }) => name)
-        .join(', ')
-        .slice(0, -2);
+const mapNames = (arr: { name: unknown }[]) => arr.map(({ name }) => name).join(', ');
 
 // 1. Функция для ежемесячного расчета статистики
 const calculateMonthlyStats = (...[bot, chatId]: CronJobParameters) => {
