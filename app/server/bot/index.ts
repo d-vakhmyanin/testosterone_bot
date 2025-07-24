@@ -12,7 +12,7 @@ import { details } from './details';
 import { message } from './message';
 import { shame_details } from './shame_details';
 
-import { createMonthlyCronJob } from '../cron/monthlyСron';
+import { createMonthlyCronJob } from '../cron/monthlyCron';
 import { replyToMessage } from '../utils/replyToMessage';
 import { createDailyCronJob } from '../cron/dailyCron';
 
@@ -39,7 +39,7 @@ const init = () => {
 };
 
 // Запуск бота
-export const launchBot = () => {
+export const initBot = () => {
     const bot = init();
 
     start(bot);
@@ -55,5 +55,5 @@ export const launchBot = () => {
 
     message(bot);
 
-    bot.launch();
+    return bot;
 };

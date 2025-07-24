@@ -1,4 +1,3 @@
-import { getRandom } from './../utils/getRandom';
 import { CronJob } from 'cron';
 
 import { ChatIdsMap, CronJobParameters } from './common';
@@ -6,6 +5,7 @@ import { ChatIdsMap, CronJobParameters } from './common';
 import { TRAINING_CONFIG } from './../config';
 import { loadChatData } from '../utils/fs';
 import { getUsernameTag } from '../utils/getUsername';
+import { getRandom } from './../utils/getRandom';
 
 const allMarkedMessages = [
     "Все отметились? Серьёзно? 😏 Роман Борисыч пока не верит. Он уже готовит 'сюрприз' для тех, кто не явится. ⏰",

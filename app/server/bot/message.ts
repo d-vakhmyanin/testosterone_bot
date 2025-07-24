@@ -1,6 +1,6 @@
 import { Context, NarrowedContext } from 'telegraf';
-import { Message, Update } from 'telegraf/typings/core/types/typegram';
 import { message as messageFilter } from 'telegraf/filters';
+import { Message, Update } from 'telegraf/types';
 
 import { COMMANDS } from './commands';
 

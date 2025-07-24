@@ -1,4 +1,4 @@
-import { User } from 'telegraf/typings/core/types/typegram';
+import { User } from 'telegraf/types';
 
 export const getUsername = (user: User) => `${user.first_name}${user.last_name ? ` ${user.last_name}` : ''}`;
 

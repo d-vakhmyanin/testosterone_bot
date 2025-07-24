@@ -1,4 +1,4 @@
-import { User } from 'telegraf/typings/core/types/typegram';
+import { User } from 'telegraf/types';
 
 import { COMMANDS } from './commands';
 

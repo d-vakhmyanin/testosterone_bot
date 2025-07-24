@@ -1,6 +1,4 @@
-const TRAINING_TIER = ['PERFECT', 'GOOD_DAY_BAD_TIME', 'BAD_DAY', 'SKIP'] as const;
-
-type TrainingTierType = (typeof TRAINING_TIER)[number];
+type TrainingTierType = 'PERFECT' | 'GOOD_DAY_BAD_TIME' | 'BAD_DAY' | 'SKIP';
 
 type Rule = Record<TrainingTierType, { score: number; desc: string }>;
 

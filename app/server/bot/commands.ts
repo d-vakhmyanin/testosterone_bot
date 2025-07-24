@@ -12,7 +12,8 @@ export const COMMAND_LIST = [
 ] as const;
 
 export type Command = (typeof COMMAND_LIST)[number];
-
-export const COMMANDS = COMMAND_LIST.reduce<{
+type Commands = {
     [K in Command]: K;
-}>((acc, cur) => ({ ...acc, [cur]: cur }), {} as any);
+};
+
+export const COMMANDS = COMMAND_LIST.reduce<Commands>((acc, cur) => ({ ...acc, [cur]: cur }), {} as Commands);
