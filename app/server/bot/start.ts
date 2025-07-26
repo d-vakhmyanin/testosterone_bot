@@ -2,7 +2,6 @@ import { COMMANDS } from './commands';
 import { addUserToList } from './register';
 
 import { getRandom } from '../utils/getRandom';
-import { Bot } from '../types';
 import { replyToMessage } from '../utils/replyToMessage';
 import { getUsernameTag } from '../utils/getUsername';
 

@@ -1,4 +1,3 @@
-import { Bot } from '../types';
 import { replyToMessage } from '../utils/replyToMessage';
 
 import { COMMANDS } from './commands';

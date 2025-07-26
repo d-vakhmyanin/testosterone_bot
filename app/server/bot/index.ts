@@ -11,6 +11,7 @@ import { stats } from './stats';
 import { details } from './details';
 import { message } from './message';
 import { shame_details } from './shame_details';
+import { web } from './web';
 
 import { createMonthlyCronJob } from '../cron/monthlyCron';
 import { replyToMessage } from '../utils/replyToMessage';
@@ -52,6 +53,7 @@ export const initBot = () => {
     stats(bot);
     details(bot);
     shame_details(bot);
+    web(bot);
 
     message(bot);
 

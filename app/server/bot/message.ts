@@ -4,7 +4,6 @@ import { Message, Update } from 'telegraf/types';
 
 import { COMMANDS } from './commands';
 
-import { Bot } from '../types';
 import { loadChatData, saveChatData } from '../utils/fs';
 import { getUsername } from '../utils/getUsername';
 import { replyToMessage } from '../utils/replyToMessage';

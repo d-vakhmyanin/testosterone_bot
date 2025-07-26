@@ -1,7 +1,4 @@
-import { Context, Telegraf } from 'telegraf';
-import { Update, User } from 'telegraf/types';
-
-export type Bot = Telegraf<Context<Update>>;
+import { User } from 'telegraf/types';
 
 type Month = number;
 type UserId = number;

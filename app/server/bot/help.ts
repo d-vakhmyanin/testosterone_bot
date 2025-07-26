@@ -1,6 +1,5 @@
 import { Command, COMMAND_LIST, COMMANDS } from './commands';
 
-import { Bot } from '../types';
 import { replyToMessage } from '../utils/replyToMessage';
 
 const getDescription = (command: Command) => {
@@ -25,6 +24,8 @@ const getDescription = (command: Command) => {
             return 'Подробнее о том, как рассчитывается итоговый балл';
         case 'shame_details':
             return 'Подробнее о процессе выявления маслят';
+        case 'web':
+            return 'Mini App';
         default:
             return 'Ваще хз что делает';
     }

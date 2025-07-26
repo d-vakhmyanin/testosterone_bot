@@ -1,6 +1,5 @@
 import { COMMANDS } from './commands';
 
-import { Bot } from '../types';
 import { TRAINING_CONFIG } from '../config';
 import { replyToMessage } from '../utils/replyToMessage';
 

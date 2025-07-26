@@ -1,6 +1,5 @@
 import { COMMANDS } from './commands';
 
-import { Bot } from '../types';
 import { loadChatData, saveChatData } from '../utils/fs';
 import { getRandom } from '../utils/getRandom';
 import { replyToMessage } from '../utils/replyToMessage';
