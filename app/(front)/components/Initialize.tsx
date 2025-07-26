@@ -7,6 +7,12 @@ export const Initialize: React.FC = () => {
         if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
             window.Telegram.WebApp.ready();
             window.Telegram.WebApp.expand(); // Полноэкранный режим
+
+            try {
+                window.Telegram.WebApp.requestFullscreen?.();
+            } catch (e) {
+                console.log(e);
+            }
         }
     }, []);
 

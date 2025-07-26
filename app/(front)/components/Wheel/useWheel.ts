@@ -204,12 +204,16 @@ export const useWheel = ({ segments = DEFAULT_SEGMENTS, duration = 10000, onSpin
             if (progress < 1) {
                 animationRef.current = requestAnimationFrame(animate);
             } else {
-                dispatch({
-                    type: 'FINISH_SPINNING',
-                    payload: {
-                        cb: onSpinFinish,
-                    },
-                });
+                // таймаут для красоты и чтобы state.currentSegment успел поменяться
+                // при очень маленьком duration'e может не успеть
+                setTimeout(() => {
+                    dispatch({
+                        type: 'FINISH_SPINNING',
+                        payload: {
+                            cb: onSpinFinish,
+                        },
+                    });
+                }, 100);
             }
         };
 
