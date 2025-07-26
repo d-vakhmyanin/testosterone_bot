@@ -23,7 +23,11 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <html lang="ru">
             <head>
-                <Script src="https://telegram.org/js/telegram-web-app.js?58" async />
+                <Script
+                    src="https://telegram.org/js/telegram-web-app.js?58"
+                    async
+                    strategy="beforeInteractive"
+                />
             </head>
             <body className={inter.className}>
                 <Initialize />

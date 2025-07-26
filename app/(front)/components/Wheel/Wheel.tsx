@@ -24,7 +24,7 @@ export const Wheel: React.FC<WheelProps> = (props) => {
     return (
         <>
             <div className={styles.wheelWrapper}>
-                <div>{curentSegment?.name}</div>
+                <p>{curentSegment?.name}</p>
                 {isMounted ? <canvas ref={canvasRef} className={styles.wheel} /> : <WheelSkeleton />}
             </div>
             <button onClick={handleSpinClick} disabled={isSpinning} className={styles.spinButton}>
