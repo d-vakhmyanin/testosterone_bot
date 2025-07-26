@@ -1,12 +1,26 @@
+.wheelWrapper {
+    text-align: center;
+}
+
 .wheel {
     border-radius: 50%;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     width: 90vw;
     height: 90vw;
+
+    max-width: 600px;
+    max-height: 600px;
 }
 
 .wheelSkeleton {
     background-color: rgba(128, 128, 128, 0.1);
+    margin-top: 22px;
+    width: calc(90vw - 18px);
+    height: calc(90vw - 18px);
+    border-radius: 50%;
+
+    max-width: 582px;
+    max-height: 582px;
 }
 
 .spinButton {
