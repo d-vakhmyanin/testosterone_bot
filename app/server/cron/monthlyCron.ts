@@ -7,7 +7,7 @@ import { saveChatData } from '../utils/fs';
 
 const mapNames = (arr: { name: unknown }[]) => arr.map(({ name }) => name).join(', ');
 
-// 1. Функция для ежемесячного расчета статистики
+// 1. Функция для ежемесячного расчёта статистики
 const calculateMonthlyStats = (...[bot, chatId]: CronJobParameters) => {
     const now = new Date();
     const month = now.getMonth();

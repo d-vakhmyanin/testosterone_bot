@@ -73,10 +73,7 @@ const sendDailyMessage = async (...[bot, chatId]: CronJobParameters) => {
         {
             caption: isMolodchikiParni
                 ? getRandom(allMarkedMessages)
-                : getRandom(slackersMessages).replace(
-                      'users',
-                      slackers.map(getUsernameTag).join(', ')
-                  ),
+                : getRandom(slackersMessages).replace('users', slackers.map(getUsernameTag).join(', ')),
         }
     );
 };
