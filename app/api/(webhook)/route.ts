@@ -1,10 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { config as dotenv } from 'dotenv';
-
-import { initBot } from '../server';
-
-dotenv();
-const bot = initBot();
+import { getBotInstance } from '@/app/server';
 
 export const POST = async (req: NextRequest) => {
     if (req.headers.get('x-telegram-bot-api-secret-token') !== process.env.TG_WEBHOOK_SECRET) {
@@ -13,7 +8,10 @@ export const POST = async (req: NextRequest) => {
 
     try {
         const body = await req.json();
+        const bot = getBotInstance();
+
         await bot.handleUpdate(body);
+
         return NextResponse.json({ ok: true });
     } catch (error) {
         console.error('Error:', error);
