@@ -1,4 +1,5 @@
 import { CronJob } from 'cron';
+import path from 'path';
 
 import { ChatIdsMap, CronJobParameters } from './common';
 
@@ -6,6 +7,8 @@ import { TRAINING_CONFIG } from './../config';
 import { loadChatData } from '../utils/fs';
 import { getUsernameTag } from '../utils/getUsername';
 import { getRandom } from './../utils/getRandom';
+
+const getMediaFilePath = (fileName: string) => path.join(process.cwd(), 'app', 'server', 'assets', fileName)
 
 const allMarkedMessages = [
     "Все отметились? Серьёзно? 😏 Роман Борисыч пока не верит. Он уже готовит 'сюрприз' для тех, кто не явится. ⏰",
@@ -63,13 +66,13 @@ const sendDailyMessage = async (...[bot, chatId]: CronJobParameters) => {
     const slackers = participants.filter(({ id }) => !chatData[month]?.[id]?.[date]);
 
     const isMolodchikiParni = slackers.length === 0;
-    const videoFileName = isMolodchikiParni ? 'success' : 'angry_cat';
-    const audioFileName = isMolodchikiParni ? 'davai' : 'wake_up';
+    const videoFileName = isMolodchikiParni ? 'success.mp4' : 'angry_cat.mp4';
+    const audioFileName = isMolodchikiParni ? 'davai.ogg' : 'wake_up.ogg';
 
-    await bot.telegram.sendVideo(chatId, { source: `./assets/${videoFileName}.mp4` });
+    await bot.telegram.sendVideo(chatId, { source: getMediaFilePath(videoFileName) });
     await bot.telegram.sendAudio(
         chatId,
-        { source: `./assets/${audioFileName}.ogg` },
+        { source: getMediaFilePath(audioFileName) },
         {
             caption: isMolodchikiParni
                 ? getRandom(allMarkedMessages)
