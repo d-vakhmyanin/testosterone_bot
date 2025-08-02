@@ -1,0 +1,110 @@
+.container {
+    padding: 16px;
+    max-width: 600px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: #e0e0e0; /* Основной цвет текста */
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 24px;
+    color: #ffffff; /* Белый цвет для заголовка */
+}
+
+.exerciseList {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px 0;
+    max-height: 55vh;
+    width: 88vw;
+    overflow-y: scroll;
+    /* padding-right: 12px; */
+}
+
+.exerciseItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background-color: #2a2a2a; /* Темный фон для элементов */
+    border-radius: 8px;
+    margin-bottom: 8px;
+    transition: all 0.2s ease;
+    color: #ffffff; /* Белый текст */
+    min-height: 56px;
+}
+
+.exerciseItem:hover {
+    background-color: #333333; /* Эффект при наведении */
+}
+
+.hidden {
+    opacity: 0.6;
+    color: #a0a0a0; /* Серый текст для скрытых элементов */
+}
+
+.exerciseActions {
+    display: flex;
+    gap: 12px; /* Увеличил расстояние между кнопками */
+}
+
+.visibilityButton,
+.deleteButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    font-size: 18px; /* Увеличил размер иконок */
+    transition: transform 0.2s ease;
+}
+
+.visibilityButton:hover,
+.deleteButton:hover {
+    transform: scale(1.1); /* Эффект увеличения при наведении */
+}
+
+.visibilityButton {
+    color: #34c759; /* Зеленый цвет для кнопки видимости */
+}
+
+.deleteButton {
+    color: #ff3b30; /* Красный цвет для кнопки удаления */
+}
+
+.exerciseInput {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #444; /* Темная граница */
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: #2a2a2a; /* Темный фон */
+    color: #ffffff; /* Белый текст */
+    transition: border-color 0.2s ease;
+}
+
+.exerciseInput::placeholder {
+    color: #666; /* Цвет плейсхолдера */
+}
+
+.exerciseInput:focus {
+    outline: none;
+    border-color: #007aff; /* Синяя граница при фокусе */
+    box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.2); /* Свечение */
+}
+
+.hiddenEyeContainer {
+    position: relative;
+    display: inline-block;
+}
+
+.strikeThrough {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #ff3b30;
+    transform: translateY(-50%) rotate(-15deg);
+    transform-origin: center;
+}

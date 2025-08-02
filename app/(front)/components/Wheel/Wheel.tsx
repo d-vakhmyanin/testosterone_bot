@@ -21,6 +21,10 @@ const WheelSkeleton: React.FC = () => {
 export const Wheel: React.FC<WheelProps> = (props) => {
     const { isMounted, canvasRef, isSpinning, curentSegment, handleSpinClick } = useWheel(props);
 
+    if (!props.segments?.length) {
+        return <p>Нет упражнений</p>;
+    }
+
     return (
         <>
             <div className={styles.wheelWrapper}>

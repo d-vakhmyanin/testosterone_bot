@@ -3,9 +3,16 @@ import { Inter } from 'next/font/google';
 import type { Metadata, Viewport } from 'next';
 
 import './globals.css';
-import { Initialize } from './components/Initialize';
+import { SettingsContextProvider } from './context';
+import { getInitialSettings } from './context';
+import styles from './layout.module.css';
 
-const inter = Inter({ subsets: ['latin'] });
+import { Initialize } from '../(front)/components/Initialize';
+import { MuscleGroupTabs } from './components/MuscleGroupTabs/MuscleGroupTabs';
+import { PageTitle } from './components/PageTitle/PageTitle';
+import { ExercisesLink, MainLink, SettingsLink } from './components/Links/Links';
+
+const inter = Inter({ subsets: ['latin', 'cyrillic'] });
 
 export const metadata: Metadata = {
     title: 'Testosterone Bot TG',
@@ -19,7 +26,10 @@ export const viewport: Viewport = {
     userScalable: false,
 };
 
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
+const RootLayout: React.FC<React.PropsWithChildren> = async ({ children }) => {
+    // server-side initialSettings
+    const initialSettings = await getInitialSettings();
+
     return (
         <html lang="ru">
             <head>
@@ -30,8 +40,21 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                 />
             </head>
             <body className={inter.className}>
-                <Initialize />
-                {children}
+                <SettingsContextProvider {...initialSettings}>
+                    <Initialize />
+                    <div className={styles.page}>
+                        <nav className={styles.navigation}>
+                            <MainLink />
+                            <ExercisesLink />
+                            <SettingsLink />
+                        </nav>
+                        <MuscleGroupTabs />
+                        <main className={styles.main}>
+                            <PageTitle />
+                            {children}
+                        </main>
+                    </div>
+                </SettingsContextProvider>
             </body>
         </html>
     );

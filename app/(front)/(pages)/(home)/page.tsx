@@ -1,15 +1,16 @@
 'use client';
 
-import React, { Suspense } from 'react';
+import React from 'react';
 
-import styles from './page.module.css';
-import { Wheel, Segment } from './components/Wheel';
-import { Modal } from './components/Modal/Modal';
-import { SendButton } from './components/SendButton/SendButton';
+import { Segment, Wheel } from '../../components/Wheel';
+import { Modal } from '../../components/Modal/Modal';
+import { SendButton } from '../../components/SendButton/SendButton';
+import { useSettings } from '../../context';
 
-const Home = () => {
+const Home: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = React.useState(false);
     const [segment, setSegment] = React.useState<Segment>();
+    const { visibleExercises } = useSettings();
 
     const handleSpinFinish = React.useCallback((res: Segment) => {
         setIsModalOpen(true);
@@ -38,18 +39,15 @@ const Home = () => {
     );
 
     return (
-        <div className={styles.page}>
-            <main className={styles.main}>
-                <h1 className={styles.title}>Колесо</h1>
-                <Wheel onSpinFinish={handleSpinFinish} />
-                <Modal isOpen={isModalOpen} onClose={handleCloseModal} title={segment?.name}>
-                    <p>Поздравляю! Ты покрутил колесо!</p>
-                    <Suspense>
-                        <SendButton onClick={handleStrangeButtonClick} />
-                    </Suspense>
-                </Modal>
-            </main>
-        </div>
+        <>
+            <Wheel onSpinFinish={handleSpinFinish} segments={visibleExercises} />
+            <Modal isOpen={isModalOpen} onClose={handleCloseModal} title={segment?.name}>
+                <p>Поздравляю! Ты покрутил колесо!</p>
+                <React.Suspense>
+                    <SendButton onClick={handleStrangeButtonClick} />
+                </React.Suspense>
+            </Modal>
+        </>
     );
 };
 

@@ -8,7 +8,7 @@ import { loadChatData } from '../utils/fs';
 import { getUsernameTag } from '../utils/getUsername';
 import { getRandom } from './../utils/getRandom';
 
-const getMediaFilePath = (fileName: string) => path.join(process.cwd(), 'app', 'server', 'assets', fileName)
+const getMediaFilePath = (fileName: string) => path.join(process.cwd(), 'app', 'server', 'assets', fileName);
 
 const allMarkedMessages = [
     "Все отметились? Серьёзно? 😏 Роман Борисыч пока не верит. Он уже готовит 'сюрприз' для тех, кто не явится. ⏰",

@@ -1,0 +1,30 @@
+.tabs {
+    display: flex;
+    border-bottom: 1px solid #444; /* Темная граница */
+    margin: 16px 0;
+    width: 'fit-content';
+    justify-content: center;
+    overflow-x: auto;
+    /* padding-bottom: 16px; */
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.tab {
+    padding: 8px 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #a0a0a0; /* Серый цвет для неактивных табов */
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+}
+
+.activeTab {
+    color: #007aff; /* Синий цвет для активного таба */
+    border-color: #007aff;
+    font-weight: 500;
+}

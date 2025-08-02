@@ -164,7 +164,7 @@ export const useWheel = ({ segments = DEFAULT_SEGMENTS, duration = 10000, onSpin
         });
     }, [state.rotation, segments, segmentAngle]);
 
-    React.useEffect(() => {
+    React.useLayoutEffect(() => {
         dispatch({ type: 'SET_MOUNTED', payload: true });
         animationRef.current = requestAnimationFrame(drawWheel);
 
@@ -176,9 +176,9 @@ export const useWheel = ({ segments = DEFAULT_SEGMENTS, duration = 10000, onSpin
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    if (state.rotation !== rotationRef.current) {
-        drawWheel();
-    }
+    React.useEffect(() => {
+        requestAnimationFrame(drawWheel);
+    }, [drawWheel]);
 
     const handleSpinClick = React.useCallback(() => {
         if (state.isSpinning) {

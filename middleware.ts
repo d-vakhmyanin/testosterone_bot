@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const validRoutes = ['/', '/api', '/api/web-app-data'];
+const validRoutes = ['/', '/exercises', '/settings', '/api', '/api/web-app-data'];
 
 const isValidRoute = (pathname: string) => {
     return validRoutes.includes(pathname);
