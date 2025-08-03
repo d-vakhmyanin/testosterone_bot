@@ -14,13 +14,11 @@ const calculateMonthlyStats = (...[bot, chatId]: CronJobParameters) => {
 
     const { allStats, message, chatData, idealDays } = calculateAllStats(chatId, now);
     const bestStat = allStats[0];
-    const worstStat = allStats[allStats.length - 1];
 
-    const worstStats = allStats.filter((el) => el.totalScore <= worstStat.totalScore);
+    const worstStats = allStats.filter((el) => el.totalScore < idealDays.length / 2);
     const bestStats = allStats.filter((el) => el.totalScore >= bestStat.totalScore);
 
-    const isWorstUserFound =
-        bestStat.totalScore > worstStat.totalScore && worstStat.perfectCount < idealDays.length;
+    const isWorstUserFound = !!worstStats.length;
 
     const bestUserNames = mapNames(bestStats);
     const worstUserNames = mapNames(worstStats);
