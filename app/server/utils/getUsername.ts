@@ -1,5 +1,6 @@
-import { User } from 'telegraf/types';
+import { ShortUser } from '@/app/utils/request';
 
-export const getUsername = (user: User) => `${user.first_name}${user.last_name ? ` ${user.last_name}` : ''}`;
+export const getUsername = (user: ShortUser) =>
+    `${user.first_name}${user.last_name ? ` ${user.last_name}` : ''}`;
 
-export const getUsernameTag = (user: User) => (user.username ? `@${user.username}` : getUsername(user));
+export const getUsernameTag = (user: ShortUser) => (user.username ? `@${user.username}` : getUsername(user));

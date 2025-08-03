@@ -44,14 +44,14 @@ const SettingsPage: React.FC = () => {
                     min={MIN}
                     max={MAX_DURATION}
                     initialValue={state.wheelSettings.duration}
-                    handleChange={setWheelDuration}
+                    onChange={setWheelDuration}
                 />
             </div>
 
             <div className={styles.settingGroup}>
                 <RangeSlider
                     title="Диапазон оборотов:"
-                    description="Влияет на вероятности!"
+                    description="Влияет на вероятности! Чем больше разброс, тем рандомнее"
                     min={MIN}
                     max={MAX}
                     initialRange={state.wheelSettings.turnoverRange}

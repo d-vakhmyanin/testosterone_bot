@@ -2,3 +2,4 @@ export { SettingsContextProvider, useSettings } from './SettingsContext/Settings
 export { BASE_EXERCISES, MUSCLE_GROUP_TABS } from './SettingsContext/contants';
 export { getInitialSettings } from './SettingsContext/getInitialSettings';
 export type { SettingsState } from './SettingsContext/settingsReducer';
+export type { Exercise } from './SettingsContext/types';

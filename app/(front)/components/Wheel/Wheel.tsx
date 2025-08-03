@@ -9,22 +9,24 @@ export type Segment = {
     name: string;
 };
 
-export type WheelProps = {
-    segments?: Segment[];
+export type WheelProps<T extends Segment = Segment> = {
+    segments: T[];
     duration?: number;
     minRotation?: number;
     maxRotation?: number;
-    onSpinFinish: (result: Segment) => void;
+    onSpinFinish: (result: T) => void;
 };
 
 const WheelSkeleton: React.FC = () => {
     return <div className={styles.wheelSkeleton} />;
 };
 
-export const Wheel: React.FC<WheelProps> = (props) => {
-    const { isMounted, canvasRef, isSpinning, curentSegment, handleSpinClick } = useWheel(props);
+export const Wheel = <T extends Segment>(props: WheelProps<T>) => {
+    const { isMounted, canvasRef, isSpinning, curentSegment, handleSpinClick } = useWheel(
+        props as unknown as WheelProps
+    );
 
-    if (!props.segments?.length) {
+    if (!props.segments.length) {
         return <h3 className={styles.singleLine}>Нет упражнений</h3>;
     }
 

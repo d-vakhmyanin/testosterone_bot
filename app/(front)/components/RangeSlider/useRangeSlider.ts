@@ -27,14 +27,14 @@ export const useRangeSlider = ({ initialRange, min, max, handleChange }: RangeSl
             return;
         }
 
-        const preventDefault = (e: Event) => {
+        const handle = (e: Event) => {
             e.preventDefault();
         };
 
-        slider.addEventListener('touchmove', preventDefault, { passive: false });
+        slider.addEventListener('touchmove', handle, { passive: false });
 
         return () => {
-            slider.removeEventListener('touchmove', preventDefault);
+            slider.removeEventListener('touchmove', handle);
         };
     }, []);
 

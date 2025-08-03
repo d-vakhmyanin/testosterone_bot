@@ -1,7 +1,5 @@
 import React from 'react';
 
-import styles from './SendButton.module.css';
-
 import { useTgStartParams } from '../../hooks.ts/useTgStartParams';
 import { Button } from '../Button/Button';
 
@@ -17,7 +15,7 @@ export const SendButton: React.FC<SendButtonProps> = ({ onClick }) => {
     }, [onClick, params]);
 
     return (
-        <Button className={styles.sendButton} onClick={handleClick}>
+        <Button onClick={handleClick} view="red">
             Это очень необычная кнопка.
             <br />
             Интересно, что она делает?

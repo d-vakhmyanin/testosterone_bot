@@ -27,12 +27,15 @@ export const settingsReducer = (state: SettingsState, action: SettingsAction): S
         case 'ADD_EXERCISE':
             return { ...state, exercises: [action.payload, ...state.exercises] };
         case 'REMOVE_EXERCISE':
-            return { ...state, exercises: state.exercises.filter((ex) => ex.id !== action.payload) };
+            return {
+                ...state,
+                exercises: state.exercises.filter((ex) => (ex.isProtected ? true : ex.id !== action.payload)),
+            };
         case 'TOGGLE_EXERCISE_VISIBILITY':
             return {
                 ...state,
                 exercises: state.exercises.map((ex) =>
-                    ex.id === action.payload ? { ...ex, isHidden: !ex.isHidden } : ex
+                    !ex.isProtected && ex.id === action.payload ? { ...ex, isHidden: !ex.isHidden } : ex
                 ),
             };
         case 'SET_WHEEL_DURATION':

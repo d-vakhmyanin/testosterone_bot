@@ -7,7 +7,7 @@
 
 .rangeSlider {
     position: relative;
-    height: 40px;
+    height: 64px;
     display: flex;
     align-items: center;
 }
@@ -29,8 +29,8 @@
 
 .thumb {
     position: absolute;
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
     background-color: var(--accent-color);
     border-radius: 50%;
     top: 50%;

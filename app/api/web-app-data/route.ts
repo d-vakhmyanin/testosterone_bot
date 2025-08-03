@@ -1,6 +1,7 @@
+import { NextRequest, NextResponse } from 'next/server';
 import { getBotInstance } from '@/app/server';
 import { getUsernameTag } from '@/app/server/utils/getUsername';
-import { NextRequest, NextResponse } from 'next/server';
+import { RequestBody } from '@/app/utils/request';
 
 const tunnel = process.env.TUNNEL_URL?.replace(/:\d+/, '');
 const ALLOWED_DOMAINS = [tunnel];
@@ -13,27 +14,21 @@ export const POST = async (req: NextRequest) => {
             return new NextResponse('Forbidden', { status: 403 });
         }
 
-        const { chatId, user, data } = await req.json();
+        const { chatId, user, data, isJoke } = (await req.json()) as RequestBody;
 
-        if (!chatId || !user || !data || !data?.segment?.name) {
-            return new NextResponse('Wrong Request', { status: 400 });
+        if (!user || !data?.exercise?.name) {
+            return new NextResponse('Bad Request', { status: 400 });
         }
 
         const bot = getBotInstance();
 
-        const res = await bot.telegram.sendMessage(
-            chatId,
-            `✨${getUsernameTag(user)}!✨\n\n<b>Ты пидор!</b>\n\n🎰(так сказало колесо)🎰`,
-            {
-                parse_mode: 'HTML',
-            }
-        );
-
-        await bot.telegram.sendMessage(chatId, `Ладно, на самом деле, колесо сказало: ${data.segment.name}`, {
-            reply_parameters: {
-                message_id: res.message_id,
-            },
-        });
+        if (isJoke && chatId) {
+            const message = `✨${getUsernameTag(user)}!✨\n\n<b>Ты пидор!</b>\n\n🎰(так сказало колесо)🎰`;
+            await bot.telegram.sendMessage(chatId, message, { parse_mode: 'HTML' });
+        } else {
+            const message = `<b>🎰Колесо сказало: 🎰</b>\n${data?.exercise?.name}`;
+            await bot.telegram.sendMessage(user.id, message, { parse_mode: 'HTML' });
+        }
 
         return NextResponse.json({ ok: true });
     } catch (error) {

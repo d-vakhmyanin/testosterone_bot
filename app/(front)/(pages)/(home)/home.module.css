@@ -1,0 +1,15 @@
+.buttonsContainer {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.basicButton {
+    flex: 1 0 auto;
+    min-width: fit-content;
+}
+
+.bigButton {
+    width: 100%;
+}

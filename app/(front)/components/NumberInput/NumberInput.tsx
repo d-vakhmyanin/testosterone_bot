@@ -4,12 +4,14 @@ import styles from './NumberInput.module.css';
 
 import { Label } from '../Label/Label';
 
+const minMax = (min: number, max: number, val: number) => Math.max(min, Math.min(max, val));
+
 type NumberInputProps = {
     title: string;
     min: number;
     max: number;
     initialValue: number;
-    handleChange: (v: number) => void;
+    onChange: (v: number) => void;
     name?: string;
     description?: string;
 };
@@ -21,32 +23,100 @@ export const NumberInput: React.FC<NumberInputProps> = ({
     max,
     description = '',
     name = 'NumberInput',
-    handleChange,
+    onChange,
 }) => {
-    const [value, setValue] = React.useState(initialValue);
+    const [value, setValue] = React.useState(initialValue.toString());
 
-    const handleDurationChange = React.useCallback(
+    const handleChange = React.useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
-            const newValue = Math.max(min, Math.min(max, Number(e.target.value)));
-            setValue(newValue);
-            handleChange(newValue);
+            const newValue = e.target.value;
+
+            if (newValue === '0') {
+                return;
+            }
+
+            const numValue = Number(newValue);
+
+            if (Number.isNaN(numValue)) {
+                return;
+            }
+
+            if (numValue > max) {
+                setValue(max.toString());
+            } else {
+                setValue(newValue);
+            }
+
+            onChange(minMax(min, max, numValue));
         },
-        [min, max, handleChange]
+        [min, max, onChange]
     );
 
+    const handleBlur = React.useCallback(() => {
+        const numValue = Number(value);
+
+        if (Number.isNaN(numValue) || numValue === 0) {
+            const clampedValue = minMax(min, max, initialValue);
+            setValue(clampedValue.toString());
+            onChange(clampedValue);
+        }
+    }, [value, min, max, initialValue, onChange]);
+
+    const increment = React.useCallback(() => {
+        setValue((prev) => {
+            const numValue = prev === '' ? initialValue : Number(prev);
+            const newValue = minMax(min, max, numValue + 1);
+            onChange(newValue);
+
+            return newValue.toString();
+        });
+    }, [min, max, initialValue, onChange]);
+
+    const decrement = React.useCallback(() => {
+        setValue((prev) => {
+            const numValue = prev === '' ? initialValue : Number(prev);
+            const newValue = minMax(min, max, numValue - 1);
+            onChange(newValue);
+
+            return newValue.toString();
+        });
+    }, [min, max, initialValue, onChange]);
+
     return (
-        <Label text={title}>
-            <Label text={description} secondary>
+        <>
+            <Label text={title}>
+                <Label text={description} secondary />
+            </Label>
+            <div className={styles.inputContainer}>
+                <button
+                    type="button"
+                    onClick={decrement}
+                    className={styles.controlButton}
+                    aria-label="Decrease value"
+                >
+                    -
+                </button>
                 <input
-                    type="number"
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     name={name}
                     min={min}
                     max={max}
                     value={value}
-                    onChange={handleDurationChange}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                     className={styles.numberInput}
                 />
-            </Label>
-        </Label>
+                <button
+                    type="button"
+                    onClick={increment}
+                    className={styles.controlButton}
+                    aria-label="Increase value"
+                >
+                    +
+                </button>
+            </div>
+        </>
     );
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { WheelProps } from './Wheel';
-import { BLACK, COLORS, DEFAULT_SEGMENTS, LINE_WIDTH, WHITE } from './constants';
+import { BLACK, COLORS, LINE_WIDTH, WHITE } from './constants';
 import { wheelInitialState, wheelReducer } from './wheelReducer';
 
 const getCurrentSegment = (
@@ -17,7 +17,7 @@ const getCurrentSegment = (
 };
 
 export const useWheel = ({
-    segments = DEFAULT_SEGMENTS,
+    segments,
     duration = 10000,
     minRotation = 10,
     maxRotation = 20,
