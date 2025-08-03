@@ -13,8 +13,8 @@ const endings = ['', '.', '!', '...'];
 const getAnswers = (answers: string[]) =>
     answers.map((answer) => endings.map((el) => `${answer}${el}`)).flat();
 
-const pidorAnswers = getAnswers(['нет', 'net']);
-const pizdaAnswers = getAnswers(['да', 'da']);
+const pidorAnswers = getAnswers(['нет', 'нeт', 'нet', 'het', 'net']);
+const pizdaAnswers = getAnswers(['да', 'da', 'dа', 'дa']);
 
 const cancelAnswers = getAnswers(['отмен', 'пиздобол', 'пиздеж', 'врун', 'враньё', 'не приш', 'не прид']);
 const wrongTimeAnswers = getAnswers(['врем', 'опозд']);
