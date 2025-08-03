@@ -71,8 +71,10 @@ export const useHome = () => {
             user: window.Telegram?.WebApp?.initDataUnsafe?.user,
             data: { exercise: state.exercise },
         })
-            .then(() => {
-                dispatch({ type: 'SAVE_SUCCESS' });
+            .then((res) => {
+                if (res.ok) {
+                    dispatch({ type: 'SAVE_SUCCESS' });
+                }
             })
             .finally(() => {
                 dispatch({ type: 'SAVE_FINISH' });
