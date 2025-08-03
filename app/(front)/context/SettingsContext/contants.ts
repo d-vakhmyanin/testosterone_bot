@@ -64,3 +64,8 @@ export const MUSCLE_GROUP_TABS = [
     { value: 'triceps', label: 'Трицепс' },
     { value: 'shoulders', label: 'Плечи' },
 ] as const;
+
+export const DEFAULT_WHEEL_SETTINGS = {
+    duration: 10,
+    turnoverRange: [10, 20] as [number, number],
+};

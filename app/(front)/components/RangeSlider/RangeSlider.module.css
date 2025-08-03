@@ -1,0 +1,45 @@
+.rangeValue {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 4px;
+}
+
+.rangeSlider {
+    position: relative;
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.track {
+    position: relative;
+    width: 100%;
+    height: 4px;
+    background-color: var(--track-bg);
+    border-radius: 2px;
+}
+
+.activeRange {
+    position: absolute;
+    height: 100%;
+    background-color: var(--accent-color);
+    border-radius: 2px;
+}
+
+.thumb {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background-color: var(--accent-color);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    cursor: pointer;
+    z-index: 2;
+    touch-action: none;
+}
+
+.thumb:hover {
+    transform: translateX(-50%) translateY(-50%) scale(1.2);
+}

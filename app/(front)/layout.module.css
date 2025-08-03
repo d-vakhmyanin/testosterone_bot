@@ -10,7 +10,6 @@
     justify-items: center;
     margin-top: 72px;
     max-height: calc(100svh - 72px);
-    font-family: var(--font-geist-sans);
 }
 
 .navigation {

@@ -22,7 +22,7 @@ const LinkBase: React.FC<React.PropsWithChildren<LinkBaseProps>> = ({ path, chil
 const EXERCISES_PATH = '/exercises';
 
 export const ExercisesLink: React.FC = () => {
-    return <LinkBase path={EXERCISES_PATH}>🏋️‍♂️</LinkBase>;
+    return <LinkBase path={EXERCISES_PATH}>📋</LinkBase>;
 };
 
 const SETTINGS_PATH = '/settings';

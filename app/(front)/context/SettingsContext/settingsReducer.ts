@@ -1,8 +1,10 @@
-import { Exercise, MuscleGroup } from './types';
+import { BASE_EXERCISES, DEFAULT_WHEEL_SETTINGS } from './contants';
+import { Exercise, MuscleGroup, WheelSettings } from './types';
 
 export type SettingsState = {
     exercises: Exercise[];
     activeTab: MuscleGroup;
+    wheelSettings: WheelSettings;
 };
 
 type SettingsAction =
@@ -11,6 +13,9 @@ type SettingsAction =
     | { type: 'ADD_EXERCISE'; payload: Exercise }
     | { type: 'REMOVE_EXERCISE'; payload: string }
     | { type: 'TOGGLE_EXERCISE_VISIBILITY'; payload: string }
+    | { type: 'SET_WHEEL_DURATION'; payload: number }
+    | { type: 'SET_WHEEL_RANGE'; payload: SettingsState['wheelSettings']['turnoverRange'] }
+    | { type: 'RESTORE_DEFAULTS' }
     | { type: 'SET_FULL_STATE'; payload: SettingsState };
 
 export const settingsReducer = (state: SettingsState, action: SettingsAction): SettingsState => {
@@ -29,6 +34,28 @@ export const settingsReducer = (state: SettingsState, action: SettingsAction): S
                 exercises: state.exercises.map((ex) =>
                     ex.id === action.payload ? { ...ex, isHidden: !ex.isHidden } : ex
                 ),
+            };
+        case 'SET_WHEEL_DURATION':
+            return {
+                ...state,
+                wheelSettings: {
+                    ...state.wheelSettings,
+                    duration: action.payload,
+                },
+            };
+        case 'SET_WHEEL_RANGE':
+            return {
+                ...state,
+                wheelSettings: {
+                    ...state.wheelSettings,
+                    turnoverRange: action.payload,
+                },
+            };
+        case 'RESTORE_DEFAULTS':
+            return {
+                exercises: BASE_EXERCISES,
+                activeTab: 'all',
+                wheelSettings: DEFAULT_WHEEL_SETTINGS,
             };
         case 'SET_FULL_STATE':
             return {

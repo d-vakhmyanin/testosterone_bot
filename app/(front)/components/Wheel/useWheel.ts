@@ -16,7 +16,13 @@ const getCurrentSegment = (
     return segments[segmentIndex];
 };
 
-export const useWheel = ({ segments = DEFAULT_SEGMENTS, duration = 10000, onSpinFinish }: WheelProps) => {
+export const useWheel = ({
+    segments = DEFAULT_SEGMENTS,
+    duration = 10000,
+    minRotation = 10,
+    maxRotation = 20,
+    onSpinFinish,
+}: WheelProps) => {
     const segmentAngle = React.useMemo(() => (2 * Math.PI) / segments.length, [segments.length]);
 
     const [state, dispatch] = React.useReducer(wheelReducer, {
@@ -188,7 +194,7 @@ export const useWheel = ({ segments = DEFAULT_SEGMENTS, duration = 10000, onSpin
         dispatch({ type: 'START_SPINNING' });
 
         const startTime = Date.now();
-        const spins = 10 + Math.random() * 10;
+        const spins = minRotation + Math.random() * (maxRotation - minRotation);
         const startRotation = rotationRef.current;
 
         const animate = () => {
@@ -218,7 +224,7 @@ export const useWheel = ({ segments = DEFAULT_SEGMENTS, duration = 10000, onSpin
         };
 
         animationRef.current = requestAnimationFrame(animate);
-    }, [duration, onSpinFinish, state.isSpinning]);
+    }, [duration, onSpinFinish, state.isSpinning, maxRotation, minRotation]);
 
     return {
         ...state,

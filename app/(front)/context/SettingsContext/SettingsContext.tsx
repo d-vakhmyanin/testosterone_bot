@@ -1,11 +1,15 @@
 'use client';
 
 import React from 'react';
+import { getStorage, STORAGE_KEYS } from '@/app/(front)/utils/storage';
 
 import { settingsReducer, SettingsState } from './settingsReducer';
-import { Exercise, MuscleGroup } from './types';
+import { Exercise, MuscleGroup, WheelSettings } from './types';
+import { DEFAULT_WHEEL_SETTINGS } from './contants';
+import { useIsInitialized } from '../../components/Initialize';
 
 type SettingsContextType = {
+    initialized: boolean;
     state: SettingsState;
     filteredExercises: Exercise[];
     visibleExercises: Exercise[];
@@ -13,16 +17,21 @@ type SettingsContextType = {
     removeExercise: (id: string) => void;
     toggleExerciseVisibility: (id: string) => void;
     setActiveTab: (tab: MuscleGroup) => void;
+    setWheelDuration: (d: WheelSettings['duration']) => void;
+    setWheelRange: (range: WheelSettings['turnoverRange']) => void;
+    restoreDefaults: () => void;
     setFullState: (state: SettingsState) => void;
 };
 
 const initialState: SettingsState = {
     exercises: [],
     activeTab: 'all',
+    wheelSettings: DEFAULT_WHEEL_SETTINGS,
 };
 
 // Контекст для доступа к настройкам в других компонентах
 const SettingsContext = React.createContext<SettingsContextType>({
+    initialized: false,
     state: initialState,
     filteredExercises: [],
     visibleExercises: [],
@@ -30,6 +39,9 @@ const SettingsContext = React.createContext<SettingsContextType>({
     removeExercise: () => {},
     toggleExerciseVisibility: () => {},
     setActiveTab: () => {},
+    setWheelDuration: () => {},
+    setWheelRange: () => {},
+    restoreDefaults: () => {},
     setFullState: () => {},
 });
 
@@ -37,11 +49,27 @@ export const SettingsContextProvider: React.FC<React.PropsWithChildren<SettingsS
     children,
     activeTab: initialActiveTab,
     exercises: initialExercises,
+    wheelSettings: initialWheelSettings,
 }) => {
     const [state, dispatch] = React.useReducer(settingsReducer, {
         activeTab: initialActiveTab,
         exercises: initialExercises,
+        wheelSettings: initialWheelSettings,
     });
+
+    const { initialized } = useIsInitialized();
+
+    React.useEffect(() => {
+        const storage = getStorage();
+
+        if (!initialized || !storage) {
+            return;
+        }
+
+        storage.setItem(STORAGE_KEYS.activeTab, state.activeTab);
+        storage.setItem(STORAGE_KEYS.exercises, JSON.stringify(state.exercises));
+        storage.setItem(STORAGE_KEYS.wheelSettings, JSON.stringify(state.wheelSettings));
+    }, [state, initialized]);
 
     // Фильтрация упражнений по активному табу
     const { filteredExercises, visibleExercises } = React.useMemo(() => {
@@ -90,6 +118,18 @@ export const SettingsContextProvider: React.FC<React.PropsWithChildren<SettingsS
         dispatch({ type: 'SET_ACTIVE_TAB', payload: tab });
     }, []);
 
+    const setWheelDuration = React.useCallback((d: WheelSettings['duration']) => {
+        dispatch({ type: 'SET_WHEEL_DURATION', payload: d });
+    }, []);
+
+    const setWheelRange = React.useCallback((range: WheelSettings['turnoverRange']) => {
+        dispatch({ type: 'SET_WHEEL_RANGE', payload: range });
+    }, []);
+
+    const restoreDefaults = React.useCallback(() => {
+        dispatch({ type: 'RESTORE_DEFAULTS' });
+    }, []);
+
     const setFullState = React.useCallback((s: SettingsState) => {
         dispatch({ type: 'SET_FULL_STATE', payload: s });
     }, []);
@@ -97,21 +137,29 @@ export const SettingsContextProvider: React.FC<React.PropsWithChildren<SettingsS
     const value = React.useMemo(
         () => ({
             state,
+            initialized,
             filteredExercises,
             visibleExercises,
             addExercise,
             removeExercise,
             toggleExerciseVisibility,
             setActiveTab,
+            setWheelDuration,
+            setWheelRange,
+            restoreDefaults,
             setFullState,
         }),
         [
             state,
+            initialized,
             filteredExercises,
             visibleExercises,
             addExercise,
             removeExercise,
             toggleExerciseVisibility,
+            setWheelDuration,
+            setWheelRange,
+            restoreDefaults,
             setActiveTab,
             setFullState,
         ]

@@ -14,8 +14,8 @@
 }
 
 .modal {
-    background: var(--tg-theme-bg-color, #ffffff);
-    color: var(--tg-theme-text-color, #000000);
+    background: var(--background-secondary, #ffffff);
+    color: var(--text-color, #000000);
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     width: 100%;
@@ -24,7 +24,7 @@
     max-height: 90vh;
     overflow-y: auto;
     animation: fadeIn 0.3s ease-out;
-    box-shadow: 0 4px 15px rgba(118, 255, 64, 0.4);
+    box-shadow: 0 4px 15px var(--accent-color);
     overflow: visible;
 }
 
@@ -40,7 +40,6 @@
     margin: 0;
     font-size: 18px;
     font-weight: 600;
-    color: var(--tg-theme-text-color, #000000);
 }
 
 .closeButton {
@@ -48,7 +47,6 @@
     border: none;
     cursor: pointer;
     padding: 4px;
-    color: var(--tg-theme-text-color, #000000);
     opacity: 0.7;
     transition: opacity 0.2s;
 }

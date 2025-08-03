@@ -6,11 +6,11 @@ import './globals.css';
 import { SettingsContextProvider } from './context';
 import { getInitialSettings } from './context';
 import styles from './layout.module.css';
+import { ExercisesLink, MainLink, SettingsLink } from './components/Links/Links';
+import { PageTitle } from './components/PageTitle/PageTitle';
+import { MuscleGroupTabs } from './components/MuscleGroupTabs/MuscleGroupTabs';
 
 import { Initialize } from '../(front)/components/Initialize';
-import { MuscleGroupTabs } from './components/MuscleGroupTabs/MuscleGroupTabs';
-import { PageTitle } from './components/PageTitle/PageTitle';
-import { ExercisesLink, MainLink, SettingsLink } from './components/Links/Links';
 
 const inter = Inter({ subsets: ['latin', 'cyrillic'] });
 
@@ -28,7 +28,7 @@ export const viewport: Viewport = {
 
 const RootLayout: React.FC<React.PropsWithChildren> = async ({ children }) => {
     // server-side initialSettings
-    const initialSettings = await getInitialSettings();
+    const initialSettings = getInitialSettings();
 
     return (
         <html lang="ru">

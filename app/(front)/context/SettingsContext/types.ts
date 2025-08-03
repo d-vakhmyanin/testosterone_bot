@@ -7,3 +7,8 @@ export type Exercise = {
     isHidden: boolean;
     isProtected?: boolean;
 };
+
+export type WheelSettings = {
+    duration: number;
+    turnoverRange: [number, number];
+};

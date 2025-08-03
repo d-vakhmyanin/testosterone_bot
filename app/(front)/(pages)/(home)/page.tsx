@@ -10,7 +10,7 @@ import { useSettings } from '../../context';
 const Home: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = React.useState(false);
     const [segment, setSegment] = React.useState<Segment>();
-    const { visibleExercises } = useSettings();
+    const { visibleExercises, state } = useSettings();
 
     const handleSpinFinish = React.useCallback((res: Segment) => {
         setIsModalOpen(true);
@@ -40,7 +40,13 @@ const Home: React.FC = () => {
 
     return (
         <>
-            <Wheel onSpinFinish={handleSpinFinish} segments={visibleExercises} />
+            <Wheel
+                onSpinFinish={handleSpinFinish}
+                segments={visibleExercises}
+                duration={state.wheelSettings.duration * 1000}
+                minRotation={state.wheelSettings.turnoverRange[0]}
+                maxRotation={state.wheelSettings.turnoverRange[1]}
+            />
             <Modal isOpen={isModalOpen} onClose={handleCloseModal} title={segment?.name}>
                 <p>Поздравляю! Ты покрутил колесо!</p>
                 <React.Suspense>

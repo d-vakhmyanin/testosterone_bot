@@ -3,6 +3,7 @@ import React from 'react';
 
 import styles from './Wheel.module.css';
 import { useWheel } from './useWheel';
+import { Button } from '../Button/Button';
 
 export type Segment = {
     name: string;
@@ -11,6 +12,8 @@ export type Segment = {
 export type WheelProps = {
     segments?: Segment[];
     duration?: number;
+    minRotation?: number;
+    maxRotation?: number;
     onSpinFinish: (result: Segment) => void;
 };
 
@@ -22,18 +25,18 @@ export const Wheel: React.FC<WheelProps> = (props) => {
     const { isMounted, canvasRef, isSpinning, curentSegment, handleSpinClick } = useWheel(props);
 
     if (!props.segments?.length) {
-        return <p>Нет упражнений</p>;
+        return <h3 className={styles.singleLine}>Нет упражнений</h3>;
     }
 
     return (
         <>
             <div className={styles.wheelWrapper}>
-                <p>{curentSegment?.name}</p>
+                <h3 className={styles.singleLine}>{curentSegment?.name}</h3>
                 {isMounted ? <canvas ref={canvasRef} className={styles.wheel} /> : <WheelSkeleton />}
             </div>
-            <button onClick={handleSpinClick} disabled={isSpinning} className={styles.spinButton}>
+            <Button onClick={handleSpinClick} disabled={isSpinning} view="red">
                 {isSpinning ? 'Крутится...' : 'Крутить колесо!'}
-            </button>
+            </Button>
         </>
     );
 };

@@ -23,26 +23,9 @@
     max-height: 582px;
 }
 
-.spinButton {
-    padding: 1rem 2.5rem;
-    font-size: 1.2rem;
-    font-weight: 600;
-    background: linear-gradient(135deg, #ff4081, #ff5252);
-    color: white;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: all 0.3s;
-    box-shadow: 0 4px 15px rgba(255, 64, 129, 0.4);
-}
-
-.spinButton:hover:not(:disabled) {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(255, 64, 129, 0.6);
-}
-
-.spinButton:disabled {
-    background: #9e9e9e;
-    cursor: not-allowed;
-    box-shadow: none;
+.singleLine {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
 }
