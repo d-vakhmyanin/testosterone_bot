@@ -16,6 +16,7 @@ import { web } from './web';
 import { createMonthlyCronJob } from '../cron/monthlyCron';
 import { replyToMessage } from '../utils/replyToMessage';
 import { createDailyCronJob } from '../cron/dailyCron';
+import { netegai, potegai } from './tag';
 
 const init = () => {
     const token = process.env.TG_TOKEN;
@@ -54,6 +55,8 @@ export const initBot = () => {
     details(bot);
     shame_details(bot);
     web(bot);
+    potegai(bot);
+    netegai(bot);
 
     message(bot);
 

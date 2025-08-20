@@ -10,6 +10,8 @@ export const COMMAND_LIST = [
     'help',
     'shame_details',
     'web',
+    'potegai',
+    'netegai',
 ] as const;
 
 export type Command = (typeof COMMAND_LIST)[number];

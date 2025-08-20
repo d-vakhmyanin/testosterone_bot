@@ -3,6 +3,7 @@ import { message as messageFilter } from 'telegraf/filters';
 import { Message, Update } from 'telegraf/types';
 
 import { COMMANDS } from './commands';
+import { handleTagMessage } from './tagMessage';
 
 import { loadChatData, saveChatData } from '../utils/fs';
 import { getUsername } from '../utils/getUsername';
@@ -36,6 +37,8 @@ const checkAdminStatus = async (
 export const message = (bot: Bot) => {
     // Обработчик ответов на сообщения бота
     bot.on(messageFilter('text'), async (ctx) => {
+        handleTagMessage(ctx);
+
         if (!('text' in ctx.message)) {
             return;
         }
