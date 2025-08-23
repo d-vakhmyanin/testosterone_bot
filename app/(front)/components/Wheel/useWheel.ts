@@ -201,8 +201,14 @@ export const useWheel = ({
             const elapsed = Date.now() - startTime;
             const progress = Math.min(elapsed / duration, 1);
 
-            const easeInOut =
-                progress < 0.5 ? 2 * Math.pow(progress, 2) : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+            const easeInOut = (() => {
+                if (progress < 0.4) {
+                    return 2 * Math.pow(progress, 2);
+                }
+
+                const t = (progress - 0.4) / 0.4;
+                return 0.85 + 0.15 * (1 - Math.exp(-5 * t));
+            })();
 
             const totalRotation = startRotation + spins * 2 * Math.PI * easeInOut;
             dispatch({ type: 'SET_ROTATION', payload: totalRotation });

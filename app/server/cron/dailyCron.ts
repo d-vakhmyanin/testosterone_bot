@@ -63,10 +63,17 @@ const sendDailyMessage = async (...[bot, chatId]: CronJobParameters) => {
     const date = today.getDate();
 
     const participants = chatData.participants || [];
+
+    if (!participants.length) {
+        return;
+    }
+
     const slackers = participants.filter(({ id }) => !chatData[month]?.[id]?.[date]);
 
     const isMolodchikiParni = slackers.length === 0;
-    const videoFileName = isMolodchikiParni ? 'success.mp4' : 'angry_cat.mp4';
+    const videoFileName = isMolodchikiParni
+        ? 'success.mp4'
+        : getRandom(['angry_cat.mp4', 'angry_cat_2.mp4', 'angry_cat_2.mp4']);
     const audioFileName = isMolodchikiParni ? 'davai.ogg' : 'wake_up.ogg';
 
     await bot.telegram.sendVideo(chatId, { source: getMediaFilePath(videoFileName) });

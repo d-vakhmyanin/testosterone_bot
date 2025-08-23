@@ -13,9 +13,17 @@ const calculateMonthlyStats = (...[bot, chatId]: CronJobParameters) => {
     const month = now.getMonth();
 
     const { allStats, message, chatData, idealDays } = calculateAllStats(chatId, now);
-    const bestStat = allStats[0];
 
-    const worstStats = allStats.filter((el) => el.totalScore < idealDays.length / 2);
+    if (!allStats.length || !chatData.participants?.length) {
+        return;
+    }
+
+    const bestStat = allStats[0];
+    const worstStat = allStats[allStats.length - 1].totalScore;
+
+    const worstStats = allStats.filter(
+        (el) => el.totalScore < idealDays.length / 2 || (el.totalScore <= worstStat && el.missedCount > 0)
+    );
     const bestStats = allStats.filter((el) => el.totalScore >= bestStat.totalScore);
 
     const isWorstUserFound = !!worstStats.length;
@@ -39,7 +47,7 @@ ${worstUserNames}! БЛИЖАЙШИЙ МЕСЯЦ НАДОЛГО ЗАПОМНИТ
 
     if (isWorstUserFound) {
         const worstUserIds = worstStats.map(({ userId }) => userId);
-        const worstUsers = chatData.participants?.filter(({ id }) => worstUserIds.includes(id));
+        const worstUsers = chatData.participants.filter(({ id }) => worstUserIds.includes(id));
 
         // 5. Сохраняем статистику
         saveChatData(chatId, { ...chatData, [month]: { ...chatData[month], shame: worstUsers } });

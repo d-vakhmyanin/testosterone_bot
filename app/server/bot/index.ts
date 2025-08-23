@@ -28,8 +28,11 @@ const init = () => {
     const bot = new Telegraf(token);
 
     bot.use(async (ctx, next) => {
-        createMonthlyCronJob(bot, ctx.chat?.id);
-        createDailyCronJob(bot, ctx.chat?.id);
+        if (ctx.chat && ctx.chat.type !== 'private') {
+            createMonthlyCronJob(bot, ctx.chat.id);
+            createDailyCronJob(bot, ctx.chat.id);
+        }
+
         await next();
     });
 

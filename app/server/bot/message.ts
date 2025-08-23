@@ -14,8 +14,9 @@ const endings = ['', '.', '!', '...'];
 const getAnswers = (answers: string[]) =>
     answers.map((answer) => endings.map((el) => `${answer}${el}`)).flat();
 
-const pidorAnswers = getAnswers(['нет', 'нeт', 'нet', 'het', 'net']);
+const pidorAnswers = getAnswers(['нет', 'неt', 'нeт', 'нet', 'hет', 'hеt', 'heт', 'het']);
 const pizdaAnswers = getAnswers(['да', 'da', 'dа', 'дa']);
+const cykaAnswers = getAnswers(['сука', 'cука', 'cyка', 'cykа', 'cyka', 'cyкa', 'сук']);
 
 const cancelAnswers = getAnswers(['отмен', 'пиздобол', 'пиздеж', 'врун', 'враньё', 'не приш', 'не прид']);
 const wrongTimeAnswers = getAnswers(['врем', 'опозд']);
@@ -43,6 +44,7 @@ export const message = (bot: Bot) => {
             return;
         }
 
+        const isReplyToBotMessage = ctx.message.reply_to_message?.from?.username === ctx.me;
         const text = ctx.message.text.toLocaleLowerCase();
 
         if (pidorAnswers.includes(text)) {
@@ -51,6 +53,23 @@ export const message = (bot: Bot) => {
 
         if (pizdaAnswers.includes(text)) {
             return replyToMessage(ctx, 'Пизда!');
+        }
+
+        let isCykaAnswer = false;
+        let isCykaExactAnswer = false;
+
+        cykaAnswers.forEach((answer) => {
+            if (text.includes(answer)) {
+                isCykaAnswer = true;
+            }
+
+            if (text === answer) {
+                isCykaExactAnswer = true;
+            }
+        });
+
+        if ((isCykaAnswer && isReplyToBotMessage) || isCykaExactAnswer) {
+            return replyToMessage(ctx, 'Ты сука');
         }
 
         const isCancell = cancelAnswers.some((answer) => text.includes(answer));

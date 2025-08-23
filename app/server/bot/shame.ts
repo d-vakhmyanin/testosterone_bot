@@ -123,7 +123,7 @@ export const shame = (bot: Bot) => {
 
         const currentDate = new Date();
         const month = currentDate.getMonth();
-        const prevMonth = month === 11 ? 0 : month - 1;
+        const prevMonth = month === 0 ? 11 : month - 1;
 
         const shameUsers = chatData[month]?.shame || chatData[prevMonth]?.shame;
 
