@@ -1,0 +1,31 @@
+.container {
+    position: fixed;
+    z-index: 99;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    display: flex;
+    background-color: rgba(51, 51, 51, 0.8);
+    backdrop-filter: blur(8px);
+}
+
+.link {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 0 24px;
+    transition: color 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+
+    p {
+        font-size: 8px;
+    }
+}
+
+.active {
+    color: var(--accent-color);
+    pointer-events: none;
+}

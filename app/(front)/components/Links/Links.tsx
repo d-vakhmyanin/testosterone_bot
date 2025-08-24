@@ -4,6 +4,7 @@ import React from 'react';
 import { usePathname } from 'next/navigation';
 
 import styles from './Links.module.css';
+import { wheelRoutes } from '../../utils/routes';
 
 type LinkBaseProps = {
     path: string;
@@ -19,20 +20,14 @@ const LinkBase: React.FC<React.PropsWithChildren<LinkBaseProps>> = ({ path, chil
     );
 };
 
-const EXERCISES_PATH = '/exercises';
-
 export const ExercisesLink: React.FC = () => {
-    return <LinkBase path={EXERCISES_PATH}>📋</LinkBase>;
+    return <LinkBase path={wheelRoutes.exercises}>📋</LinkBase>;
 };
-
-const SETTINGS_PATH = '/settings';
 
 export const SettingsLink: React.FC = () => {
-    return <LinkBase path={SETTINGS_PATH}>⚙️</LinkBase>;
+    return <LinkBase path={wheelRoutes.settings}>⚙️</LinkBase>;
 };
 
-const MAIN_PATH = '/';
-
 export const MainLink: React.FC = () => {
-    return <LinkBase path={MAIN_PATH}>🎰</LinkBase>;
+    return <LinkBase path={wheelRoutes.home}>🎰</LinkBase>;
 };

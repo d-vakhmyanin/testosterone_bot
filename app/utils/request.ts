@@ -7,7 +7,7 @@ export type ShortUser = {
     username?: string;
 };
 
-export type RequestBody = {
+export type WheelRequestBody = {
     chatId?: string;
     isJoke: boolean;
     user?: ShortUser;

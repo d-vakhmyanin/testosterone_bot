@@ -4,11 +4,11 @@ import React from 'react';
 
 import styles from './Settings.module.css';
 
-import { NumberInput } from '../../components/NumberInput/NumberInput';
-import { useSettings } from '../../context';
-import { RangeSlider } from '../../components/RangeSlider/RangeSlider';
-import { Modal } from '../../components/Modal/Modal';
-import { Button } from '../../components/Button/Button';
+import { NumberInput } from '../../../components/NumberInput/NumberInput';
+import { useSettings } from '../../../context';
+import { RangeSlider } from '../../../components/RangeSlider/RangeSlider';
+import { Modal } from '../../../components/Modal/Modal';
+import { Button } from '../../../components/Button/Button';
 
 const MIN = 1;
 const MAX = 100;

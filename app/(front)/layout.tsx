@@ -3,12 +3,8 @@ import { Inter } from 'next/font/google';
 import type { Metadata, Viewport } from 'next';
 
 import './globals.css';
-import { SettingsContextProvider } from './context';
-import { getInitialSettings } from './context';
 import styles from './layout.module.css';
-import { ExercisesLink, MainLink, SettingsLink } from './components/Links/Links';
-import { PageTitle } from './components/PageTitle/PageTitle';
-import { MuscleGroupTabs } from './components/MuscleGroupTabs/MuscleGroupTabs';
+import { GlobalNavigation } from './components/GlobalNavigation/GlobalNavigation';
 
 import { Initialize } from '../(front)/components/Initialize';
 
@@ -22,14 +18,10 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
     width: 'device-width',
     initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
+    maximumScale: 5,
 };
 
-const RootLayout: React.FC<React.PropsWithChildren> = async ({ children }) => {
-    // server-side initialSettings
-    const initialSettings = getInitialSettings();
-
+const RootLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
     return (
         <html lang="ru">
             <head>
@@ -37,24 +29,15 @@ const RootLayout: React.FC<React.PropsWithChildren> = async ({ children }) => {
                     src="https://telegram.org/js/telegram-web-app.js?58"
                     async
                     strategy="beforeInteractive"
+                    crossOrigin="anonymous"
                 />
             </head>
             <body className={inter.className}>
-                <SettingsContextProvider {...initialSettings}>
-                    <Initialize />
-                    <div className={styles.page}>
-                        <nav className={styles.navigation}>
-                            <MainLink />
-                            <ExercisesLink />
-                            <SettingsLink />
-                        </nav>
-                        <MuscleGroupTabs />
-                        <main className={styles.main}>
-                            <PageTitle />
-                            {children}
-                        </main>
-                    </div>
-                </SettingsContextProvider>
+                <Initialize />
+                <div className={styles.page}>
+                    {children}
+                    <GlobalNavigation />
+                </div>
             </body>
         </html>
     );

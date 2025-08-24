@@ -9,14 +9,7 @@
     align-items: center;
     justify-items: center;
     margin-top: 72px;
-    max-height: calc(100svh - 72px);
-}
-
-.navigation {
-    display: flex;
-    align-items: center;
-    justify-content: start;
-    gap: 8px;
+    height: calc(100svh - 72px);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -30,21 +23,9 @@
     }
 }
 
-.main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-}
-
 @media (max-width: 600px) {
     .page {
         padding: 32px;
         padding-bottom: 80px;
-    }
-
-    .main {
-        align-items: center;
     }
 }

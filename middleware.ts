@@ -1,15 +1,24 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const validRoutes = ['/', '/exercises', '/settings', '/api', '/api/web-app-data'];
+import * as routes from '@/app/(front)/utils/routes';
+
+const validRoutes: string[] = Object.values(routes)
+    .map((el) => Object.values(el))
+    .flat();
 
 const isValidRoute = (pathname: string) => {
+    // public
+    if (pathname === '/robots.txt' || pathname.startsWith('/teams/image_team_')) {
+        return true;
+    }
+
     return validRoutes.includes(pathname);
 };
 
 export const middleware = (request: NextRequest) => {
     if (!isValidRoute(request.nextUrl.pathname)) {
-        return NextResponse.redirect(new URL('/', request.url));
+        return NextResponse.redirect(new URL(routes.hockeyRoutes.home, request.url));
     }
 
     return NextResponse.next();

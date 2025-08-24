@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import styles from './MuscleGroupTabs.module.css';
 
 import { MUSCLE_GROUP_TABS, useSettings } from '../../context';
+import { wheelRoutes } from '../../utils/routes';
 
 export const MuscleGroupTabs = () => {
     const { state, setActiveTab } = useSettings();
@@ -17,7 +18,7 @@ export const MuscleGroupTabs = () => {
     }, []);
 
     return (
-        <div className={`${styles.tabs} ${pathname === '/settings' ? styles.hidden : ''}`}>
+        <div className={`${styles.tabs} ${pathname === wheelRoutes.settings ? styles.hidden : ''}`}>
             {MUSCLE_GROUP_TABS.map((tab) => (
                 <button
                     key={tab.value}

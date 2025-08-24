@@ -5,10 +5,10 @@ import React from 'react';
 import styles from './home.module.css';
 import { useHome } from './useHome';
 
-import { Wheel } from '../../components/Wheel';
-import { Modal } from '../../components/Modal/Modal';
-import { SendButton } from '../../components/SendButton/SendButton';
-import { Button } from '../../components/Button/Button';
+import { Wheel } from '../../../components/Wheel';
+import { Modal } from '../../../components/Modal/Modal';
+import { SendButton } from '../../../components/SendButton/SendButton';
+import { Button } from '../../../components/Button/Button';
 
 const Home: React.FC = () => {
     const {

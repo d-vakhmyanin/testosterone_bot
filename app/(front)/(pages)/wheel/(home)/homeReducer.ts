@@ -1,4 +1,4 @@
-import { Exercise } from '../../context';
+import { Exercise } from '../../../context';
 
 type State = {
     isModalOpen: boolean;

@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /_next/
+Disallow: /api/
+Disallow: /*.json$
+Disallow: /*?*
+
+Crawl-delay: 1

@@ -29,3 +29,7 @@
     text-overflow: ellipsis;
     margin: 0;
 }
+
+.button {
+    margin-top: -16px !important;
+}

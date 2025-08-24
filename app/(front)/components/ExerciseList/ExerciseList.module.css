@@ -77,3 +77,8 @@
     transform: translateY(-50%) rotate(-15deg);
     transform-origin: center;
 }
+
+.dummy {
+    height: 56px;
+    width: 100%;
+}

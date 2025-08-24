@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getBotInstance } from '@/app/server';
 import { getUsernameTag } from '@/app/server/utils/getUsername';
-import { RequestBody } from '@/app/utils/request';
+import { WheelRequestBody } from '@/app/utils/request';
 
 const tunnel = process.env.TUNNEL_URL?.replace(/:\d+/, '');
 const ALLOWED_DOMAINS = [tunnel];
@@ -14,7 +14,7 @@ export const POST = async (req: NextRequest) => {
             return new NextResponse('Forbidden', { status: 403 });
         }
 
-        const { chatId, user, data, isJoke } = (await req.json()) as RequestBody;
+        const { chatId, user, data, isJoke }: WheelRequestBody = await req.json();
 
         if (!user || !data?.exercise?.name) {
             return new NextResponse('Bad Request', { status: 400 });

@@ -50,6 +50,7 @@ export const ExerciseList: React.FC<ExerciseListProps> = ({
                     </div>
                 </li>
             ))}
+            <li className={styles.dummy} />
         </ul>
     );
 };

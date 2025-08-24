@@ -1,12 +1,13 @@
 import React from 'react';
-import { RequestBody } from '@/app/utils/request';
+import { WheelRequestBody } from '@/app/utils/request';
 
 import { homeInitialState, homeReducer } from './homeReducer';
 
-import { Exercise, useSettings } from '../../context';
+import { Exercise, useSettings } from '../../../context';
+import { apiRoutes } from '@/app/(front)/utils/routes';
 
-const sendRequest = (body: RequestBody) =>
-    fetch('/api/web-app-data', {
+const sendRequest = (body: WheelRequestBody) =>
+    fetch(apiRoutes.sendWheelMessage, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),

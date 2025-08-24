@@ -6,6 +6,8 @@ import { getStorage, STORAGE_KEYS } from '@/app/(front)/utils/storage';
 import { settingsReducer, SettingsState } from './settingsReducer';
 import { Exercise, MuscleGroup, WheelSettings } from './types';
 import { DEFAULT_WHEEL_SETTINGS } from './contants';
+import { getInitialSettings } from './getInitialSettings';
+
 import { useIsInitialized } from '../../components/Initialize';
 
 type SettingsContextType = {
@@ -45,17 +47,8 @@ const SettingsContext = React.createContext<SettingsContextType>({
     setFullState: () => {},
 });
 
-export const SettingsContextProvider: React.FC<React.PropsWithChildren<SettingsState>> = ({
-    children,
-    activeTab: initialActiveTab,
-    exercises: initialExercises,
-    wheelSettings: initialWheelSettings,
-}) => {
-    const [state, dispatch] = React.useReducer(settingsReducer, {
-        activeTab: initialActiveTab,
-        exercises: initialExercises,
-        wheelSettings: initialWheelSettings,
-    });
+export const SettingsContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+    const [state, dispatch] = React.useReducer(settingsReducer, getInitialSettings());
 
     const { initialized } = useIsInitialized();
 

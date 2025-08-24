@@ -36,7 +36,7 @@ export const Wheel = <T extends Segment>(props: WheelProps<T>) => {
                 <h3 className={styles.singleLine}>{curentSegment?.name}</h3>
                 {isMounted ? <canvas ref={canvasRef} className={styles.wheel} /> : <WheelSkeleton />}
             </div>
-            <Button onClick={handleSpinClick} disabled={isSpinning} view="red">
+            <Button onClick={handleSpinClick} disabled={isSpinning} view="red" className={styles.button}>
                 {isSpinning ? 'Крутится...' : 'Крутить колесо!'}
             </Button>
         </>
