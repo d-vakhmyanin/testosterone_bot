@@ -5,7 +5,8 @@ import * as routes from '@/app/(front)/utils/routes';
 
 const validRoutes: string[] = Object.values(routes)
     .map((el) => Object.values(el))
-    .flat();
+    .flat()
+    .filter((el) => typeof el === 'string');
 
 const isValidRoute = (pathname: string) => {
     // public
@@ -13,7 +14,7 @@ const isValidRoute = (pathname: string) => {
         return true;
     }
 
-    return validRoutes.includes(pathname);
+    return validRoutes.includes(pathname) || pathname.startsWith(routes.hockeyRoutes.match(''));
 };
 
 export const middleware = (request: NextRequest) => {

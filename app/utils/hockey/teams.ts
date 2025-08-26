@@ -8,7 +8,7 @@ type Emoji = {
     length: number;
 };
 
-type Team = {
+export type Team = {
     id: number;
     name: string;
     conference: 'west' | 'east';

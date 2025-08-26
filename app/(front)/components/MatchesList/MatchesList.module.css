@@ -1,0 +1,53 @@
+.team {
+    min-width: 64px;
+}
+
+.time {
+    font-size: larger;
+    font-weight: 700;
+}
+
+.smallText {
+    font-size: 8px;
+}
+
+.secondary {
+    color: var(--secondary-text);
+    text-align: center;
+}
+
+.matchContainer {
+    display: flex;
+    align-items: center;
+    border-radius: 8px;
+    padding: 8px;
+    justify-content: space-between;
+    background-color: var(--background-secondary);
+    transition: background-color 0.1s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.matchContainer:active {
+    background-color: var(--accent-color);
+}
+
+.image {
+    object-fit: contain;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.listContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-height: calc(100% + 16px);
+    padding-bottom: 16px;
+    overflow-y: auto;
+}

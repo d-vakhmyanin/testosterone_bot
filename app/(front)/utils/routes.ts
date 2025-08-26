@@ -6,6 +6,7 @@ export const wheelRoutes = {
 
 export const hockeyRoutes = {
     home: '/hockey',
+    match: (id: string) => `/hockey/match/${id}`,
 } as const;
 
 export const apiRoutes = {

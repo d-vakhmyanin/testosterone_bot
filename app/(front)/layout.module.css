@@ -8,8 +8,9 @@
 
     align-items: center;
     justify-items: center;
-    margin-top: 72px;
-    height: calc(100svh - 72px);
+    margin-top: 104px;
+    height: calc(100svh - 104px);
+    padding: 0 32px 80px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -25,7 +26,6 @@
 
 @media (max-width: 600px) {
     .page {
-        padding: 32px;
-        padding-bottom: 80px;
+        padding: 0 16px 80px;
     }
 }
