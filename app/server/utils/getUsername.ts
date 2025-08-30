@@ -1,4 +1,4 @@
-import { ShortUser } from '@/app/utils/request';
+import { ShortUser } from '@/app/utils/requests/sendWheelMessage';
 
 export const getUsername = (user: ShortUser) =>
     `${user.first_name}${user.last_name ? ` ${user.last_name}` : ''}`;

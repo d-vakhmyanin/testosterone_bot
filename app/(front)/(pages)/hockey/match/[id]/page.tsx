@@ -1,19 +1,16 @@
-'use client';
-
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 type MatchProps = {
-    params: React.Usable<{ id: string }>;
+    params: Promise<{ id: string }>;
 };
 
-const Match: React.FC<MatchProps> = ({ params }) => {
-    const router = useRouter();
-    const { id } = React.use(params);
+const Match: React.FC<MatchProps> = async ({ params }) => {
+    const { id } = await params;
 
     return (
         <div>
-            <button onClick={router.back}>back</button>
+            <Link href="/">back</Link>
             <h1>MATCH</h1>
             <div>id: {id}</div>
         </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useTgStartParams } from '../../hooks.ts/useTgStartParams';
+import { useTgStartParams } from '../../hooks/useTgStartParams';
 import { Button } from '../Button/Button';
 
 type SendButtonProps = {

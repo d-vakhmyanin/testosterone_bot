@@ -1,24 +1,21 @@
+'use client';
 import React from 'react';
-
-import { TEAMS } from '@/app/utils/hockey/teams';
-import { MATCHES } from '@/app/utils/hockey/matches';
 import { MatchesList } from '@/app/(front)/components/MatchesList/MatchesList';
-
-const east: typeof TEAMS = [];
-const west: typeof TEAMS = [];
-
-TEAMS.forEach((el) => {
-    if (el.conference === 'east') {
-        east.push(el);
-    }
-
-    if (el.conference === 'west') {
-        west.push(el);
-    }
-});
+import { useMatches } from '@/app/(front)/context';
 
 const Home: React.FC = () => {
-    return <MatchesList data={MATCHES.slice(0, 20)} />;
+    const { state, loadTop, loadBottom } = useMatches();
+
+    return (
+        <MatchesList
+            data={state.matches}
+            isLoading={state.isLoading}
+            hasMoreBottom={state.hasNext}
+            hasMoreTop={state.hasPrev}
+            loadMoreBottom={loadBottom}
+            loadMoreTop={loadTop}
+        />
+    );
 };
 
 export default Home;

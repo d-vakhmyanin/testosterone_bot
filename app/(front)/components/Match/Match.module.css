@@ -1,0 +1,32 @@
+.matchContainer {
+    display: flex;
+    align-items: center;
+    border-radius: 8px;
+    padding: 8px;
+    justify-content: space-between;
+    background-color: var(--background-secondary);
+    transition: background-color 0.1s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.matchContainer:active {
+    background-color: var(--accent-color);
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.time {
+    font-size: larger;
+    font-weight: 700;
+}
+
+.smallText {
+    font-size: 8px;
+    color: var(--secondary-text);
+    text-align: center;
+}

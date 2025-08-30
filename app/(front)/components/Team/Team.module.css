@@ -1,0 +1,14 @@
+.team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 64px;
+}
+
+.smallText {
+    font-size: 8px;
+}
+
+.image {
+    object-fit: contain;
+}

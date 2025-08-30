@@ -1,17 +1,9 @@
 import React from 'react';
-import { WheelRequestBody } from '@/app/utils/request';
+import { sendWheelMessage } from '@/app/utils/requests/sendWheelMessage';
 
 import { homeInitialState, homeReducer } from './homeReducer';
 
 import { Exercise, useSettings } from '../../../context';
-import { apiRoutes } from '@/app/(front)/utils/routes';
-
-const sendRequest = (body: WheelRequestBody) =>
-    fetch(apiRoutes.sendWheelMessage, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-    });
 
 export const useHome = () => {
     const [state, dispatch] = React.useReducer(homeReducer, homeInitialState);
@@ -67,7 +59,7 @@ export const useHome = () => {
 
         dispatch({ type: 'SAVE_START' });
 
-        sendRequest({
+        sendWheelMessage({
             isJoke: false,
             user: window.Telegram?.WebApp?.initDataUnsafe?.user,
             data: { exercise: state.exercise },
@@ -103,7 +95,7 @@ export const useHome = () => {
                 return;
             }
 
-            sendRequest({
+            sendWheelMessage({
                 chatId: params.chatId,
                 isJoke: true,
                 user: window.Telegram?.WebApp?.initDataUnsafe?.user,

@@ -12,4 +12,5 @@ export const hockeyRoutes = {
 export const apiRoutes = {
     webhook: '/api',
     sendWheelMessage: '/api/send-wheel-message',
+    getMatches: '/api/get-matches',
 } as const;
