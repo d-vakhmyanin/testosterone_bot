@@ -7,33 +7,41 @@ import { Label } from '../Label/Label';
 const minMax = (min: number, max: number, val: number) => Math.max(min, Math.min(max, val));
 
 type NumberInputProps = {
-    title: string;
+    initialValue: number;
+    forceValue?: number;
     min: number;
     max: number;
-    initialValue: number;
     onChange: (v: number) => void;
+    title?: string;
+    step?: number;
     name?: string;
     description?: string;
+    inputMode?: 'numeric' | 'decimal';
 };
 
 export const NumberInput: React.FC<NumberInputProps> = ({
     title,
     initialValue,
+    forceValue,
     min,
     max,
+    step = 1,
     description = '',
+    inputMode = 'numeric',
     name = 'NumberInput',
     onChange,
 }) => {
     const [value, setValue] = React.useState(initialValue.toString());
 
+    React.useEffect(() => {
+        if (forceValue) {
+            setValue(forceValue.toString());
+        }
+    }, [forceValue]);
+
     const handleChange = React.useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
-            const newValue = e.target.value;
-
-            if (newValue === '0') {
-                return;
-            }
+            const newValue = e.target.value.replace(',', '.');
 
             const numValue = Number(newValue);
 
@@ -41,15 +49,19 @@ export const NumberInput: React.FC<NumberInputProps> = ({
                 return;
             }
 
+            const quotient = numValue / step;
+
             if (numValue > max) {
                 setValue(max.toString());
-            } else {
+            } else if (Number.isInteger(quotient)) {
                 setValue(newValue);
+            } else {
+                setValue((Math.round(quotient) * step).toString());
             }
 
             onChange(minMax(min, max, numValue));
         },
-        [min, max, onChange]
+        [min, max, step, onChange]
     );
 
     const handleBlur = React.useCallback(() => {
@@ -59,34 +71,38 @@ export const NumberInput: React.FC<NumberInputProps> = ({
             const clampedValue = minMax(min, max, initialValue);
             setValue(clampedValue.toString());
             onChange(clampedValue);
+        } else if (value.match(/\.0?$/)) {
+            setValue(value.replace(/\.0?$/, ''));
         }
     }, [value, min, max, initialValue, onChange]);
 
     const increment = React.useCallback(() => {
         setValue((prev) => {
             const numValue = prev === '' ? initialValue : Number(prev);
-            const newValue = minMax(min, max, numValue + 1);
+            const newValue = minMax(min, max, numValue + step);
             onChange(newValue);
 
             return newValue.toString();
         });
-    }, [min, max, initialValue, onChange]);
+    }, [min, max, step, initialValue, onChange]);
 
     const decrement = React.useCallback(() => {
         setValue((prev) => {
             const numValue = prev === '' ? initialValue : Number(prev);
-            const newValue = minMax(min, max, numValue - 1);
+            const newValue = minMax(min, max, numValue - step);
             onChange(newValue);
 
             return newValue.toString();
         });
-    }, [min, max, initialValue, onChange]);
+    }, [min, max, initialValue, step, onChange]);
 
     return (
         <>
-            <Label text={title}>
-                <Label text={description} secondary />
-            </Label>
+            {title ? (
+                <Label text={title}>
+                    <Label text={description} secondary />
+                </Label>
+            ) : null}
             <div className={styles.inputContainer}>
                 <button
                     type="button"
@@ -98,8 +114,8 @@ export const NumberInput: React.FC<NumberInputProps> = ({
                 </button>
                 <input
                     type="text"
-                    inputMode="numeric"
-                    pattern="[0-9]*"
+                    inputMode={inputMode}
+                    pattern={inputMode === 'numeric' ? '[0-9]' : '[0-9]*.?[0-9]*'}
                     name={name}
                     min={min}
                     max={max}

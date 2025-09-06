@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { getMatchesServer } from './getMatchesSever';
+import { getMatchesServer } from './getMatchesServer';
 
 export const GET = async (req: NextRequest) => {
     try {
@@ -10,7 +10,7 @@ export const GET = async (req: NextRequest) => {
         const edgeMatchId = searchParams.get('edgeMatchId') || undefined;
         const minLimit = Number(searchParams.get('minLimit')) || undefined;
 
-        const res = getMatchesServer({ edgeMatchId, type, minLimit });
+        const res = await getMatchesServer({ edgeMatchId, type, minLimit });
 
         return NextResponse.json({ ok: true, ...res });
     } catch (error) {

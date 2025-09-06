@@ -1,13 +1,16 @@
-import { Match, MATCHES } from '@/app/utils/hockey/matches';
+'use server';
+
+import { loadMatches } from '@/app/server/utils/fs';
+import { Match } from '@/app/utils/hockey/matches';
 import { GetMatchesRequest, GetMatchesResponse } from '@/app/utils/requests/getMatches';
 
 const LIMIT = 20;
 
-export const getMatchesServer = ({
+export const getMatchesServer = async ({
     type,
     edgeMatchId = '-1',
     minLimit = LIMIT,
-}: GetMatchesRequest): GetMatchesResponse => {
+}: GetMatchesRequest): Promise<GetMatchesResponse> => {
     const prevMatches: Match[] = [];
     const matchesToReturn: Match[] = [];
     const date = new Date();
@@ -19,6 +22,8 @@ export const getMatchesServer = ({
     let hasMore = false;
     let hasPrev = undefined;
     let hasNext = undefined;
+
+    const MATCHES = loadMatches();
 
     MATCHES.forEach((match) => {
         if (isDone) {

@@ -13,4 +13,6 @@ export const apiRoutes = {
     webhook: '/api',
     sendWheelMessage: '/api/send-wheel-message',
     getMatches: '/api/get-matches',
+    getBet: '/api/get-bet',
+    saveBet: '/api/save-bet',
 } as const;

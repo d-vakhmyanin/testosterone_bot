@@ -1,7 +1,8 @@
 import { apiRoutes } from '@/app/(front)/utils/routes';
 
 import { Match } from '../hockey/matches';
-import { getMatchesServer } from '@/app/api/get-matches/getMatchesSever';
+import { getMatchesServer } from '@/app/api/get-matches/getMatchesServer';
+import { updateMatches } from '@/app/api/get-matches/updateMatches';
 
 export type GetMatchesRequest = {
     type: 'prev' | 'next' | 'now';
@@ -18,7 +19,15 @@ export type GetMatchesResponse = {
 
 export const getMatches = (params: GetMatchesRequest): Promise<GetMatchesResponse> => {
     if (typeof window === 'undefined') {
-        return new Promise((res) => res(getMatchesServer(params)));
+        const callGetMatchesServer = () => getMatchesServer(params).then((res) => res);
+
+        return updateMatches()
+            .then(callGetMatchesServer)
+            .catch((e) => {
+                console.log('Unable to update matches', e);
+
+                return callGetMatchesServer();
+            });
     }
 
     const host = window.location.origin;

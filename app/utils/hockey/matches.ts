@@ -16,4 +16,6 @@ export type Match = {
     isFinished: boolean;
 };
 
+export type Bet = Match['result'] & { total: number };
+
 export const MATCHES = json as Match[];

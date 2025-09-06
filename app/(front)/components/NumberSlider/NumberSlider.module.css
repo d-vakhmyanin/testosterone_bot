@@ -1,0 +1,14 @@
+.scoreValue {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 0 10px;
+    min-width: 48px;
+    text-align: center;
+    user-select: none;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.active {
+    color: var(--accent-color);
+}

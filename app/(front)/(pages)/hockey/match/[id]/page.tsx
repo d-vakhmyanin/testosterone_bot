@@ -1,20 +1,28 @@
 import React from 'react';
-import Link from 'next/link';
+import { BackButton } from '@/app/(front)/components/BackButton/BackButton';
+import { MathPage } from '@/app/(front)/components/MatchPage/MatchPage';
+import { loadMatches } from '@/app/server/utils/fs';
 
 type MatchProps = {
     params: Promise<{ id: string }>;
 };
 
-const Match: React.FC<MatchProps> = async ({ params }) => {
+const Page: React.FC<MatchProps> = async ({ params }) => {
     const { id } = await params;
+    const matches = loadMatches();
+
+    const match = matches.find((m) => m.id === id);
+
+    if (!match) {
+        return null;
+    }
 
     return (
-        <div>
-            <Link href="/">back</Link>
-            <h1>MATCH</h1>
-            <div>id: {id}</div>
-        </div>
+        <>
+            <BackButton />
+            <MathPage {...match} />
+        </>
     );
 };
 
-export default Match;
+export default Page;

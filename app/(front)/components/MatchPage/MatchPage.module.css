@@ -1,0 +1,103 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.matchHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.bet {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.score {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    position: relative;
+}
+
+.scoreDivider {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.liveBadge {
+    position: absolute;
+    top: -20px;
+    background-color: #e53935;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.matchStatus {
+    text-align: center;
+}
+
+.resultInfo {
+    margin: 12px 0;
+    font-style: italic;
+}
+
+.radio {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+
+    * {
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+    }
+}
+
+.radioButton {
+    margin-right: 8px;
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    margin-right: 10px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.radioButton:checked {
+    border-color: var(--accent-color);
+}
+
+.radioButton:checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #2196f3;
+}
+
+.submitButton {
+    width: 100%;
+    margin-top: 32px !important;
+}

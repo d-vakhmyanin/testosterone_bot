@@ -40,9 +40,7 @@ export const MatchesList: React.FC<MatchesListProps> = ({
                     }
 
                     if (entry.target === topSentinelRef.current && hasMoreTop) {
-                        if (prevScroll.current !== null) {
-                            loadMoreTop();
-                        }
+                        loadMoreTop();
 
                         if (containerRef.current) {
                             prevScroll.current =

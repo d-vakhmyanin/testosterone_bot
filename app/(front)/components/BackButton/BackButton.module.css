@@ -1,0 +1,13 @@
+.backButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    outline: none !important;
+    color: var(--accent-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: flex-start;
+    font-size: medium;
+}

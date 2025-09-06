@@ -34,7 +34,7 @@ export const Match: React.FC<MatchT> = ({ date, id, homeTeam, guestTeam, isFinis
                 </div>
                 <div className={styles.smallText}>{homeTeam.city}</div>
                 {isStarted || isFinished ? (
-                    <div className={styles.smallText}>{isStarted ? 'Идёт сейчас' : 'Завершён'}</div>
+                    <div className={styles.smallText}>{isFinished ? 'Завершён' : 'Идёт сейчас'}</div>
                 ) : null}
             </div>
             <Team {...guestTeam} />
