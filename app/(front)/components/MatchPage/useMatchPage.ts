@@ -1,12 +1,16 @@
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { Bet, Match } from '@/app/utils/hockey/matches';
 import { getBet } from '@/app/utils/requests/getBet';
 import { saveBet } from '@/app/utils/requests/saveBet';
 
 import { matchPageInitialState, matchPagereducer } from './matchReducer';
 
+import { hockeyRoutes } from '../../utils/routes';
+
 export const useMatchPage = ({ id, date }: Match) => {
     const [state, dispatch] = React.useReducer(matchPagereducer, matchPageInitialState);
+    const router = useRouter();
 
     const hasStarted = React.useMemo(() => state.currentTime >= date, [state.currentTime, date]);
 
@@ -92,15 +96,20 @@ export const useMatchPage = ({ id, date }: Match) => {
             });
     }, [state.isLoading, state.bet, id]);
 
+    const handleModalButtonClick = React.useCallback(() => {
+        router.replace(hockeyRoutes.match((Number(id) + 1).toString()));
+    }, [router, id]);
+
     return {
         state,
         hasStarted,
         isButtonDisabled,
         closeModal,
-        handleHomeSliderChange,
-        handleGuestSliderChange,
+        handleBetSubmit,
         handleTotalChange,
         handleWinTypeChange,
-        handleBetSubmit,
+        handleModalButtonClick,
+        handleHomeSliderChange,
+        handleGuestSliderChange,
     };
 };

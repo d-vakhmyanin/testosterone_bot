@@ -12,6 +12,7 @@ import { Button } from '../Button/Button';
 import { useMatchPage } from './useMatchPage';
 import { NumberInput } from '../NumberInput/NumberInput';
 import { NumberSlider } from '../NumberSlider/NumberSlider';
+import { DateLabel } from '../DateLabel/DateLabel';
 
 const periods = [
     { value: 'regulation', label: 'В основное время' },
@@ -26,27 +27,30 @@ export const MathPage: React.FC<MatchT> = (match) => {
         hasStarted,
         isButtonDisabled,
         closeModal,
-        handleHomeSliderChange,
-        handleGuestSliderChange,
+        handleBetSubmit,
         handleTotalChange,
         handleWinTypeChange,
-        handleBetSubmit,
+        handleModalButtonClick,
+        handleHomeSliderChange,
+        handleGuestSliderChange,
     } = useMatchPage(match);
 
     return (
         <div className={styles.container}>
             <Modal isOpen={state.isSubmitted} onClose={closeModal} title="Cтавка сохранена" withConfetti>
                 <BetFC bet={state.bet} homeTeam={homeTeam} guestTeam={guestTeam} />
+                <Button className={styles.modalButton} onClick={handleModalButtonClick}>
+                    К следующему матчу
+                </Button>
             </Modal>
 
+            <DateLabel date={match.date} />
             <div className={styles.matchHeader}>
                 <Team {...homeTeam} />
 
                 <div className={styles.score}>
                     <NumberSlider
-                        initialValue={
-                            hasStarted && result?.homeScore ? result.homeScore : state.bet.homeScore
-                        }
+                        initialValue={hasStarted ? result?.homeScore : state.bet.homeScore}
                         isDisabled={hasStarted}
                         onChange={handleHomeSliderChange}
                     />

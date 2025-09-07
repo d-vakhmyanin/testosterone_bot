@@ -44,14 +44,16 @@
         "homeTeam": { "id": 8, "name": "Сибирь", "city": "Новосибирск", "conference": "east" },
         "guestTeam": { "id": 5, "name": "Амур", "city": "Хабаровск", "conference": "east" },
         "date": 1757241000000,
-        "isFinished": false
+        "isFinished": false,
+        "result": { "homeScore": 0, "guestScore": 1 }
     },
     {
         "id": "7",
         "homeTeam": { "id": 6, "name": "Барыс", "city": "Астана", "conference": "east" },
         "guestTeam": { "id": 9, "name": "Трактор", "city": "Челябинск", "conference": "east" },
         "date": 1757244600000,
-        "isFinished": false
+        "isFinished": false,
+        "result": { "homeScore": 1, "guestScore": 1 }
     },
     {
         "id": "8",

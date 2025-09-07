@@ -4,6 +4,11 @@
     padding: 20px;
 }
 
+.modalButton {
+    width: 100%;
+    margin-top: 16px !important;
+}
+
 .matchHeader {
     display: flex;
     justify-content: space-between;

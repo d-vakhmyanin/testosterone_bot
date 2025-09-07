@@ -1,24 +1,9 @@
 import React from 'react';
 
 import { Match } from '../Match/Match';
+import { DateLabel } from '../DateLabel/DateLabel';
 
-import styles from './MatchesList.module.css';
 import { MatchesListProps } from './MatchesList';
-
-type DateLabelProps = {
-    date: Date;
-};
-
-const DateLabel: React.FC<DateLabelProps> = ({ date }) => {
-    const formatter = new Intl.DateTimeFormat('ru-RU', {
-        day: 'numeric',
-        month: 'long',
-    });
-    const weekday = date.toLocaleString('ru-RU', { weekday: 'short' }).toLowerCase();
-    const label = `${formatter.format(date)}, ${weekday}`;
-
-    return <div className={styles.secondary}>{label}</div>;
-};
 
 export const renderData = (data: MatchesListProps['data']) => {
     let curDate: Date | undefined = undefined;
