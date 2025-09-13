@@ -36,7 +36,6 @@ const checkAdminStatus = async (
 };
 
 export const message = (bot: Bot) => {
-    // Обработчик ответов на сообщения бота
     bot.on(messageFilter('text'), async (ctx) => {
         handleTagMessage(ctx);
 
@@ -45,7 +44,7 @@ export const message = (bot: Bot) => {
         }
 
         const isReplyToBotMessage = ctx.message.reply_to_message?.from?.username === ctx.me;
-        const text = ctx.message.text.toLocaleLowerCase();
+        const text = ctx.message.text.toLowerCase();
 
         if (pidorAnswers.includes(text)) {
             return replyToMessage(ctx, 'Пидора ответ');
@@ -53,6 +52,14 @@ export const message = (bot: Bot) => {
 
         if (pizdaAnswers.includes(text)) {
             return replyToMessage(ctx, 'Пизда!');
+        }
+
+        if (text.match(/го+л/i)) {
+            return replyToMessage(ctx, 'ГОООООООООООООЛ');
+        }
+
+        if (text === 'верим в команду') {
+            return replyToMessage(ctx, 'ВЕРИМ В КОМАНДУ');
         }
 
         let isCykaAnswer = false;
@@ -79,7 +86,7 @@ export const message = (bot: Bot) => {
         if (
             !reply ||
             !('text' in reply) ||
-            !reply.text.toLocaleLowerCase().includes(`/${COMMANDS.gym}`) ||
+            !reply.text.toLowerCase().includes(`/${COMMANDS.gym}`) ||
             (!isCancell && !isWrongTime)
         ) {
             return;
@@ -114,13 +121,16 @@ export const message = (bot: Bot) => {
         if (isCancell) {
             delete newData[month]![replyUserId][day];
 
-            replyToMessage(ctx, `АХ ТЫ СУКА ${userName}! Отменяю запись сегодня.`);
+            replyToMessage(ctx, `Дядь, ${userName}! Не в масть тебе такая тренировка. Давай отменю.`);
         } else if (isWrongTime) {
             newData[month]![replyUserId][day] = {
                 ...newData[month]![replyUserId][day],
                 is_right_time: false,
             };
-            replyToMessage(ctx, `Записано. ${userName} приходит не вовремя. Советую купить часы.`);
+            replyToMessage(
+                ctx,
+                `Записано. ${userName} приходит не вовремя. Советую купить генеральские котлы.`
+            );
         }
 
         saveChatData(chatId, newData);

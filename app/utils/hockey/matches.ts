@@ -4,7 +4,7 @@ import json from './matches.json';
 type Result = {
     homeScore: number;
     guestScore: number;
-    winType: 'regulation' | 'overtime' | 'shootout';
+    winType?: 'regulation' | 'overtime' | 'shootout';
 };
 
 export type Match = {

@@ -1,60 +1,20 @@
 import { CronJob } from 'cron';
 import path from 'path';
+import { getMatchesServer } from '@/app/api/get-matches/getMatchesServer';
+import { updateMatches } from '@/app/api/get-matches/updateMatches';
 
 import { ChatIdsMap, CronJobParameters } from './common';
+import { allMarkedMessages, slackersMessages } from './constants';
 
 import { TRAINING_CONFIG } from './../config';
 import { loadChatData } from '../utils/fs';
 import { getUsernameTag } from '../utils/getUsername';
 import { getRandom } from './../utils/getRandom';
+import { getWebLinkMarkup } from './../bot/web';
+import { getAllBets } from '../utils/getAllBets';
+import { getBetsMessage } from '../utils/getBetsMessage';
 
 const getMediaFilePath = (fileName: string) => path.join(process.cwd(), 'app', 'server', 'assets', fileName);
-
-const allMarkedMessages = [
-    "Все отметились? Серьёзно? 😏 Роман Борисыч пока не верит. Он уже готовит 'сюрприз' для тех, кто не явится. ⏰",
-    'О, все в списке? Йозе Марино хмыкает: «Ну посмотрим...» Если кто-то слиняет — он станет мемом российской качалки. 🏋️‍♂️💀',
-    'РоРо доволен? Нет. Он ждет. Если кто-то не придет — его имя выгравируют на Доске Позора Российской Качалки. ⏰',
-    'Все записались? Хм... Роман Борисыч подозрительно молчит. Лучше не проверять, что у него на уме. 🚪💥',
-    'Йозе Марино сказал: «Если хоть один не придет — я его найду.» Вы уверены, что хотите рискнуть? ⏰',
-    'РоРо кивнул, но его глаза говорят: «Я вас проверю.» Не подведите, или станете легендой слабости. 💪🔥',
-    "Все отметились? Хорошо. Но Роман Борисыч уже готовит 'особый' комплекс для прогульщиков. 🏋️‍♂️😈",
-    'Йозе Марино ухмыляется: «Интересно, сколько из вас реально придет?» Не дайте ему повода разочароваться. ⏰',
-    'РоРо записал всех в блокнот. Если кто-то не явится — его фото повесят в раздевалке с подписью «Этот человек боится железа». 📸😱',
-    'Роман Борисыч одобрил список, но добавил: «Посмотрим, кто выживет.» Не будьте слабаком — приходите. 💀🔥',
-    'Йозе Марино звонит в колокол тревоги. Все отметились, но он не верит. Докажите, что вы не мусор. ⏰',
-    'РоРо скрестил руки: «Ну что, герои?» Если кто-то не придет — он лично придет за объяснениями. 🚔💢',
-    "Все в списке? Отлично. Роман Борисыч уже придумал 'награду' для первого, кто не явится. 🏆💀",
-    'Йозе Марино сказал: «Если вы все прийдете — я удивлюсь.» Не дайте ему усомниться в вас. ⏰',
-    'РоРо кивает: «Хороший список. Жаль, если он окажется фейком.» Не подведите — или станете посмешищем. 😤',
-    'Роман Борисыч смотрит на список и шепчет: «Интересно, сколько трупов будет завтра?» Не будьте одним из них. ⚰️💪',
-    'Йозе Марино улыбается: «Вы все такие храбрые на бумаге...» Докажите, что вы не просто строчки в списке. ⏰',
-    'РоРо сказал: «Если все придут — я куплю пиццу. Но я не верю в это.» Не дайте ему скупить всю пиццу в городе. 🍕😏',
-    'Роман Борисыч ведет учет. Если кто-то не придет — его имя занесут в «Книгу слабаков». 📖💀',
-    'Йозе Марино звонит в колокол: «Последний звонок для тех, кто еще не отметился.» ⏰',
-];
-
-const slackersMessages = [
-    'users, серьезно? РоРо уже точит гантели. Отмечайтесь: ⏰ /gym — или станете позором российской качалки. 💀',
-    'Йозе Марино в ярости. users, еще можно спастись: ⏰ /gym. Или вас выставят на «Слабо?». 😤',
-    'Роман Борисыч смотрит на вас с презрением. users, последний шанс: ⏰ /gym — или ваше имя будет выкрикивать в зале как пример слабости. 🔥',
-    'users, РоРо уже готовит для вас «особый» комплекс. Хотите избежать? ⏰ /gym — или станете мемом. 😱',
-    'Йозе Марино сказал: «Эти users — позор российской качалки.» Исправьтесь: ⏰ /gym. 🏋️‍♂️💢',
-    'Роман Борисыч записывает users в «Книгу слабаков». Хотите вычеркнуться? ⏰ /gym — или вас будут вспоминать как пример того, как НЕ надо. 📖',
-    'РоРо звонит в колокол тревоги. users, вы последние, кто еще не отметился. ⏰ /gym — или станете легендой лени. 💀',
-    'Йозе Марино смеется: «users боится железа.» Докажите обратное: ⏰ /gym. 🐔➡️🦍',
-    'Роман Борисыч сказал: «Если users не придут — я лично приду за ними.» Шутки кончились. ⏰ /gym. 🚔',
-    'РоРо смотрит на users и качает головой. «Позор. Российской. Качалки.» Исправьте это: ⏰ /gym. 😤',
-    'Йозе Марино сказал: «users, вы уже проиграли.» Но вы можете передумать: ⏰ /gym. ⏳',
-    'Роман Борисыч ведет черный список. users, хотите в него попасть? Нет? Тогда ⏰ /gym. 📜',
-    'РоРо готовит «сюрприз» для users. Хотите его избежать? ⏰ /gym. 🎁💀',
-    'Йозе Марино сказал: «users, вы — слабое звено. Прощайте.» Или нет? ⏰ /gym. ⛓️',
-    'Роман Борисыч записал users в список «Люди, которые боятся пота». Хотите исправиться? ⏰ /gym. 💦',
-    'РоРо зовет users: «Последний шанс.» ⏰ /gym — или вас выставят на всеобщее осмеяние. 🎤',
-    'Йозе Марино сказал: «users, вы уже почти в мусорке истории.» Вытащите себя: ⏰ /gym. 🗑️',
-    'Роман Борисыч добавил users в «Список на растерзание». Хотите вычеркнуться? ⏰ /gym. 🦁',
-    'РоРо смотрит на users и вздыхает: «Жаль.» Но еще не поздно: ⏰ /gym. ⏳',
-    'Йозе Марино сказал: «users, вас уже нет.» Докажите, что это не так: ⏰ /gym. 💀🔥',
-];
 
 const sendDailyMessage = async (...[bot, chatId]: CronJobParameters) => {
     const chatData = loadChatData(chatId);
@@ -88,9 +48,138 @@ const sendDailyMessage = async (...[bot, chatId]: CronJobParameters) => {
     );
 };
 
-const handleTick = (...params: CronJobParameters) => {
-    if (TRAINING_CONFIG.idealDaysOfWeek.includes(new Date().getDay())) {
+const sendDailyMorningHockeyMessage = async (...[bot, chatId]: CronJobParameters) => {
+    const { matches } = await getMatchesServer({ type: 'today' });
+
+    if (!bot.botInfo || !matches.length) {
+        return;
+    }
+
+    const message =
+        `<b>Сегодняшние матчи:</b>\n\n` +
+        matches
+            .map((match) => {
+                const matchDate = new Date(match.date);
+
+                return (
+                    `🏒 <b>${match.homeTeam.name}</b> vs <b>${match.guestTeam.name}</b>\n` +
+                    `🕐 ${matchDate.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}\n` +
+                    `📍 ${match.homeTeam.city}\n`
+                );
+            })
+            .join('\n');
+
+    bot.telegram.sendMessage(chatId, message, {
+        parse_mode: 'HTML',
+        ...getWebLinkMarkup(bot.botInfo.username, chatId, 'Голосуй или проиграешь 🗳️'),
+    });
+};
+
+type EveningSentMap = {
+    [chatId: number]: {
+        [date: number]: {
+            isEveningSent: boolean;
+            isLokoSent?: boolean;
+        };
+    };
+};
+
+const isEveningSentMap: EveningSentMap = {};
+
+const sendDailyEveningHockeyMessage = async (...[bot, chatId]: CronJobParameters) => {
+    const today = new Date();
+    const todayDate = today.getDate();
+
+    if (!(chatId in isEveningSentMap)) {
+        isEveningSentMap[chatId] = {};
+    }
+
+    const prevEveningMap = isEveningSentMap[chatId][todayDate] || {};
+
+    if (prevEveningMap.isEveningSent || !bot.botInfo) {
+        return;
+    }
+
+    await updateMatches();
+
+    const { matches } = await getMatchesServer({ type: 'today' });
+
+    const lokoMatch = matches.find((match) => match.homeTeam.id === 10 || match.guestTeam.id === 10);
+
+    if (lokoMatch && Math.abs(lokoMatch.date - today.getTime()) < 1000 * 60 * 5) {
+        bot.telegram.sendMessage(chatId, 'ВЕРИМ В КОМАНДУ');
+    }
+
+    if (lokoMatch && lokoMatch.isFinished && !prevEveningMap.isLokoSent) {
+        const gameWinner =
+            (lokoMatch.result?.homeScore || 0) > (lokoMatch.result?.guestScore || 0)
+                ? lokoMatch.homeTeam
+                : lokoMatch.guestTeam;
+        const isLokoWon = gameWinner.id === 10;
+
+        bot.telegram.sendMessage(chatId, isLokoWon ? 'СПАСИБО ПАРНИ' : 'ВСЕХ В МОЛОТ');
+
+        isEveningSentMap[chatId][todayDate] = {
+            ...prevEveningMap,
+            isLokoSent: true,
+        };
+    }
+
+    const finishedMatches = matches.filter(
+        ({ isFinished, result }) => isFinished && Boolean(result)
+    ) as Required<(typeof matches)[number]>[];
+
+    if (!matches.length || finishedMatches.length !== matches.length) {
+        return;
+    }
+
+    const matchesResultmessage =
+        `<b>Результаты сегодняшних матчей:</b>\n\n` +
+        finishedMatches
+            .map((match) => {
+                const { homeTeam, guestTeam, result } = match;
+
+                let winTypeSuffix = '';
+                if (result.winType === 'overtime') {
+                    winTypeSuffix = ' (OT)';
+                } else if (result.winType === 'shootout') {
+                    winTypeSuffix = ' (Б)';
+                }
+
+                return `${homeTeam.name} ${result.homeScore} - ${result?.guestScore} ${guestTeam.name}${winTypeSuffix}`;
+            })
+            .join('\n');
+
+    await bot.telegram.sendMessage(chatId, matchesResultmessage, { parse_mode: 'HTML' });
+
+    const userBets = await getAllBets(bot, chatId);
+    const message = getBetsMessage(userBets, finishedMatches);
+
+    bot.telegram.sendMessage(chatId, message, { parse_mode: 'HTML' });
+
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayDate = yesterday.getDate();
+
+    delete isEveningSentMap[chatId][yesterdayDate];
+
+    isEveningSentMap[chatId][todayDate] = {
+        ...prevEveningMap,
+        isEveningSent: true,
+    };
+};
+
+const handleTick = (type: 'gym' | 'hockeyMorning' | 'hockeyEvening', ...params: CronJobParameters) => {
+    if (type === 'gym' && TRAINING_CONFIG.idealDaysOfWeek.includes(new Date().getDay())) {
         sendDailyMessage(...params);
+    }
+
+    if (type === 'hockeyMorning') {
+        sendDailyMorningHockeyMessage(...params);
+    }
+
+    if (type === 'hockeyEvening') {
+        sendDailyEveningHockeyMessage(...params);
     }
 };
 
@@ -104,15 +193,31 @@ export const createDailyCronJob = (...[bot, chatId]: Partial<CronJobParameters>)
     const { dailyCronConfig } = TRAINING_CONFIG;
     // Единый CronJob, который срабатывает каждый день в указанное время
     const cronTime = `${dailyCronConfig.minute} ${dailyCronConfig.hour} * * *`; // Каждый день в hour:minute
-    const job = new CronJob(
+    const gymJob = new CronJob(
         cronTime,
-        () => handleTick(bot, chatId),
+        () => handleTick('gym', bot, chatId),
         null, // onComplete
         true, // start
         'Europe/Moscow'
     );
 
+    const hockeyMorningJob = new CronJob(
+        '0 9 * * *', // в 9 часов 0 минут
+        () => handleTick('hockeyMorning', bot, chatId),
+        null,
+        true,
+        'Europe/Moscow'
+    );
+
+    const hockeyEveningJob = new CronJob(
+        '*/10 * * * *', // каждые 10 минут
+        () => handleTick('hockeyEvening', bot, chatId),
+        null,
+        true,
+        'Europe/Moscow'
+    );
+
     chatIdsMap[chatId] = true;
 
-    return job;
+    return [gymJob, hockeyMorningJob, hockeyEveningJob];
 };

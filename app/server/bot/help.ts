@@ -26,6 +26,10 @@ const getDescription = (command: Command) => {
             return 'Подробнее о процессе выявления маслят';
         case 'web':
             return 'Mini App';
+        case 'bet_stats':
+            return 'Статистика всех ставок';
+        case 'bet_rules':
+            return 'Правила баллов за ставки';
         default:
             return 'Ваще хз что делает';
     }

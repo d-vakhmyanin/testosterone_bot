@@ -70,23 +70,21 @@ export const MathPage: React.FC<MatchT> = (match) => {
                 <div className={styles.matchStatus}>
                     <h3>{isFinished ? 'Матч завершён' : 'Ставки сделаны, ставок больше нет'}</h3>
                     {isFinished && result ? (
+                        <div className={styles.resultInfo}>
+                            {result.winType === 'regulation' && 'Основное время'}
+                            {result.winType === 'overtime' && 'Овертайм'}
+                            {result.winType === 'shootout' && 'Буллиты'}
+                        </div>
+                    ) : null}
+                    {state.isBetLoaded ? (
                         <>
-                            <div className={styles.resultInfo}>
-                                {result.winType === 'regulation' && 'Основное время'}
-                                {result.winType === 'overtime' && 'Овертайм'}
-                                {result.winType === 'shootout' && 'Буллиты'}
-                            </div>
-                            {state.isBetLoaded ? (
-                                <>
-                                    <div>Ваша ставка:</div>
-                                    <BetFC
-                                        bet={state.bet}
-                                        homeTeam={homeTeam}
-                                        guestTeam={guestTeam}
-                                        result={result}
-                                    />
-                                </>
-                            ) : null}
+                            <div>Ваша ставка:</div>
+                            <BetFC
+                                bet={state.bet}
+                                homeTeam={homeTeam}
+                                guestTeam={guestTeam}
+                                result={result}
+                            />
                         </>
                     ) : null}
                 </div>
@@ -96,11 +94,11 @@ export const MathPage: React.FC<MatchT> = (match) => {
                         Тотал
                         <NumberInput
                             initialValue={0}
-                            forceValue={state.isBetLoaded ? state.bet.total : undefined}
                             max={99}
                             min={0}
                             step={0.5}
                             inputMode="decimal"
+                            forceValue={state.isBetLoaded ? state.bet.total : undefined}
                             onChange={handleTotalChange}
                         />
                     </div>
@@ -109,9 +107,9 @@ export const MathPage: React.FC<MatchT> = (match) => {
                         {periods.map((period) => (
                             <label key={period.value} className={styles.radio}>
                                 <input
+                                    type="radio"
                                     className={styles.radioButton}
                                     name={period.value}
-                                    type="radio"
                                     value={period.value}
                                     checked={state.bet.winType === period.value}
                                     onChange={handleWinTypeChange}
@@ -122,9 +120,9 @@ export const MathPage: React.FC<MatchT> = (match) => {
                     </div>
                     <Button
                         className={styles.submitButton}
-                        onClick={handleBetSubmit}
                         isLoading={state.isLoading}
                         disabled={isButtonDisabled}
+                        onClick={handleBetSubmit}
                     >
                         Сделать ставку
                     </Button>

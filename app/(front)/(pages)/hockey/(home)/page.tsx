@@ -1,21 +1,12 @@
-'use client';
 import React from 'react';
-import { MatchesList } from '@/app/(front)/components/MatchesList/MatchesList';
-import { useMatches } from '@/app/(front)/context';
+import { updateMatches } from '@/app/api/get-matches/updateMatches';
 
-const Home: React.FC = () => {
-    const { state, loadTop, loadBottom } = useMatches();
+import { Home } from './home';
 
-    return (
-        <MatchesList
-            data={state.matches}
-            isLoading={state.isLoading}
-            hasMoreBottom={state.hasNext}
-            hasMoreTop={state.hasPrev}
-            loadMoreBottom={loadBottom}
-            loadMoreTop={loadTop}
-        />
-    );
+const Page: React.FC = async () => {
+    await updateMatches();
+
+    return <Home />;
 };
 
-export default Home;
+export default Page;

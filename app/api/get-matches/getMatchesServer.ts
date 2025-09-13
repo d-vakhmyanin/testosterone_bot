@@ -15,6 +15,9 @@ export const getMatchesServer = async ({
     const matchesToReturn: Match[] = [];
     const date = new Date();
 
+    const maxToday = new Date(date);
+    maxToday.setHours(23, 59, 59, 99);
+
     const limitDate = new Date(2026, 2, 19);
 
     let isDone = false;
@@ -30,58 +33,77 @@ export const getMatchesServer = async ({
             return;
         }
 
-        if (type === 'now') {
-            const matchDate = new Date(match.date);
-            const prevDate = new Date(matchesToReturn.at(-1)?.date || 0).getDate();
+        const matchDate = new Date(match.date);
+        const prevDate = new Date(matchesToReturn.at(-1)?.date || 0).getDate();
 
-            if (matchDate >= date || matchDate >= limitDate) {
-                matchesToReturn.push(match);
-            }
-
-            isDone = matchesToReturn.length >= minLimit && matchDate.getDate() !== prevDate;
-        } else {
-            const matchDate = new Date(match.date);
-            const isEdge = edgeMatchId === match.id;
-
-            if (type === 'prev') {
-                if (isEdge) {
-                    isDone = true;
-
-                    for (let index = prevMatches.length - 1; index >= 0; index--) {
-                        const element = prevMatches[index];
-
-                        if (matchesToReturn.length < minLimit) {
-                            matchesToReturn.push(element);
-                        } else {
-                            const lastSavedDate = new Date(matchesToReturn.at(-1)?.date || 0);
-                            const curDate = new Date(element.date);
-
-                            if (lastSavedDate.getDate() === curDate.getDate()) {
-                                matchesToReturn.push(element);
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-
-                    matchesToReturn.reverse();
-                } else {
-                    prevMatches.push(match);
-                }
-            }
-
-            if (type === 'next' && isEdgeMet) {
-                const prevDate = new Date(matchesToReturn.at(-1)?.date || 0);
-                isDone = matchesToReturn.length >= minLimit && prevDate.getDate() !== matchDate.getDate();
-
-                if (!isDone) {
+        switch (type) {
+            case 'now': {
+                if (matchDate >= date || matchDate >= limitDate) {
                     matchesToReturn.push(match);
                 }
-            }
 
-            if (!isEdgeMet) {
-                isEdgeMet = isEdge;
+                isDone = matchesToReturn.length >= minLimit && matchDate.getDate() !== prevDate;
+                break;
             }
+            case 'today': {
+                if (
+                    matchDate.getDate() === date.getDate() &&
+                    matchDate.getMonth() === date.getMonth() &&
+                    matchDate.getFullYear() === date.getFullYear()
+                ) {
+                    matchesToReturn.push(match);
+                }
+
+                isDone = matchDate > maxToday;
+                break;
+            }
+            case 'next':
+            case 'prev': {
+                const isEdge = edgeMatchId === match.id;
+
+                if (type === 'prev') {
+                    if (isEdge) {
+                        isDone = true;
+
+                        for (let index = prevMatches.length - 1; index >= 0; index--) {
+                            const element = prevMatches[index];
+
+                            if (matchesToReturn.length < minLimit) {
+                                matchesToReturn.push(element);
+                            } else {
+                                const lastSavedDate = new Date(matchesToReturn.at(-1)?.date || 0);
+                                const curDate = new Date(element.date);
+
+                                if (lastSavedDate.getDate() === curDate.getDate()) {
+                                    matchesToReturn.push(element);
+                                } else {
+                                    break;
+                                }
+                            }
+                        }
+
+                        matchesToReturn.reverse();
+                    } else {
+                        prevMatches.push(match);
+                    }
+                }
+
+                if (type === 'next' && isEdgeMet) {
+                    isDone = matchesToReturn.length >= minLimit && prevDate !== matchDate.getDate();
+
+                    if (!isDone) {
+                        matchesToReturn.push(match);
+                    }
+                }
+
+                if (!isEdgeMet) {
+                    isEdgeMet = isEdge;
+                }
+
+                break;
+            }
+            default:
+                break;
         }
     });
 

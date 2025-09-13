@@ -12,6 +12,8 @@ export const COMMAND_LIST = [
     'web',
     'potegai',
     'netegai',
+    'bet_stats',
+    'bet_rules',
 ] as const;
 
 export type Command = (typeof COMMAND_LIST)[number];

@@ -12,11 +12,13 @@ import { details } from './details';
 import { message } from './message';
 import { shame_details } from './shame_details';
 import { web } from './web';
+import { netegai, potegai } from './tag';
+import { bet_rules } from './bet_rules';
+import { bet_stats } from './bet_stats';
 
 import { createMonthlyCronJob } from '../cron/monthlyCron';
 import { replyToMessage } from '../utils/replyToMessage';
 import { createDailyCronJob } from '../cron/dailyCron';
-import { netegai, potegai } from './tag';
 
 const init = () => {
     const token = process.env.TG_TOKEN;
@@ -60,6 +62,8 @@ export const initBot = () => {
     web(bot);
     potegai(bot);
     netegai(bot);
+    bet_rules(bot);
+    bet_stats(bot);
 
     message(bot);
 
