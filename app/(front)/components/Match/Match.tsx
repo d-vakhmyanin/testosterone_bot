@@ -24,11 +24,11 @@ export const Match: React.FC<MatchT> = ({ date, id, homeTeam, guestTeam, isFinis
             <Team {...homeTeam} />
             <div className={styles.column}>
                 <div className={styles.time}>
-                    <span>{result ? result.homeScore : d.getHours()}</span>
+                    <span>{isStarted ? result?.homeScore || 0 : d.getHours()}</span>
                     <span>:</span>
                     <span>
-                        {result
-                            ? `${result.guestScore}${winTypeToLabel[result.winType || 'regulation']}`
+                        {isStarted
+                            ? `${result?.guestScore || 0}${winTypeToLabel[result?.winType || 'regulation']}`
                             : minutesStr}
                     </span>
                 </div>
