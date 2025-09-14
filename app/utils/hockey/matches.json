@@ -268,48 +268,48 @@
         "homeTeam": { "id": 11, "name": "Нефтехимик", "city": "Нижнекамск", "conference": "east" },
         "guestTeam": { "id": 10, "name": "Локомотив", "city": "Ярославль", "conference": "west" },
         "date": 1757847600000,
-        "isFinished": false,
-        "result": { "homeScore": 0, "guestScore": 0, "winType": "regulation" }
+        "isFinished": true,
+        "result": { "homeScore": 5, "guestScore": 4, "winType": "overtime" }
     },
     {
         "id": "35",
         "homeTeam": { "id": 16, "name": "Северсталь", "city": "Череповец", "conference": "west" },
         "guestTeam": { "id": 18, "name": "ЦСКА", "city": "Москва", "conference": "west" },
         "date": 1757858400000,
-        "isFinished": false,
-        "result": { "homeScore": 0, "guestScore": 0, "winType": "regulation" }
+        "isFinished": true,
+        "result": { "homeScore": 1, "guestScore": 2, "winType": "regulation" }
     },
     {
         "id": "36",
         "homeTeam": { "id": 14, "name": "Спартак", "city": "Москва", "conference": "west" },
         "guestTeam": { "id": 13, "name": "Торпедо", "city": "Нижний Новгород", "conference": "west" },
         "date": 1757858400000,
-        "isFinished": false,
-        "result": { "homeScore": 0, "guestScore": 0, "winType": "regulation" }
+        "isFinished": true,
+        "result": { "homeScore": 3, "guestScore": 4, "winType": "overtime" }
     },
     {
         "id": "37",
         "homeTeam": { "id": 1, "name": "Ак Барс", "city": "Казань", "conference": "east" },
         "guestTeam": { "id": 12, "name": "Металлург Мг", "city": "Магнитогорск", "conference": "east" },
         "date": 1757858400000,
-        "isFinished": false,
-        "result": { "homeScore": 0, "guestScore": 0, "winType": "regulation" }
+        "isFinished": true,
+        "result": { "homeScore": 3, "guestScore": 6, "winType": "regulation" }
     },
     {
         "id": "38",
         "homeTeam": { "id": 19, "name": "СКА", "city": "Санкт-Петербург", "conference": "west" },
         "guestTeam": { "id": 23, "name": "Лада", "city": "Тольятти", "conference": "west" },
         "date": 1757858400000,
-        "isFinished": false,
-        "result": { "homeScore": 0, "guestScore": 0, "winType": "regulation" }
+        "isFinished": true,
+        "result": { "homeScore": 6, "guestScore": 1, "winType": "regulation" }
     },
     {
         "id": "39",
         "homeTeam": { "id": 15, "name": "ХК Сочи", "city": "Сочи", "conference": "west" },
         "guestTeam": { "id": 9, "name": "Трактор", "city": "Челябинск", "conference": "east" },
         "date": 1757858400000,
-        "isFinished": false,
-        "result": { "homeScore": 0, "guestScore": 0, "winType": "regulation" }
+        "isFinished": true,
+        "result": { "homeScore": 3, "guestScore": 4, "winType": "overtime" }
     },
     {
         "id": "40",
