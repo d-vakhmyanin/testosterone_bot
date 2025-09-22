@@ -316,238 +316,272 @@
         "homeTeam": { "id": 5, "name": "Амур", "city": "Хабаровск", "conference": "east" },
         "guestTeam": { "id": 22, "name": "Драконы", "city": "Шанхай", "conference": "west" },
         "date": 1757927700000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 5, "guestScore": 4, "winType": "regulation" }
     },
     {
         "id": "41",
         "homeTeam": { "id": 3, "name": "Адмирал", "city": "Владивосток", "conference": "east" },
         "guestTeam": { "id": 8, "name": "Сибирь", "city": "Новосибирск", "conference": "east" },
         "date": 1757928600000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 2, "guestScore": 0, "winType": "regulation" }
     },
     {
         "id": "42",
         "homeTeam": { "id": 4, "name": "Авангард", "city": "Омск", "conference": "east" },
         "guestTeam": { "id": 21, "name": "Динамо Мн", "city": "Минск", "conference": "west" },
         "date": 1757943000000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 5, "guestScore": 4, "winType": "shootout" }
     },
     {
         "id": "43",
         "homeTeam": { "id": 2, "name": "Автомобилист", "city": "Екатеринбург", "conference": "east" },
         "guestTeam": { "id": 7, "name": "Салават Юлаев", "city": "Уфа", "conference": "east" },
         "date": 1757944800000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 4, "guestScore": 2, "winType": "regulation" }
     },
     {
         "id": "44",
         "homeTeam": { "id": 6, "name": "Барыс", "city": "Астана", "conference": "east" },
         "guestTeam": { "id": 17, "name": "Динамо М", "city": "Москва", "conference": "west" },
         "date": 1757946600000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 5, "guestScore": 2, "winType": "regulation" }
     },
     {
         "id": "45",
         "homeTeam": { "id": 23, "name": "Лада", "city": "Тольятти", "conference": "west" },
         "guestTeam": { "id": 10, "name": "Локомотив", "city": "Ярославль", "conference": "west" },
         "date": 1758034800000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 1, "guestScore": 6, "winType": "regulation" }
     },
     {
         "id": "46",
         "homeTeam": { "id": 16, "name": "Северсталь", "city": "Череповец", "conference": "west" },
         "guestTeam": { "id": 12, "name": "Металлург Мг", "city": "Магнитогорск", "conference": "east" },
         "date": 1758038400000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 2, "guestScore": 5, "winType": "regulation" }
     },
     {
         "id": "47",
         "homeTeam": { "id": 18, "name": "ЦСКА", "city": "Москва", "conference": "west" },
         "guestTeam": { "id": 14, "name": "Спартак", "city": "Москва", "conference": "west" },
         "date": 1758040200000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 5, "guestScore": 6, "winType": "shootout" }
     },
     {
         "id": "48",
         "homeTeam": { "id": 15, "name": "ХК Сочи", "city": "Сочи", "conference": "west" },
         "guestTeam": { "id": 13, "name": "Торпедо", "city": "Нижний Новгород", "conference": "west" },
         "date": 1758040200000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 0, "guestScore": 3, "winType": "regulation" }
     },
     {
         "id": "49",
         "homeTeam": { "id": 5, "name": "Амур", "city": "Хабаровск", "conference": "east" },
         "guestTeam": { "id": 8, "name": "Сибирь", "city": "Новосибирск", "conference": "east" },
         "date": 1758100500000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 3, "guestScore": 4, "winType": "shootout" }
     },
     {
         "id": "50",
         "homeTeam": { "id": 3, "name": "Адмирал", "city": "Владивосток", "conference": "east" },
         "guestTeam": { "id": 22, "name": "Драконы", "city": "Шанхай", "conference": "west" },
         "date": 1758101400000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 4, "guestScore": 0, "winType": "regulation" }
     },
     {
         "id": "51",
         "homeTeam": { "id": 4, "name": "Авангард", "city": "Омск", "conference": "east" },
         "guestTeam": { "id": 7, "name": "Салават Юлаев", "city": "Уфа", "conference": "east" },
         "date": 1758115800000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 3, "guestScore": 2, "winType": "overtime" }
     },
     {
         "id": "52",
         "homeTeam": { "id": 2, "name": "Автомобилист", "city": "Екатеринбург", "conference": "east" },
         "guestTeam": { "id": 9, "name": "Трактор", "city": "Челябинск", "conference": "east" },
         "date": 1758117600000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 0, "guestScore": 2, "winType": "regulation" }
     },
     {
         "id": "53",
         "homeTeam": { "id": 1, "name": "Ак Барс", "city": "Казань", "conference": "east" },
         "guestTeam": { "id": 11, "name": "Нефтехимик", "city": "Нижнекамск", "conference": "east" },
         "date": 1758124800000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 1, "guestScore": 2, "winType": "regulation" }
     },
     {
         "id": "54",
         "homeTeam": { "id": 12, "name": "Металлург Мг", "city": "Магнитогорск", "conference": "east" },
         "guestTeam": { "id": 6, "name": "Барыс", "city": "Астана", "conference": "east" },
         "date": 1758204000000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 5, "guestScore": 1, "winType": "regulation" }
     },
     {
         "id": "55",
         "homeTeam": { "id": 23, "name": "Лада", "city": "Тольятти", "conference": "west" },
         "guestTeam": { "id": 13, "name": "Торпедо", "city": "Нижний Новгород", "conference": "west" },
         "date": 1758207600000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 1, "guestScore": 5, "winType": "regulation" }
     },
     {
         "id": "56",
         "homeTeam": { "id": 18, "name": "ЦСКА", "city": "Москва", "conference": "west" },
         "guestTeam": { "id": 10, "name": "Локомотив", "city": "Ярославль", "conference": "west" },
         "date": 1758213000000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 1, "guestScore": 5, "winType": "regulation" }
     },
     {
         "id": "57",
         "homeTeam": { "id": 5, "name": "Амур", "city": "Хабаровск", "conference": "east" },
         "guestTeam": { "id": 8, "name": "Сибирь", "city": "Новосибирск", "conference": "east" },
         "date": 1758273300000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 0, "guestScore": 1, "winType": "regulation" }
     },
     {
         "id": "58",
         "homeTeam": { "id": 2, "name": "Автомобилист", "city": "Екатеринбург", "conference": "east" },
         "guestTeam": { "id": 14, "name": "Спартак", "city": "Москва", "conference": "west" },
         "date": 1758290400000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 5, "guestScore": 4, "winType": "shootout" }
     },
     {
         "id": "59",
         "homeTeam": { "id": 9, "name": "Трактор", "city": "Челябинск", "conference": "east" },
         "guestTeam": { "id": 11, "name": "Нефтехимик", "city": "Нижнекамск", "conference": "east" },
         "date": 1758290400000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 3, "guestScore": 2, "winType": "regulation" }
     },
     {
         "id": "60",
         "homeTeam": { "id": 1, "name": "Ак Барс", "city": "Казань", "conference": "east" },
         "guestTeam": { "id": 7, "name": "Салават Юлаев", "city": "Уфа", "conference": "east" },
         "date": 1758297600000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 3, "guestScore": 1, "winType": "regulation" }
     },
     {
         "id": "61",
         "homeTeam": { "id": 19, "name": "СКА", "city": "Санкт-Петербург", "conference": "west" },
         "guestTeam": { "id": 21, "name": "Динамо Мн", "city": "Минск", "conference": "west" },
         "date": 1758299400000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 3, "guestScore": 2, "winType": "overtime" }
     },
     {
         "id": "62",
         "homeTeam": { "id": 3, "name": "Адмирал", "city": "Владивосток", "conference": "east" },
         "guestTeam": { "id": 17, "name": "Динамо М", "city": "Москва", "conference": "west" },
         "date": 1758351600000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 3, "guestScore": 4, "winType": "shootout" }
     },
     {
         "id": "63",
         "homeTeam": { "id": 16, "name": "Северсталь", "city": "Череповец", "conference": "west" },
         "guestTeam": { "id": 6, "name": "Барыс", "city": "Астана", "conference": "east" },
         "date": 1758376800000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 3, "guestScore": 2, "winType": "regulation" }
     },
     {
         "id": "64",
         "homeTeam": { "id": 9, "name": "Трактор", "city": "Челябинск", "conference": "east" },
         "guestTeam": { "id": 14, "name": "Спартак", "city": "Москва", "conference": "west" },
         "date": 1758452400000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 3, "guestScore": 5, "winType": "regulation" }
     },
     {
         "id": "65",
         "homeTeam": { "id": 12, "name": "Металлург Мг", "city": "Магнитогорск", "conference": "east" },
         "guestTeam": { "id": 18, "name": "ЦСКА", "city": "Москва", "conference": "west" },
         "date": 1758454200000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 5, "guestScore": 4, "winType": "regulation" }
     },
     {
         "id": "66",
         "homeTeam": { "id": 2, "name": "Автомобилист", "city": "Екатеринбург", "conference": "east" },
         "guestTeam": { "id": 11, "name": "Нефтехимик", "city": "Нижнекамск", "conference": "east" },
         "date": 1758456000000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 1, "guestScore": 4, "winType": "regulation" }
     },
     {
         "id": "67",
         "homeTeam": { "id": 23, "name": "Лада", "city": "Тольятти", "conference": "west" },
         "guestTeam": { "id": 19, "name": "СКА", "city": "Санкт-Петербург", "conference": "west" },
         "date": 1758459600000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 0, "guestScore": 3, "winType": "regulation" }
     },
     {
         "id": "68",
         "homeTeam": { "id": 1, "name": "Ак Барс", "city": "Казань", "conference": "east" },
         "guestTeam": { "id": 4, "name": "Авангард", "city": "Омск", "conference": "east" },
         "date": 1758461400000,
-        "isFinished": false
+        "isFinished": true,
+        "result": { "homeScore": 1, "guestScore": 6, "winType": "regulation" }
     },
     {
         "id": "69",
         "homeTeam": { "id": 5, "name": "Амур", "city": "Хабаровск", "conference": "east" },
         "guestTeam": { "id": 17, "name": "Динамо М", "city": "Москва", "conference": "west" },
         "date": 1758532500000,
-        "isFinished": false
+        "isFinished": false,
+        "result": { "homeScore": 0, "guestScore": 0, "winType": "regulation" }
     },
     {
         "id": "70",
         "homeTeam": { "id": 8, "name": "Сибирь", "city": "Новосибирск", "conference": "east" },
         "guestTeam": { "id": 16, "name": "Северсталь", "city": "Череповец", "conference": "west" },
         "date": 1758544200000,
-        "isFinished": false
+        "isFinished": false,
+        "result": { "homeScore": 0, "guestScore": 0, "winType": "regulation" }
     },
     {
         "id": "71",
         "homeTeam": { "id": 10, "name": "Локомотив", "city": "Ярославль", "conference": "west" },
         "guestTeam": { "id": 15, "name": "ХК Сочи", "city": "Сочи", "conference": "west" },
         "date": 1758556800000,
-        "isFinished": false
+        "isFinished": false,
+        "result": { "homeScore": 0, "guestScore": 0, "winType": "regulation" }
     },
     {
         "id": "72",
         "homeTeam": { "id": 21, "name": "Динамо Мн", "city": "Минск", "conference": "west" },
         "guestTeam": { "id": 6, "name": "Барыс", "city": "Астана", "conference": "east" },
         "date": 1758557400000,
-        "isFinished": false
+        "isFinished": false,
+        "result": { "homeScore": 0, "guestScore": 0, "winType": "regulation" }
     },
     {
         "id": "73",
         "homeTeam": { "id": 22, "name": "Драконы", "city": "Шанхай", "conference": "west" },
         "guestTeam": { "id": 13, "name": "Торпедо", "city": "Нижний Новгород", "conference": "west" },
         "date": 1758558600000,
-        "isFinished": false
+        "isFinished": false,
+        "result": { "homeScore": 0, "guestScore": 0, "winType": "regulation" }
     },
     {
         "id": "74",

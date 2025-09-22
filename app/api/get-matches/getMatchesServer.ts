@@ -1,6 +1,7 @@
 'use server';
 
 import { loadMatches } from '@/app/server/utils/fs';
+import { isToday } from '@/app/server/utils/isToday';
 import { Match } from '@/app/utils/hockey/matches';
 import { GetMatchesRequest, GetMatchesResponse } from '@/app/utils/requests/getMatches';
 
@@ -46,11 +47,7 @@ export const getMatchesServer = async ({
                 break;
             }
             case 'today': {
-                if (
-                    matchDate.getDate() === date.getDate() &&
-                    matchDate.getMonth() === date.getMonth() &&
-                    matchDate.getFullYear() === date.getFullYear()
-                ) {
+                if (isToday(matchDate)) {
                     matchesToReturn.push(match);
                 }
 

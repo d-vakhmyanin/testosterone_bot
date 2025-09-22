@@ -3,6 +3,7 @@
 import { parse } from 'node-html-parser';
 import { Match } from '@/app/utils/hockey/matches';
 import { loadMatches } from '@/app/server/utils/fs';
+import { isToday } from '@/app/server/utils/isToday';
 
 const getHtmlCalendar = () =>
     fetch('https://www.championat.com/hockey/_superleague/tournament/6608/calendar/', {
@@ -174,7 +175,7 @@ export const updateMatches = async () => {
     const oldMatches = loadMatches();
 
     const newMatches = oldMatches.map((match) => {
-        if (match.isFinished) {
+        if (match.isFinished && !isToday(match.date)) {
             return match;
         }
 
