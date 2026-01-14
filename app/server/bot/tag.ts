@@ -34,7 +34,7 @@ export const potegai = (bot: Bot) => {
         const username = ctx.message.text.split(' ')[1];
         const chatId = ctx.chat.id;
 
-        if (ctx.message.from.username !== 'dVakhmyanin') {
+        if (ctx.message.from.username !== 'vakhmian') {
             return replyToMessage(ctx, 'Тебя в этом вопросе не слушаю', false);
         }
 
@@ -65,7 +65,7 @@ export const netegai = (bot: Bot) => {
         const username = ctx.message.text.split(' ')[1];
         const chatId = ctx.chat.id;
 
-        if (ctx.message.from.username !== 'dVakhmyanin') {
+        if (ctx.message.from.username !== 'vakhmian') {
             return replyToMessage(ctx, 'Тебя в этом вопросе не слушаю', false);
         }
 

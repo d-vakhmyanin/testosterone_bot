@@ -155,7 +155,7 @@ const sendDailyEveningHockeyMessage = async (...[bot, chatId]: CronJobParameters
     const userBets = await getAllBets(bot, chatId);
     const message = getBetsMessage(userBets, finishedMatches);
 
-    bot.telegram.sendMessage(chatId, message, { parse_mode: 'HTML' });
+    await bot.telegram.sendMessage(chatId, message, { parse_mode: 'HTML' });
 
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);

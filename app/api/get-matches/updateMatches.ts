@@ -124,6 +124,8 @@ const parseCalendarMatches = (html: string): ParsedMatch[] => {
     return matches;
 };
 
+const TRANSFER = 3 * 1000 * 60 * 60;
+
 export const updateMatches = async () => {
     if (typeof window !== 'undefined') {
         return;
@@ -179,15 +181,16 @@ export const updateMatches = async () => {
             return match;
         }
 
-        const parsedMatch = parsedMatches.find(
-            (el) =>
-                !!el.result &&
-                el.date === match.date &&
-                (match.homeTeam.name.includes(el.homeTeam.name) ||
-                    match.guestTeam.name.includes(el.guestTeam.name) ||
-                    el.homeTeam.name.includes(match.homeTeam.name) ||
-                    el.guestTeam.name.includes(match.guestTeam.name))
-        );
+        const parsedMatch = parsedMatches.find((el) => {
+            const isSameDate = Math.abs(el.date - match.date) < TRANSFER;
+            const isSameTeams =
+                (match.homeTeam.name.includes(el.homeTeam.name) &&
+                    match.guestTeam.name.includes(el.guestTeam.name)) ||
+                (el.homeTeam.name.includes(match.homeTeam.name) &&
+                    el.guestTeam.name.includes(match.guestTeam.name));
+
+            return !!el.result && isSameDate && isSameTeams;
+        });
 
         if (!parsedMatch) {
             return match;
