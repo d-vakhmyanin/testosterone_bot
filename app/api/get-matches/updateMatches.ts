@@ -124,7 +124,7 @@ const parseCalendarMatches = (html: string): ParsedMatch[] => {
     return matches;
 };
 
-const TRANSFER = 3 * 1000 * 60 * 60;
+const TRANSFER = 6 * 1000 * 60 * 60;
 
 export const updateMatches = async () => {
     if (typeof window !== 'undefined') {

@@ -201,6 +201,12 @@ export const createDailyCronJob = (...[bot, chatId]: Partial<CronJobParameters>)
         'Europe/Moscow'
     );
 
+    if (chatId.toString() === '-4691307266') {
+        chatIdsMap[chatId] = true;
+
+        return;
+    }
+
     const hockeyMorningJob = new CronJob(
         '0 9 * * *', // в 9 часов 0 минут
         () => handleTick('hockeyMorning', bot, chatId),
