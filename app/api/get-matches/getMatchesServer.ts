@@ -19,7 +19,7 @@ export const getMatchesServer = async ({
     const maxToday = new Date(date);
     maxToday.setHours(23, 59, 59, 99);
 
-    const limitDate = new Date(2026, 2, 19);
+    const limitDate = new Date(2027, 2, 20);
 
     let isDone = false;
     let isEdgeMet = false;
