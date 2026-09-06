@@ -96,8 +96,7 @@ export const MathPage: React.FC<MatchT> = (match) => {
                             initialValue={0}
                             max={99}
                             min={0}
-                            step={0.5}
-                            inputMode="decimal"
+                            inputMode="numeric"
                             forceValue={state.isBetLoaded ? state.bet.total : undefined}
                             onChange={handleTotalChange}
                         />

@@ -6,14 +6,14 @@ import { loadMatches } from '@/app/server/utils/fs';
 import { isToday } from '@/app/server/utils/isToday';
 
 const getHtmlCalendar = () =>
-    fetch('https://www.championat.com/hockey/_superleague/tournament/6608/calendar/', {
+    fetch('https://www.championat.com/hockey/_superleague/tournament/7092/calendar/', {
         headers: {
             'sec-ch-ua': '"Not;A=Brand";v="99", "Google Chrome";v="139", "Chromium";v="139"',
             'sec-ch-ua-mobile': '?0',
             'sec-ch-ua-platform': '"Windows"',
             'upgrade-insecure-requests': '1',
         },
-        referrer: 'https://www.championat.com/hockey/_superleague/tournament/6608/',
+        referrer: 'https://www.championat.com/hockey/_superleague/tournament/7092/',
         body: null,
         method: 'GET',
         mode: 'cors',
@@ -40,10 +40,14 @@ type CurrentMatchesResponse = {
     };
 };
 
-const getCurrentMatches = (): Promise<CurrentMatchesResponse> =>
-    fetch(`https://www.championat.com/stat/data/${new Date().toISOString().split('T')[0]}/hockey`, {
+const getCurrentMatches = (): Promise<CurrentMatchesResponse> => {
+    const url = `https://www.championat.com/stat/data/${
+        new Date().toISOString().split('T')[0]
+    }/hockey?error=missing_code&utm_auth=false`;
+
+    return fetch(url, {
         headers: {
-            'sec-ch-ua': '"Chromium";v="140", "Not=A?Brand";v="24", "Google Chrome";v="140"',
+            'sec-ch-ua': '"Chromium";v="152", "Not?A_Brand";v="24", "Google Chrome";v="152"',
             'sec-ch-ua-mobile': '?0',
             'sec-ch-ua-platform': '"Windows"',
         },
@@ -53,6 +57,7 @@ const getCurrentMatches = (): Promise<CurrentMatchesResponse> =>
         mode: 'cors',
         credentials: 'omit',
     }).then((res) => res.json());
+};
 
 type ParsedMatch = Pick<Match, 'date' | 'isFinished' | 'result'> & {
     homeTeam: ShortTeam;
