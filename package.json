@@ -12,7 +12,7 @@
     "dependencies": {
         "cron": "^4.3.1",
         "dotenv": "^17.0.1",
-        "next": "15.4.2",
+        "next": "^15.5.14",
         "node-html-parser": "^7.0.1",
         "react": "19.1.0",
         "react-dom": "19.1.0",
@@ -22,7 +22,7 @@
     "devDependencies": {
         "@eslint/eslintrc": "^3",
         "@twa-dev/types": "^8.0.2",
-        "@types/node": "^20",
+        "@types/node": "^20.19.37",
         "@types/react": "^19",
         "@types/react-dom": "^19",
         "eslint": "^9",
