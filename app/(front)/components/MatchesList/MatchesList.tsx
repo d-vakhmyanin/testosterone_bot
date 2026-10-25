@@ -32,6 +32,11 @@ export const MatchesList: React.FC<MatchesListProps> = ({
     const topSentinelRef = React.useRef(null);
     const bottomSentinelRef = React.useRef(null);
 
+    const stateRef = React.useRef({ hasMoreTop, hasMoreBottom, loadMoreTop, loadMoreBottom });
+    stateRef.current = { hasMoreTop, hasMoreBottom, loadMoreTop, loadMoreBottom };
+
+    const observerRef = React.useRef<IntersectionObserver | null>(null);
+
     React.useLayoutEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
@@ -39,6 +44,8 @@ export const MatchesList: React.FC<MatchesListProps> = ({
                     if (!entry.isIntersecting) {
                         return;
                     }
+
+                    const { hasMoreTop, hasMoreBottom, loadMoreTop, loadMoreBottom } = stateRef.current;
 
                     if (entry.target === topSentinelRef.current && hasMoreTop) {
                         loadMoreTop();
@@ -53,24 +60,45 @@ export const MatchesList: React.FC<MatchesListProps> = ({
                     }
                 });
             },
-            {
-                rootMargin: '200px',
-                threshold: 0.1,
-            }
+            { rootMargin: '200px', threshold: 0.1 }
         );
 
-        if (topSentinelRef.current) {
-            observer.observe(topSentinelRef.current);
-        }
-
-        if (bottomSentinelRef.current) {
-            observer.observe(bottomSentinelRef.current);
-        }
+        observerRef.current = observer;
 
         return () => {
             observer.disconnect();
+            observerRef.current = null;
         };
-    }, [containerRef, hasMoreTop, hasMoreBottom, loadMoreTop, loadMoreBottom]);
+    }, [containerRef]);
+
+    React.useLayoutEffect(() => {
+        const observer = observerRef.current;
+
+        if (!observer) {
+            return;
+        }
+
+        const top = topSentinelRef.current;
+        const bottom = bottomSentinelRef.current;
+
+        if (top && hasMoreTop) {
+            observer.observe(top);
+        }
+
+        if (bottom && hasMoreBottom) {
+            observer.observe(bottom);
+        }
+
+        return () => {
+            if (top) {
+                observer.unobserve(top);
+            }
+
+            if (bottom) {
+                observer.unobserve(bottom);
+            }
+        };
+    }, [hasMoreTop, hasMoreBottom]);
 
     // сохранение скролла при подгрузке сверху
     React.useLayoutEffect(() => {

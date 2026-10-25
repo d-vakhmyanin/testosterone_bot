@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { getMatches } from '@/app/utils/requests/getMatches';
 
 import { matchesReducer, MatchesState } from './matchesReducer';
@@ -39,6 +39,7 @@ export const MatchesProvider: React.FC<React.PropsWithChildren<MatchesProviderPr
         hasNext: Boolean(initialData.hasNext),
         hasPrev: Boolean(initialData.hasPrev),
     });
+    const firstRender = useRef(true);
 
     const filters = useMemo(() => {
         const activeTeams = searchParams.get('activeTeams');
@@ -97,7 +98,9 @@ export const MatchesProvider: React.FC<React.PropsWithChildren<MatchesProviderPr
     }, [state.matches, state.isLoading, state.hasNext, filters]);
 
     useEffect(() => {
-        if (!filters) {
+        if (firstRender.current) {
+            firstRender.current = false;
+
             return;
         }
 
