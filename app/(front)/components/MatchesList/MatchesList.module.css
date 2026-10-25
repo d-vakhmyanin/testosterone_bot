@@ -29,6 +29,15 @@
     gap: 4px;
 }
 
+.empty {
+    color: var(--text-color);
+    font-size: large;
+    height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .dot {
     width: 8px;
     height: 8px;

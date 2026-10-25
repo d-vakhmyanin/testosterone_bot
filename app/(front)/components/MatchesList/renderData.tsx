@@ -4,8 +4,13 @@ import { Match } from '../Match/Match';
 import { DateLabel } from '../DateLabel/DateLabel';
 
 import { MatchesListProps } from './MatchesList';
+import styles from './MatchesList.module.css';
 
 export const renderData = (data: MatchesListProps['data']) => {
+    if (!data.length) {
+        return <div className={styles.empty}>Матчей нет</div>;
+    }
+
     let curDate: Date | undefined = undefined;
 
     return data.map((el) => {

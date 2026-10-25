@@ -58,12 +58,12 @@ a {
 }
 
 .rdp-root {
-    --rdp-accent-color: var(--accent-color);
-    --rdp-accent-background-color: var(--accent-color);
-    --rdp-day-height: 32px;
-    --rdp-day-width: 32px;
-    --rdp-day_button-width: 32px;
-    --rdp-day_button-height: 32px;
+    --rdp-accent-color: var(--accent-color) !important;;
+    --rdp-accent-background-color: var(--accent-color) !important;;
+    --rdp-day-height: 32px !important;;
+    --rdp-day-width: 32px !important;;
+    --rdp-day_button-width: 32px !important;;
+    --rdp-day_button-height: 32px !important;;
 }
 
 .rdp-selected {
