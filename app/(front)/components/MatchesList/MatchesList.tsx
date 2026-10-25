@@ -8,6 +8,7 @@ import { useScrollRestorationRef } from '../../hooks/useScrollRestorationRef';
 import styles from './MatchesList.module.css';
 import { renderData } from './renderData';
 import { Sentinel } from './Sentinel';
+import { FiltersModal } from './FiltersModal/FiltersModal';
 
 export type MatchesListProps = {
     data: MatchT[];
@@ -83,6 +84,7 @@ export const MatchesList: React.FC<MatchesListProps> = ({
 
     return (
         <div className={styles.listContainer} ref={containerRef}>
+            <FiltersModal />
             {hasMoreTop && <Sentinel isHidden={!isLoading} ref={topSentinelRef} />}
             {renderData(data)}
             {hasMoreBottom && <Sentinel isHidden={!isLoading} ref={bottomSentinelRef} />}

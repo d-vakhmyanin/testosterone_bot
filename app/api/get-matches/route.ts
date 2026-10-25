@@ -10,7 +10,13 @@ export const GET = async (req: NextRequest) => {
         const edgeMatchId = searchParams.get('edgeMatchId') || undefined;
         const minLimit = Number(searchParams.get('minLimit')) || undefined;
 
-        const res = await getMatchesServer({ edgeMatchId, type, minLimit });
+        const filters = {
+            activeTeams: searchParams.get('activeTeams') || null,
+            from: searchParams.get('from') || null,
+            to: searchParams.get('to') || null,
+        };
+
+        const res = await getMatchesServer({ edgeMatchId, type, minLimit, filters });
 
         return NextResponse.json({ ok: true, ...res });
     } catch (error) {

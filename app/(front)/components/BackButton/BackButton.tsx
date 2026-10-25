@@ -5,11 +5,19 @@ import React from 'react';
 
 import styles from './BackButton.module.css';
 
-export const BackButton: React.FC = () => {
+type BackButtonProps = {
+    onCLick?: () => void;
+};
+
+export const BackButton: React.FC<BackButtonProps> = ({ onCLick }) => {
     const router = useRouter();
 
     const handleClick = () => {
-        router.back();
+        if (onCLick) {
+            onCLick();
+        } else {
+            router.back();
+        }
     };
 
     return (

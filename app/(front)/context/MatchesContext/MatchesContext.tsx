@@ -1,9 +1,9 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { getMatches } from '@/app/utils/requests/getMatches';
-import { Match } from '@/app/utils/hockey/matches';
 
 import { matchesReducer, MatchesState } from './matchesReducer';
+import { useSearchParams } from 'next/navigation';
 
 const initialState: MatchesState = {
     matches: [],
@@ -16,14 +16,12 @@ type MatchesContextType = {
     state: MatchesState;
     loadTop: () => void;
     loadBottom: () => void;
-    setFullState: (data: { matches: Match[]; hasPrev: boolean; hasNext: boolean }) => void;
 };
 
 const MatchesContext = React.createContext<MatchesContextType>({
     state: initialState,
     loadTop: () => {},
     loadBottom: () => {},
-    setFullState: () => {},
 });
 
 type MatchesProviderProps = {
@@ -34,12 +32,21 @@ export const MatchesProvider: React.FC<React.PropsWithChildren<MatchesProviderPr
     children,
     initialData,
 }) => {
+    const searchParams = useSearchParams();
     const [state, dispatch] = React.useReducer(matchesReducer, {
         ...initialState,
         matches: initialData.matches,
         hasNext: Boolean(initialData.hasNext),
         hasPrev: Boolean(initialData.hasPrev),
     });
+
+    const filters = useMemo(() => {
+        const activeTeams = searchParams.get('activeTeams');
+        const from = searchParams.get('from');
+        const to = searchParams.get('to');
+
+        return { activeTeams, from, to };
+    }, [searchParams]);
 
     const loadTop = React.useCallback(() => {
         if (state.isLoading || !state.hasPrev) {
@@ -51,6 +58,7 @@ export const MatchesProvider: React.FC<React.PropsWithChildren<MatchesProviderPr
         getMatches({
             edgeMatchId: state.matches.at(0)?.id,
             type: 'prev',
+            filters,
         })
             .then((data) => {
                 dispatch({
@@ -64,7 +72,7 @@ export const MatchesProvider: React.FC<React.PropsWithChildren<MatchesProviderPr
             .finally(() => {
                 dispatch({ type: 'SET_LOADING', payload: false });
             });
-    }, [state.matches, state.isLoading, state.hasPrev]);
+    }, [state.matches, state.isLoading, state.hasPrev, filters]);
 
     const loadBottom = React.useCallback(() => {
         if (state.isLoading || !state.hasNext) {
@@ -73,7 +81,7 @@ export const MatchesProvider: React.FC<React.PropsWithChildren<MatchesProviderPr
 
         dispatch({ type: 'SET_LOADING', payload: true });
 
-        getMatches({ edgeMatchId: state.matches.at(-1)?.id, type: 'next' })
+        getMatches({ edgeMatchId: state.matches.at(-1)?.id, type: 'next', filters })
             .then((data) => {
                 dispatch({
                     type: 'ADD_BOTTOM_MATCHES',
@@ -86,19 +94,32 @@ export const MatchesProvider: React.FC<React.PropsWithChildren<MatchesProviderPr
             .finally(() => {
                 dispatch({ type: 'SET_LOADING', payload: false });
             });
-    }, [state.matches, state.isLoading, state.hasNext]);
+    }, [state.matches, state.isLoading, state.hasNext, filters]);
 
-    const setFullState = React.useCallback(
-        (data: { matches: Match[]; hasPrev: boolean; hasNext: boolean }) => {
-            dispatch({ type: 'SET_FULL_STATE', payload: data });
-        },
-        []
-    );
+    useEffect(() => {
+        if (!filters) {
+            return;
+        }
 
-    const value = React.useMemo(
-        () => ({ state, loadTop, loadBottom, setFullState }),
-        [state, loadTop, loadBottom, setFullState]
-    );
+        dispatch({ type: 'SET_LOADING', payload: true });
+
+        getMatches({ type: 'now', filters })
+            .then((data) => {
+                dispatch({
+                    type: 'SET_FULL_STATE',
+                    payload: {
+                        matches: data.matches,
+                        hasPrev: Boolean(data.hasPrev),
+                        hasNext: Boolean(data.hasNext),
+                    },
+                });
+            })
+            .finally(() => {
+                dispatch({ type: 'SET_LOADING', payload: false });
+            });
+    }, [filters]);
+
+    const value = React.useMemo(() => ({ state, loadTop, loadBottom }), [state, loadTop, loadBottom]);
 
     return <MatchesContext.Provider value={value}>{children}</MatchesContext.Provider>;
 };

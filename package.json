@@ -15,6 +15,7 @@
         "next": "^15.5.14",
         "node-html-parser": "^7.0.1",
         "react": "19.1.0",
+        "react-day-picker": "^10.0.2",
         "react-dom": "19.1.0",
         "telegraf": "^4.16.3",
         "ts-node": "^10.9.2"

@@ -56,3 +56,21 @@ a {
     color: inherit;
     text-decoration: none;
 }
+
+.rdp-root {
+    --rdp-accent-color: var(--accent-color);
+    --rdp-accent-background-color: var(--accent-color);
+    --rdp-day-height: 32px;
+    --rdp-day-width: 32px;
+    --rdp-day_button-width: 32px;
+    --rdp-day_button-height: 32px;
+}
+
+.rdp-selected {
+    font-size: medium;
+    font-weight: normal;
+}
+
+.rdp-caption_label {
+    text-transform: capitalize;
+}

@@ -3,10 +3,17 @@ import { getMatchesServer } from '@/app/api/get-matches/getMatchesServer';
 
 import { Match } from '../hockey/matches';
 
+type Filters = {
+    activeTeams: string | null;
+    from: string | null;
+    to: string | null;
+};
+
 export type GetMatchesRequest = {
     type: 'prev' | 'next' | 'now' | 'today';
     edgeMatchId?: string | null;
     minLimit?: number;
+    filters?: Filters;
 };
 
 export type GetMatchesResponse = {
@@ -22,9 +29,17 @@ export const getMatches = (params: GetMatchesRequest): Promise<GetMatchesRespons
     }
 
     const host = window.location.origin;
-    const query = `type=${params.type || 'now'}&edgeMatchId=${params.edgeMatchId || ''}&minLimit=${
+    let query = `type=${params.type || 'now'}&edgeMatchId=${params.edgeMatchId || ''}&minLimit=${
         params.minLimit || ''
     }`;
+
+    if (params.filters) {
+        Object.entries(params.filters).forEach(([key, value]) => {
+            if (key && value) {
+                query = `${query}&${key}=${value}`;
+            }
+        });
+    }
 
     return fetch(`${host}/${apiRoutes.getMatches}?${query}`, { method: 'GET' }).then((res) => res.json());
 };

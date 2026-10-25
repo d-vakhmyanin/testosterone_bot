@@ -11,6 +11,7 @@ export const getMatchesServer = async ({
     type,
     edgeMatchId = '-1',
     minLimit = LIMIT,
+    filters,
 }: GetMatchesRequest): Promise<GetMatchesResponse> => {
     const prevMatches: Match[] = [];
     const matchesToReturn: Match[] = [];
@@ -27,7 +28,32 @@ export const getMatchesServer = async ({
     let hasPrev = undefined;
     let hasNext = undefined;
 
-    const MATCHES = loadMatches();
+    let MATCHES: ReturnType<typeof loadMatches> = [];
+
+    if (filters) {
+        const { activeTeams, from, to } = filters;
+        const teamIds = activeTeams?.split(',');
+        const fromDate = from ? new Date(from) : null;
+
+        const endFrom = fromDate ? new Date(fromDate) : null;
+        endFrom?.setHours(23, 59, 59, 999);
+        const toDate = to ? new Date(to) : endFrom;
+
+        MATCHES = loadMatches().filter((match) => {
+            const matchDate = new Date(match.date);
+
+            const teamSatisfies = teamIds?.length
+                ? teamIds.includes(match.homeTeam.id.toString()) ||
+                  teamIds.includes(match.guestTeam.id.toString())
+                : true;
+            const fromSatisfies = fromDate ? matchDate >= fromDate : true;
+            const toSatisfies = toDate ? matchDate <= toDate : true;
+
+            return teamSatisfies && fromSatisfies && toSatisfies;
+        });
+    } else {
+        MATCHES = loadMatches();
+    }
 
     MATCHES.forEach((match) => {
         if (isDone) {
@@ -39,11 +65,15 @@ export const getMatchesServer = async ({
 
         switch (type) {
             case 'now': {
-                if (matchDate >= date || matchDate >= limitDate) {
+                if (filters?.from) {
+                    matchesToReturn.push(match);
+                } else if (matchDate >= date || matchDate >= limitDate) {
                     matchesToReturn.push(match);
                 }
 
-                isDone = matchesToReturn.length >= minLimit && matchDate.getDate() !== prevDate;
+                isDone = filters?.from
+                    ? matchesToReturn.length >= minLimit
+                    : matchesToReturn.length >= minLimit && matchDate.getDate() !== prevDate;
                 break;
             }
             case 'today': {

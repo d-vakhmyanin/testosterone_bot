@@ -1,0 +1,27 @@
+.container {
+    position: relative;
+}
+
+.btn {
+    display: flex;
+    align-items: center;
+    color: var(--accent-color);
+    justify-content: center;
+    gap: 4px;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    background: none;
+    padding: 4px;
+    white-space: nowrap;
+}
+
+.popup {
+    position: absolute;
+    background-color: var(--background-secondary);
+    z-index: 99;
+    right: 0;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px var(--background);
+}

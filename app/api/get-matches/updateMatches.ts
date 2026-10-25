@@ -136,13 +136,13 @@ export const updateMatches = async () => {
         return;
     }
 
-    const fs = await import('fs');
-    // здесь только результаты завершённых матчей
-    const html = await getHtmlCalendar();
-    const championatMatches = parseCalendarMatches(html);
-    const currentMatches: typeof championatMatches = [];
-
     try {
+        const fs = await import('fs');
+        // здесь только результаты завершённых матчей
+        const html = await getHtmlCalendar();
+        const championatMatches = parseCalendarMatches(html);
+        const currentMatches: typeof championatMatches = [];
+
         // здесь актуальные счета в том числе по идущим матчам
         const res = await getCurrentMatches();
         Object.values(res.matches.hockey.tournaments).forEach((tournament) => {
@@ -174,39 +174,39 @@ export const updateMatches = async () => {
                 });
             });
         });
+
+        const parsedMatches = [...championatMatches, ...currentMatches];
+        const oldMatches = loadMatches();
+
+        const newMatches = oldMatches.map((match) => {
+            if (match.isFinished && !isToday(match.date)) {
+                return match;
+            }
+
+            const parsedMatch = parsedMatches.find((el) => {
+                const isSameDate = Math.abs(el.date - match.date) < TRANSFER;
+                const isSameTeams =
+                    (match.homeTeam.name.includes(el.homeTeam.name) &&
+                        match.guestTeam.name.includes(el.guestTeam.name)) ||
+                    (el.homeTeam.name.includes(match.homeTeam.name) &&
+                        el.guestTeam.name.includes(match.guestTeam.name));
+
+                return !!el.result && isSameDate && isSameTeams;
+            });
+
+            if (!parsedMatch) {
+                return match;
+            }
+
+            return {
+                ...match,
+                isFinished: parsedMatch.isFinished,
+                result: parsedMatch.result,
+            };
+        });
+
+        fs.writeFileSync('app/utils/hockey/matches.json', JSON.stringify(newMatches));
     } catch (e) {
         console.log('Cannot get current matches data', e);
     }
-
-    const parsedMatches = [...championatMatches, ...currentMatches];
-    const oldMatches = loadMatches();
-
-    const newMatches = oldMatches.map((match) => {
-        if (match.isFinished && !isToday(match.date)) {
-            return match;
-        }
-
-        const parsedMatch = parsedMatches.find((el) => {
-            const isSameDate = Math.abs(el.date - match.date) < TRANSFER;
-            const isSameTeams =
-                (match.homeTeam.name.includes(el.homeTeam.name) &&
-                    match.guestTeam.name.includes(el.guestTeam.name)) ||
-                (el.homeTeam.name.includes(match.homeTeam.name) &&
-                    el.guestTeam.name.includes(match.guestTeam.name));
-
-            return !!el.result && isSameDate && isSameTeams;
-        });
-
-        if (!parsedMatch) {
-            return match;
-        }
-
-        return {
-            ...match,
-            isFinished: parsedMatch.isFinished,
-            result: parsedMatch.result,
-        };
-    });
-
-    fs.writeFileSync('app/utils/hockey/matches.json', JSON.stringify(newMatches));
 };

@@ -1,6 +1,7 @@
 import Script from 'next/script';
 import { Inter } from 'next/font/google';
 import type { Metadata, Viewport } from 'next';
+import 'react-day-picker/style.css';
 
 import './globals.css';
 import styles from './layout.module.css';
