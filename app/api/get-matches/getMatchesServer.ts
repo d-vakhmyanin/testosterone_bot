@@ -42,10 +42,20 @@ export const getMatchesServer = async ({
         MATCHES = loadMatches().filter((match) => {
             const matchDate = new Date(match.date);
 
-            const teamSatisfies = teamIds?.length
-                ? teamIds.includes(match.homeTeam.id.toString()) ||
-                  teamIds.includes(match.guestTeam.id.toString())
-                : true;
+            const teamSatisfies = (() => {
+                if (!teamIds?.length) {
+                    return true;
+                }
+
+                const hasHomeTeam = teamIds.includes(match.homeTeam.id.toString());
+                const hasGuestTeam = teamIds.includes(match.guestTeam.id.toString());
+
+                if (teamIds.length === 2) {
+                    return hasHomeTeam && hasGuestTeam;
+                }
+
+                return hasHomeTeam || hasGuestTeam;
+            })();
             const fromSatisfies = fromDate ? matchDate >= fromDate : true;
             const toSatisfies = toDate ? matchDate <= toDate : true;
 
