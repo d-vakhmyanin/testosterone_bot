@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { DateRange } from 'react-day-picker';
 import { Team, TEAMS } from '@/app/utils/hockey/teams';
 
@@ -11,15 +11,30 @@ import { IconCross } from '../../Icons/IconCross';
 import { Calendar } from '../../Calendar/Calendar';
 
 import styles from './FiltersModal.module.css';
+import { useMatches } from '@/app/(front)/context';
 
 export const FiltersModal: React.FC = () => {
     const router = useRouter();
     const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const { state, loadFilteredMatches } = useMatches();
 
     const [isOpen, setIsOpen] = useState(false);
-    const [activeTeamsMap, setActiveTeamsMap] = useState<Record<Team['id'], boolean>>({});
-    const [range, setRange] = useState<DateRange | undefined>();
-    const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const [activeTeamsMap, setActiveTeamsMap] = useState(() =>
+        state.filters.activeTeams.reduce<Record<Team['id'], boolean>>((acc, cur) => {
+            acc[cur] = true;
+
+            return acc;
+        }, {})
+    );
+
+    const [range, setRange] = useState<DateRange | undefined>(() => {
+        if (!state.filters.from && !state.filters.to) {
+            return undefined;
+        }
+
+        return { from: state.filters.from, to: state.filters.to };
+    });
 
     const clearDisabled = useMemo(() => {
         const hasActiveTeams = Object.keys(activeTeamsMap).length;
@@ -28,9 +43,42 @@ export const FiltersModal: React.FC = () => {
         return !hasActiveTeams && !hasActiveRange;
     }, [activeTeamsMap, range]);
 
+    const applyFilters = useCallback(
+        (teams = activeTeamsMap, rangeArg: typeof range | null = range) => {
+            const params = new URLSearchParams();
+            const activeTeams = Object.entries(teams)
+                .filter(([, value]) => value)
+                .map(([key]) => key);
+
+            if (activeTeams.length) {
+                params.set('activeTeams', activeTeams.join(','));
+            }
+
+            if (rangeArg?.from) {
+                const from = new Date(rangeArg.from);
+                from.setHours(0, 0, 0, 0);
+                params.set('from', from.toISOString());
+            }
+
+            if (rangeArg?.to && rangeArg.to.getTime() !== rangeArg.from?.getTime()) {
+                const to = new Date(rangeArg.to);
+                to.setHours(23, 59, 59, 999);
+                params.set('to', to.toISOString());
+            }
+
+            if (params.toString() === searchParams.toString()) {
+                return;
+            }
+
+            router.replace(`${pathname}?${params.toString()}`, { scroll: true });
+        },
+        [router, pathname, activeTeamsMap, searchParams, range]
+    );
+
     const closeModal = useCallback(() => {
+        applyFilters();
         setIsOpen(false);
-    }, []);
+    }, [applyFilters]);
 
     const handleTeamClick = useCallback((team: Team) => {
         setActiveTeamsMap((prev) => ({ ...prev, [team.id]: !prev[team.id] }));
@@ -41,52 +89,19 @@ export const FiltersModal: React.FC = () => {
         setRange(undefined);
     }, []);
 
-    const applyFilters = useCallback(() => {
-        const params = new URLSearchParams();
-        const activeTeams = Object.entries(activeTeamsMap)
-            .filter(([, value]) => value)
-            .map(([key]) => key);
-
-        if (activeTeams.length) {
-            params.set('activeTeams', activeTeams.join(','));
-        }
-
-        if (range?.from) {
-            const from = new Date(range.from);
-            from.setHours(0, 0, 0, 0);
-            params.set('from', from.toISOString());
-        }
-
-        if (range?.to && range.to.getTime() !== range.from?.getTime()) {
-            const to = new Date(range.to);
-            to.setHours(23, 59, 59, 999);
-            params.set('to', to.toISOString());
-        }
-
-        router.replace(`${pathname}?${params.toString()}`, { scroll: true });
-    }, [router, pathname, activeTeamsMap, range]);
+    const applyEmptyFilters = useCallback(() => {
+        applyFilters({}, null);
+    }, [applyFilters]);
 
     useEffect(() => {
-        if (timerRef.current) {
-            clearTimeout(timerRef.current);
-        }
-
-        timerRef.current = setTimeout(() => {
-            applyFilters();
-        }, 300);
-
-        return () => {
-            if (timerRef.current) {
-                clearTimeout(timerRef.current);
-            }
-        };
-    }, [applyFilters]);
+        loadFilteredMatches();
+    }, [searchParams, loadFilteredMatches]);
 
     return (
         <>
             <div className={styles.container}>
                 {clearDisabled ? null : (
-                    <button className={styles.btn} onClick={clearFilters}>
+                    <button className={styles.btn} onClick={applyEmptyFilters}>
                         <IconCross />
                     </button>
                 )}

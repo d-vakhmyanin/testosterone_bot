@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { getMatches } from '@/app/utils/requests/getMatches';
 
 import { matchesReducer, MatchesState } from './matchesReducer';
@@ -10,18 +10,24 @@ const initialState: MatchesState = {
     hasPrev: false,
     hasNext: false,
     isLoading: false,
+    isGlobalLoading: false,
+    filters: {
+        activeTeams: [],
+    },
 };
 
 type MatchesContextType = {
     state: MatchesState;
     loadTop: () => void;
     loadBottom: () => void;
+    loadFilteredMatches: () => void;
 };
 
 const MatchesContext = React.createContext<MatchesContextType>({
     state: initialState,
     loadTop: () => {},
     loadBottom: () => {},
+    loadFilteredMatches: () => {},
 });
 
 type MatchesProviderProps = {
@@ -39,9 +45,8 @@ export const MatchesProvider: React.FC<React.PropsWithChildren<MatchesProviderPr
         hasNext: Boolean(initialData.hasNext),
         hasPrev: Boolean(initialData.hasPrev),
     });
-    const firstRender = useRef(true);
 
-    const filters = useMemo(() => {
+    const filtersSearchParams = useMemo(() => {
         const activeTeams = searchParams.get('activeTeams');
         const from = searchParams.get('from');
         const to = searchParams.get('to');
@@ -59,7 +64,7 @@ export const MatchesProvider: React.FC<React.PropsWithChildren<MatchesProviderPr
         getMatches({
             edgeMatchId: state.matches.at(0)?.id,
             type: 'prev',
-            filters,
+            filters: filtersSearchParams,
         })
             .then((data) => {
                 dispatch({
@@ -73,7 +78,7 @@ export const MatchesProvider: React.FC<React.PropsWithChildren<MatchesProviderPr
             .finally(() => {
                 dispatch({ type: 'SET_LOADING', payload: false });
             });
-    }, [state.matches, state.isLoading, state.hasPrev, filters]);
+    }, [state.matches, state.isLoading, state.hasPrev, filtersSearchParams]);
 
     const loadBottom = React.useCallback(() => {
         if (state.isLoading || !state.hasNext) {
@@ -82,7 +87,7 @@ export const MatchesProvider: React.FC<React.PropsWithChildren<MatchesProviderPr
 
         dispatch({ type: 'SET_LOADING', payload: true });
 
-        getMatches({ edgeMatchId: state.matches.at(-1)?.id, type: 'next', filters })
+        getMatches({ edgeMatchId: state.matches.at(-1)?.id, type: 'next', filters: filtersSearchParams })
             .then((data) => {
                 dispatch({
                     type: 'ADD_BOTTOM_MATCHES',
@@ -95,18 +100,45 @@ export const MatchesProvider: React.FC<React.PropsWithChildren<MatchesProviderPr
             .finally(() => {
                 dispatch({ type: 'SET_LOADING', payload: false });
             });
-    }, [state.matches, state.isLoading, state.hasNext, filters]);
+    }, [state.matches, state.isLoading, state.hasNext, filtersSearchParams]);
 
-    useEffect(() => {
-        if (firstRender.current) {
-            firstRender.current = false;
+    const loadFilteredMatches = useCallback(() => {
+        const filters = (() => {
+            const activeTeams =
+                filtersSearchParams.activeTeams
+                    ?.split(',')
+                    .map(Number)
+                    .filter((n) => !Number.isNaN(n)) || [];
+            const from = filtersSearchParams.from ? new Date(filtersSearchParams.from) : null;
+            const to = filtersSearchParams.to ? new Date(filtersSearchParams.to) : null;
 
+            const res: (typeof state)['filters'] = { activeTeams };
+
+            if (from && !Number.isNaN(from.getTime())) {
+                res.from = from;
+            }
+
+            if (to && !Number.isNaN(to.getTime())) {
+                res.to = to;
+            }
+
+            return res;
+        })();
+
+        if (
+            filters.from?.getTime() === state.filters.from?.getTime() &&
+            filters.to?.getTime() === state.filters.to?.getTime() &&
+            filters.activeTeams.length === state.filters.activeTeams.length &&
+            filters.activeTeams.every((t) => state.filters.activeTeams.includes(t))
+        ) {
             return;
         }
 
-        dispatch({ type: 'SET_LOADING', payload: true });
+        dispatch({ type: 'SET_FILTERS', payload: filters });
 
-        getMatches({ type: 'now', filters })
+        console.log('LOAD BY FILTERS');
+
+        getMatches({ type: 'now', filters: filtersSearchParams })
             .then((data) => {
                 dispatch({
                     type: 'SET_FULL_STATE',
@@ -118,11 +150,14 @@ export const MatchesProvider: React.FC<React.PropsWithChildren<MatchesProviderPr
                 });
             })
             .finally(() => {
-                dispatch({ type: 'SET_LOADING', payload: false });
+                dispatch({ type: 'SET_GLOBAL_LOADING', payload: false });
             });
-    }, [filters]);
+    }, [filtersSearchParams, state.filters]);
 
-    const value = React.useMemo(() => ({ state, loadTop, loadBottom }), [state, loadTop, loadBottom]);
+    const value = React.useMemo(
+        () => ({ state, loadTop, loadBottom, loadFilteredMatches }),
+        [state, loadTop, loadBottom, loadFilteredMatches]
+    );
 
     return <MatchesContext.Provider value={value}>{children}</MatchesContext.Provider>;
 };

@@ -144,6 +144,10 @@ export const getMatchesServer = async ({
         }
     });
 
+    if (prevMatches.length && !matchesToReturn.length) {
+        matchesToReturn.push(...prevMatches);
+    }
+
     const index = type === 'prev' ? 0 : -1;
     hasMore = Boolean(matchesToReturn.length) && matchesToReturn.at(index)?.id !== MATCHES.at(index)?.id;
 

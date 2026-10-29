@@ -16,7 +16,11 @@ export const renderData = (data: MatchesListProps['data']) => {
     return data.map((el) => {
         const elDate = new Date(el.date);
 
-        if (curDate?.getDate() === elDate.getDate()) {
+        if (
+            curDate?.getDate() === elDate.getDate() &&
+            curDate?.getMonth() === elDate.getMonth() &&
+            curDate?.getFullYear() === elDate.getFullYear()
+        ) {
             return <Match key={el.id} {...el} />;
         } else {
             curDate = elDate;

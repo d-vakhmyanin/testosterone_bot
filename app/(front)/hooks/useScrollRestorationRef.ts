@@ -22,13 +22,19 @@ export const useScrollRestorationRef = <T extends HTMLElement>() => {
             container.scrollTop = parseInt(savedScrollTop);
         }
 
+        let timeoutId: ReturnType<typeof setTimeout>;
+
         const saveScrollPosition = () => {
-            sessionStorage.setItem(`scroll-${key}`, container.scrollTop.toString());
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                sessionStorage.setItem(`scroll-${key}`, container.scrollTop.toString());
+            }, 0);
         };
 
         container.addEventListener('scroll', saveScrollPosition);
 
         return () => {
+            clearTimeout(timeoutId);
             container.removeEventListener('scroll', saveScrollPosition);
         };
     }, [pathname]);
