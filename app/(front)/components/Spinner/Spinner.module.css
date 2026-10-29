@@ -3,6 +3,7 @@
     border-color: currentColor transparent currentColor currentColor;
     border-radius: 50%;
     animation: spin 0.75s linear infinite;
+    margin: 0 auto;
 }
 
 @keyframes spin {

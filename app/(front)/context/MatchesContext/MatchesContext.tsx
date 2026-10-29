@@ -21,6 +21,7 @@ type MatchesContextType = {
     loadTop: () => void;
     loadBottom: () => void;
     loadFilteredMatches: () => void;
+    setGlobalLoading: (payload: boolean) => void;
 };
 
 const MatchesContext = React.createContext<MatchesContextType>({
@@ -28,6 +29,7 @@ const MatchesContext = React.createContext<MatchesContextType>({
     loadTop: () => {},
     loadBottom: () => {},
     loadFilteredMatches: () => {},
+    setGlobalLoading: () => {},
 });
 
 type MatchesProviderProps = {
@@ -136,8 +138,6 @@ export const MatchesProvider: React.FC<React.PropsWithChildren<MatchesProviderPr
 
         dispatch({ type: 'SET_FILTERS', payload: filters });
 
-        console.log('LOAD BY FILTERS');
-
         getMatches({ type: 'now', filters: filtersSearchParams })
             .then((data) => {
                 dispatch({
@@ -154,9 +154,13 @@ export const MatchesProvider: React.FC<React.PropsWithChildren<MatchesProviderPr
             });
     }, [filtersSearchParams, state.filters]);
 
+    const setGlobalLoading = useCallback((payload: boolean) => {
+        dispatch({ type: 'SET_GLOBAL_LOADING', payload });
+    }, []);
+
     const value = React.useMemo(
-        () => ({ state, loadTop, loadBottom, loadFilteredMatches }),
-        [state, loadTop, loadBottom, loadFilteredMatches]
+        () => ({ state, setGlobalLoading, loadTop, loadBottom, loadFilteredMatches }),
+        [state, setGlobalLoading, loadTop, loadBottom, loadFilteredMatches]
     );
 
     return <MatchesContext.Provider value={value}>{children}</MatchesContext.Provider>;

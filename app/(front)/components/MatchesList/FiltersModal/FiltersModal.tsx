@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { DateRange } from 'react-day-picker';
 import { Team, TEAMS } from '@/app/utils/hockey/teams';
+import { useMatches } from '@/app/(front)/context';
 
 import { Modal } from '../../Modal/Modal';
 import { IconFilters } from '../../Icons/IconFilters';
@@ -11,13 +12,12 @@ import { IconCross } from '../../Icons/IconCross';
 import { Calendar } from '../../Calendar/Calendar';
 
 import styles from './FiltersModal.module.css';
-import { useMatches } from '@/app/(front)/context';
 
 export const FiltersModal: React.FC = () => {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
-    const { state, loadFilteredMatches } = useMatches();
+    const { state, setGlobalLoading } = useMatches();
 
     const [isOpen, setIsOpen] = useState(false);
     const [activeTeamsMap, setActiveTeamsMap] = useState(() =>
@@ -71,8 +71,9 @@ export const FiltersModal: React.FC = () => {
             }
 
             router.replace(`${pathname}?${params.toString()}`, { scroll: true });
+            setGlobalLoading(true);
         },
-        [router, pathname, activeTeamsMap, searchParams, range]
+        [router, pathname, activeTeamsMap, searchParams, range, setGlobalLoading]
     );
 
     const closeModal = useCallback(() => {
@@ -92,10 +93,6 @@ export const FiltersModal: React.FC = () => {
     const applyEmptyFilters = useCallback(() => {
         applyFilters({}, null);
     }, [applyFilters]);
-
-    useEffect(() => {
-        loadFilteredMatches();
-    }, [searchParams, loadFilteredMatches]);
 
     return (
         <>
