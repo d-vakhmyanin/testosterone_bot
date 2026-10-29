@@ -12,7 +12,7 @@
     "dependencies": {
         "cron": "^4.3.1",
         "dotenv": "^17.0.1",
-        "next": "^15.5.14",
+        "next": "^16.4.3",
         "node-html-parser": "^7.0.1",
         "react": "19.1.0",
         "react-day-picker": "^10.0.2",

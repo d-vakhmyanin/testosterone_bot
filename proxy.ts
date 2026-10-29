@@ -17,7 +17,7 @@ const isValidRoute = (pathname: string) => {
     return validRoutes.includes(pathname) || pathname.startsWith(routes.hockeyRoutes.match(''));
 };
 
-export const middleware = (request: NextRequest) => {
+export const proxy = (request: NextRequest) => {
     if (!isValidRoute(request.nextUrl.pathname)) {
         return NextResponse.redirect(new URL(routes.hockeyRoutes.home, request.url));
     }
