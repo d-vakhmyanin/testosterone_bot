@@ -6,7 +6,7 @@ import styles from './Team.module.css';
 
 export const TeamImage: React.FC<MatchT['homeTeam']> = ({ id, name }) => (
     <Image
-        src={`/teams/image_team_${id}.png`}
+        src={`/teams/image_team_${id}.svg`}
         className={styles.image}
         alt={name}
         width={48}
