@@ -23,6 +23,9 @@ type MatchesAction =
     | { type: 'ADD_BOTTOM_MATCHES'; payload: { matches: Match[]; hasMore: boolean } }
     | { type: 'SET_FULL_STATE'; payload: { matches: Match[]; hasPrev: boolean; hasNext: boolean } };
 
+const removeDuplicates = (matches: Match[]): Match[] =>
+    Array.from(new Map(matches.map((m) => [m.id, m])).values());
+
 export const matchesReducer = (state: MatchesState, action: MatchesAction): MatchesState => {
     switch (action.type) {
         case 'SET_LOADING':
@@ -30,14 +33,14 @@ export const matchesReducer = (state: MatchesState, action: MatchesAction): Matc
         case 'ADD_TOP_MATCHES':
             return {
                 ...state,
-                matches: [...action.payload.matches, ...state.matches],
+                matches: removeDuplicates([...action.payload.matches, ...state.matches]),
                 hasPrev: action.payload.hasMore,
                 isLoading: false,
             };
         case 'ADD_BOTTOM_MATCHES':
             return {
                 ...state,
-                matches: [...state.matches, ...action.payload.matches],
+                matches: removeDuplicates([...state.matches, ...action.payload.matches]),
                 hasNext: action.payload.hasMore,
                 isLoading: false,
             };
@@ -45,6 +48,7 @@ export const matchesReducer = (state: MatchesState, action: MatchesAction): Matc
             return {
                 ...state,
                 ...action.payload,
+                matches: removeDuplicates(action.payload.matches),
             };
         case 'SET_GLOBAL_LOADING':
             return {
@@ -54,7 +58,6 @@ export const matchesReducer = (state: MatchesState, action: MatchesAction): Matc
         case 'SET_FILTERS':
             return {
                 ...state,
-                isGlobalLoading: true,
                 filters: action.payload,
             };
         default:

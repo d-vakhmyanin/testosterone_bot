@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { DateRange } from 'react-day-picker';
 import { Team, TEAMS } from '@/app/utils/hockey/teams';
@@ -13,6 +13,23 @@ import { Calendar } from '../../Calendar/Calendar';
 import styles from './FiltersModal.module.css';
 import { IconDone } from '../../Icons/IconDone';
 
+type Filters = ReturnType<typeof useMatches>['state']['filters'];
+
+const stateToTeamsMap = (filters: Filters) =>
+    filters.activeTeams.reduce<Record<Team['id'], boolean>>((acc, cur) => {
+        acc[cur] = true;
+
+        return acc;
+    }, {});
+
+const stateToRange = (filters: Filters) => {
+    if (!filters.from && !filters.to) {
+        return undefined;
+    }
+
+    return { from: filters.from, to: filters.to };
+};
+
 type FiltersModalProps = {
     onClear?: () => void;
 };
@@ -24,21 +41,9 @@ export const FiltersModal: React.FC<FiltersModalProps> = ({ onClear }) => {
     const { state, setGlobalLoading } = useMatches();
 
     const [isOpen, setIsOpen] = useState(false);
-    const [activeTeamsMap, setActiveTeamsMap] = useState(() =>
-        state.filters.activeTeams.reduce<Record<Team['id'], boolean>>((acc, cur) => {
-            acc[cur] = true;
+    const [activeTeamsMap, setActiveTeamsMap] = useState(() => stateToTeamsMap(state.filters));
 
-            return acc;
-        }, {})
-    );
-
-    const [range, setRange] = useState<DateRange | undefined>(() => {
-        if (!state.filters.from && !state.filters.to) {
-            return undefined;
-        }
-
-        return { from: state.filters.from, to: state.filters.to };
-    });
+    const [range, setRange] = useState<DateRange | undefined>(() => stateToRange(state.filters));
 
     const clearDisabled = useMemo(() => {
         const hasActiveTeams = Object.keys(activeTeamsMap).length;
@@ -46,6 +51,11 @@ export const FiltersModal: React.FC<FiltersModalProps> = ({ onClear }) => {
 
         return !hasActiveTeams && !hasActiveRange;
     }, [activeTeamsMap, range]);
+
+    useEffect(() => {
+        setActiveTeamsMap(stateToTeamsMap(state.filters));
+        setRange(stateToRange(state.filters));
+    }, [state.filters]);
 
     const applyFilters = useCallback(
         (teams = activeTeamsMap, rangeArg: typeof range | null = range) => {

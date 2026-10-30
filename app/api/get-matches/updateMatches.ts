@@ -5,7 +5,7 @@ import { Match } from '@/app/utils/hockey/matches';
 import { loadMatches } from '@/app/server/utils/fs';
 import { isToday } from '@/app/server/utils/isToday';
 
-const getHtmlCalendar = () =>
+const getHtmlCalendar = (signal: AbortSignal) =>
     fetch(
         'https://www.championat.com/hockey/_superleague/tournament/7092/calendar/?error=missing_code&utm_auth=false',
         {
@@ -20,6 +20,7 @@ const getHtmlCalendar = () =>
             method: 'GET',
             mode: 'cors',
             credentials: 'omit',
+            signal,
         }
     ).then((res) => res.text());
 
@@ -43,7 +44,7 @@ type CurrentMatchesResponse = {
     };
 };
 
-const getCurrentMatches = (): Promise<CurrentMatchesResponse> => {
+const getCurrentMatches = (signal: AbortSignal): Promise<CurrentMatchesResponse> => {
     const url = `https://www.championat.com/stat/data/${
         new Date().toISOString().split('T')[0]
     }/hockey?error=missing_code&utm_auth=false`;
@@ -59,6 +60,7 @@ const getCurrentMatches = (): Promise<CurrentMatchesResponse> => {
         method: 'GET',
         mode: 'cors',
         credentials: 'omit',
+        signal,
     }).then((res) => res.json());
 };
 
@@ -140,14 +142,18 @@ export const updateMatches = async () => {
     }
 
     try {
-        const fs = await import('fs');
+        const signal = AbortSignal.timeout(3000);
+        const fsPromise = import('fs');
         // здесь только результаты завершённых матчей
-        const html = await getHtmlCalendar();
+        const htmlPromise = getHtmlCalendar(signal);
+        // здесь актуальные счета в том числе по идущим матчам
+        const resPromise = getCurrentMatches(signal);
+
+        const [fs, html, res] = await Promise.all([fsPromise, htmlPromise, resPromise]);
+
         const championatMatches = parseCalendarMatches(html);
         const currentMatches: typeof championatMatches = [];
 
-        // здесь актуальные счета в том числе по идущим матчам
-        const res = await getCurrentMatches();
         Object.values(res.matches.hockey.tournaments).forEach((tournament) => {
             tournament.matches.forEach((match) => {
                 const winType = (() => {

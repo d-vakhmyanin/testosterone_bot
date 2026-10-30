@@ -10,6 +10,8 @@ import { renderData } from './renderData';
 import { Sentinel } from './Sentinel';
 import { FiltersModal } from './FiltersModal/FiltersModal';
 
+const DUMMY = { height: '32px', flexShrink: 0 };
+
 export type MatchesListProps = {
     data: MatchT[];
     hasMoreTop: boolean;
@@ -111,11 +113,14 @@ export const MatchesList: React.FC<MatchesListProps> = ({
     }, [data, containerRef]);
 
     return (
-        <div className={styles.listContainer} ref={containerRef}>
+        <>
+            <div className={styles.listContainer} ref={containerRef}>
+                {hasMoreTop && <Sentinel isHidden={!isLoading} ref={topSentinelRef} />}
+                {renderData(data)}
+                {hasMoreBottom && <Sentinel isHidden={!isLoading} ref={bottomSentinelRef} />}
+                <div style={DUMMY} />
+            </div>
             <FiltersModal onClear={clear} />
-            {hasMoreTop && <Sentinel isHidden={!isLoading} ref={topSentinelRef} />}
-            {renderData(data)}
-            {hasMoreBottom && <Sentinel isHidden={!isLoading} ref={bottomSentinelRef} />}
-        </div>
+        </>
     );
 };
