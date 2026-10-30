@@ -51,6 +51,15 @@
     width: 100%;
 }
 
+.done_button {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--accent-color);
+}
+
 .header_right {
     display: flex;
     align-items: center;

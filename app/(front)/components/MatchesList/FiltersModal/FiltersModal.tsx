@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { DateRange } from 'react-day-picker';
 import { Team, TEAMS } from '@/app/utils/hockey/teams';
@@ -6,12 +6,12 @@ import { useMatches } from '@/app/(front)/context';
 
 import { Modal } from '../../Modal/Modal';
 import { IconFilters } from '../../Icons/IconFilters';
-import { BackButton } from '../../BackButton/BackButton';
 import { TeamImage } from '../../Team/Team';
 import { IconCross } from '../../Icons/IconCross';
 import { Calendar } from '../../Calendar/Calendar';
 
 import styles from './FiltersModal.module.css';
+import { IconDone } from '../../Icons/IconDone';
 
 type FiltersModalProps = {
     onClear?: () => void;
@@ -125,7 +125,10 @@ export const FiltersModal: React.FC<FiltersModalProps> = ({ onClear }) => {
                 onClose={closeModal}
             >
                 <div className={styles.header}>
-                    <BackButton onCLick={closeModal} />
+                    <div className={styles.done_button} onClick={closeModal}>
+                        <IconDone />
+                        Готово
+                    </div>
                     <div className={styles.header_right}>
                         <Calendar value={range} onChange={setRange} />
                         <button className={styles.close_btn} onClick={clearFilters} disabled={clearDisabled}>
