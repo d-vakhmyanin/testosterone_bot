@@ -1,11 +1,19 @@
 'use client';
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { usePathname } from 'next/navigation';
 
 export const useScrollRestorationRef = <T extends HTMLElement>() => {
     const ref = React.useRef<T>(null);
     const pathname = usePathname();
+
+    const clear = useCallback(() => {
+        if (ref.current) {
+            ref.current.scrollTop = 0;
+        }
+
+        sessionStorage.clear();
+    }, []);
 
     React.useLayoutEffect(() => {
         const container = ref.current;
@@ -28,7 +36,7 @@ export const useScrollRestorationRef = <T extends HTMLElement>() => {
             clearTimeout(timeoutId);
             timeoutId = setTimeout(() => {
                 sessionStorage.setItem(`scroll-${key}`, container.scrollTop.toString());
-            }, 0);
+            }, 20);
         };
 
         container.addEventListener('scroll', saveScrollPosition);
@@ -41,5 +49,6 @@ export const useScrollRestorationRef = <T extends HTMLElement>() => {
 
     return {
         ref,
+        clear,
     };
 };

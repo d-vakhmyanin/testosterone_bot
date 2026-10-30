@@ -27,7 +27,7 @@ export const MatchesList: React.FC<MatchesListProps> = ({
     loadMoreTop,
     loadMoreBottom,
 }) => {
-    const { ref: containerRef } = useScrollRestorationRef<HTMLDivElement>();
+    const { ref: containerRef, clear } = useScrollRestorationRef<HTMLDivElement>();
     const prevScroll = React.useRef<number>(null);
     const topSentinelRef = React.useRef(null);
     const bottomSentinelRef = React.useRef(null);
@@ -112,7 +112,7 @@ export const MatchesList: React.FC<MatchesListProps> = ({
 
     return (
         <div className={styles.listContainer} ref={containerRef}>
-            <FiltersModal />
+            <FiltersModal onClear={clear} />
             {hasMoreTop && <Sentinel isHidden={!isLoading} ref={topSentinelRef} />}
             {renderData(data)}
             {hasMoreBottom && <Sentinel isHidden={!isLoading} ref={bottomSentinelRef} />}

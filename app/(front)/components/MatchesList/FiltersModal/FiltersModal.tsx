@@ -13,7 +13,11 @@ import { Calendar } from '../../Calendar/Calendar';
 
 import styles from './FiltersModal.module.css';
 
-export const FiltersModal: React.FC = () => {
+type FiltersModalProps = {
+    onClear?: () => void;
+};
+
+export const FiltersModal: React.FC<FiltersModalProps> = ({ onClear }) => {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -92,7 +96,8 @@ export const FiltersModal: React.FC = () => {
 
     const applyEmptyFilters = useCallback(() => {
         applyFilters({}, null);
-    }, [applyFilters]);
+        onClear?.();
+    }, [applyFilters, onClear]);
 
     return (
         <>
