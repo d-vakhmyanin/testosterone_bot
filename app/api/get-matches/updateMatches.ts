@@ -154,8 +154,8 @@ export const updateMatches = async () => {
 
         const [fs, html, res] = await Promise.all([fsPromise, htmlPromise, resPromise]);
 
-        const championatMatches = parseCalendarMatches(html);
-        const currentMatches: typeof championatMatches = [];
+        const calendarMatches = parseCalendarMatches(html);
+        const currentMatches: typeof calendarMatches = [];
 
         Object.values(res.matches.hockey.tournaments).forEach((tournament) => {
             tournament.matches.forEach((match) => {
@@ -188,7 +188,7 @@ export const updateMatches = async () => {
             });
         });
 
-        const parsedMatches = [...currentMatches, ...championatMatches];
+        const parsedMatches = [...currentMatches, ...calendarMatches];
         const oldMatches = loadMatches();
 
         const newMatches = oldMatches.map((match) => {
