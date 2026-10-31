@@ -5,6 +5,14 @@ type SpinnerProps = {
     className?: string;
 };
 
+export const CenteredSpinner: React.FC<SpinnerProps> = (props) => {
+    return (
+        <div className={styles.spinner_container}>
+            <Spinner {...props} />
+        </div>
+    );
+};
+
 export const Spinner: React.FC<SpinnerProps> = ({ size = 64, className }) => {
     return (
         <div
