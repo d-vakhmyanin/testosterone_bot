@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Match as MatchT } from '@/app/utils/hockey/matches';
+import { MatchDetails, Match as MatchT } from '@/app/utils/hockey/matches';
 
 import styles from './MatchPage.module.css';
 
@@ -20,7 +20,14 @@ const periods = [
     { value: 'shootout', label: 'По буллитам' },
 ];
 
-export const MathPage: React.FC<MatchT> = (match) => {
+export type MathPageProps = {
+    match: MatchT;
+    details?: MatchDetails;
+    nextMatchId?: MatchT['id'];
+};
+
+export const MathPage: React.FC<MathPageProps> = (props) => {
+    const { match, details } = props;
     const { homeTeam, guestTeam, result, isFinished } = match;
     const {
         state,
@@ -33,62 +40,11 @@ export const MathPage: React.FC<MatchT> = (match) => {
         handleModalButtonClick,
         handleHomeSliderChange,
         handleGuestSliderChange,
-    } = useMatchPage(match);
+    } = useMatchPage(props);
 
-    return (
-        <div className={styles.container}>
-            <Modal isOpen={state.isSubmitted} onClose={closeModal} title="Cтавка сохранена" withConfetti>
-                <BetFC bet={state.bet} homeTeam={homeTeam} guestTeam={guestTeam} />
-                <Button className={styles.modalButton} onClick={handleModalButtonClick}>
-                    К следующему матчу
-                </Button>
-            </Modal>
-
-            <DateLabel date={match.date} />
-            <div className={styles.matchHeader}>
-                <Team {...homeTeam} />
-
-                <div className={styles.score}>
-                    <NumberSlider
-                        initialValue={hasStarted ? result?.homeScore : state.bet.homeScore}
-                        isDisabled={hasStarted}
-                        onChange={handleHomeSliderChange}
-                    />
-                    <span className={styles.scoreDivider}>:</span>
-                    <NumberSlider
-                        initialValue={hasStarted ? result?.guestScore : state.bet.guestScore}
-                        isDisabled={hasStarted}
-                        onChange={handleGuestSliderChange}
-                    />
-                    {hasStarted && !isFinished ? <div className={styles.liveBadge}>LIVE</div> : null}
-                </div>
-
-                <Team {...guestTeam} />
-            </div>
-
-            {hasStarted ? (
-                <div className={styles.matchStatus}>
-                    <h3>{isFinished ? 'Матч завершён' : 'Ставки сделаны, ставок больше нет'}</h3>
-                    {isFinished && result ? (
-                        <div className={styles.resultInfo}>
-                            {result.winType === 'regulation' && 'Основное время'}
-                            {result.winType === 'overtime' && 'Овертайм'}
-                            {result.winType === 'shootout' && 'Буллиты'}
-                        </div>
-                    ) : null}
-                    {state.isBetLoaded ? (
-                        <>
-                            <div>Ваша ставка:</div>
-                            <BetFC
-                                bet={state.bet}
-                                homeTeam={homeTeam}
-                                guestTeam={guestTeam}
-                                result={result}
-                            />
-                        </>
-                    ) : null}
-                </div>
-            ) : (
+    const renderContent = () => {
+        if (!hasStarted) {
+            return (
                 <>
                     <div>
                         Тотал
@@ -126,7 +82,72 @@ export const MathPage: React.FC<MatchT> = (match) => {
                         Сделать ставку
                     </Button>
                 </>
-            )}
+            );
+        }
+
+        const title = isFinished ? 'Матч завершён' : 'Ставки сделаны, ставок больше нет';
+
+        const winType = (() => {
+            if (result?.winType === 'regulation') {
+                return 'Основное время';
+            } else if (result?.winType === 'overtime') {
+                return 'Овертайм';
+            } else if (result?.winType === 'shootout') {
+                return 'Буллиты';
+            }
+
+            return null;
+        })();
+
+        return (
+            <div className={styles.matchStatus}>
+                <h3>{title}</h3>
+                {isFinished && result ? <div className={styles.resultInfo}>{winType}</div> : null}
+                {state.isBetLoaded ? (
+                    <>
+                        <div>Ваша ставка:</div>
+                        <BetFC bet={state.bet} homeTeam={homeTeam} guestTeam={guestTeam} result={result} />
+                    </>
+                ) : null}
+            </div>
+        );
+    };
+
+    console.log({ match, details });
+
+    return (
+        <div className={styles.container}>
+            <DateLabel date={match.date} />
+
+            <div className={styles.matchHeader}>
+                <Team {...homeTeam} />
+                <div className={styles.score}>
+                    <NumberSlider
+                        initialValue={hasStarted ? result?.homeScore : state.bet.homeScore}
+                        isDisabled={hasStarted}
+                        onChange={handleHomeSliderChange}
+                    />
+                    <span className={styles.scoreDivider}>:</span>
+                    <NumberSlider
+                        initialValue={hasStarted ? result?.guestScore : state.bet.guestScore}
+                        isDisabled={hasStarted}
+                        onChange={handleGuestSliderChange}
+                    />
+                    {hasStarted && !isFinished ? <div className={styles.liveBadge}>LIVE</div> : null}
+                </div>
+                <Team {...guestTeam} />
+            </div>
+
+            {renderContent()}
+
+            <Modal isOpen={state.isSubmitted} onClose={closeModal} title="Cтавка сохранена" withConfetti>
+                <BetFC bet={state.bet} homeTeam={homeTeam} guestTeam={guestTeam} />
+                {props.nextMatchId ? (
+                    <Button className={styles.modalButton} onClick={handleModalButtonClick}>
+                        К следующему матчу
+                    </Button>
+                ) : null}
+            </Modal>
         </div>
     );
 };

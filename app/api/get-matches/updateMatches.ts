@@ -37,6 +37,7 @@ type CurrentMatchesResponse = {
                         status: { label: string; name: string };
                         result?: { detailed: { goal1: number; goal2: number; extra?: string } };
                         score?: { totalHome: number; totalAway: number; suffix?: string };
+                        link?: string;
                     }[];
                 };
             };
@@ -64,7 +65,7 @@ const getCurrentMatches = (signal: AbortSignal): Promise<CurrentMatchesResponse>
     }).then((res) => res.json());
 };
 
-type ParsedMatch = Pick<Match, 'date' | 'isFinished' | 'result'> & {
+type ParsedMatch = Pick<Match, 'date' | 'isFinished' | 'result' | 'externalLink'> & {
     homeTeam: ShortTeam;
     guestTeam: ShortTeam;
 };
@@ -79,6 +80,7 @@ const parseCalendarMatches = (html: string): ParsedMatch[] => {
         const teamElements = row.querySelectorAll('.table-item__name');
         const scoreElement = row.querySelector('.stat-results__count-main');
         const winTypeElement = row.querySelector('.stat-results__count-ext');
+        const externalLink = row.querySelector('a[href*="/match/"]')?.getAttribute('href');
 
         const dateText = dateElement?.textContent.trim();
         const homeTeam = teamElements[0]?.textContent.trim();
@@ -127,6 +129,7 @@ const parseCalendarMatches = (html: string): ParsedMatch[] => {
             guestTeam: { name: awayTeam },
             date: timestamp,
             isFinished,
+            externalLink,
             result: { homeScore, guestScore, winType },
         });
     }
@@ -175,6 +178,7 @@ export const updateMatches = async () => {
                     homeTeam: { name: match.teams[0]?.name },
                     guestTeam: { name: match.teams[1]?.name },
                     isFinished: match.status?.name === 'Окончен' || match.status?.label === 'fin',
+                    externalLink: match.link,
                     result: {
                         homeScore: match.score?.totalHome || match.result?.detailed?.goal1 || 0,
                         guestScore: match.score?.totalAway || match.result?.detailed?.goal2 || 0,
@@ -184,11 +188,11 @@ export const updateMatches = async () => {
             });
         });
 
-        const parsedMatches = [...championatMatches, ...currentMatches];
+        const parsedMatches = [...currentMatches, ...championatMatches];
         const oldMatches = loadMatches();
 
         const newMatches = oldMatches.map((match) => {
-            if (match.isFinished && !isToday(match.date)) {
+            if (match.externalLink && match.isFinished && !isToday(match.date)) {
                 return match;
             }
 
@@ -211,6 +215,7 @@ export const updateMatches = async () => {
                 ...match,
                 isFinished: parsedMatch.isFinished,
                 result: parsedMatch.result,
+                externalLink: parsedMatch.externalLink,
             };
         });
 

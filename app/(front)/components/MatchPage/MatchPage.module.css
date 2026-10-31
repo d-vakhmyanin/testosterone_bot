@@ -1,7 +1,5 @@
 .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+    padding: 16px;
 }
 
 .modalButton {
@@ -13,8 +11,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
-    padding: 20px;
+    margin-bottom: 32px;
+    padding: 16px;
     border-radius: 8px;
 }
 

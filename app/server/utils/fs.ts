@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { Match } from '@/app/utils/hockey/matches';
+import { Match, MatchDetails } from '@/app/utils/hockey/matches';
 
 import { BetsData, ChatData } from '../types';
 
@@ -77,3 +77,21 @@ export const saveBetsData = (userId: number, data: BetsData) => {
 
 export const loadMatches = (): Match[] =>
     JSON.parse(fs.readFileSync('app/utils/hockey/matches.json', 'utf-8'));
+
+export const loadMatchDetails = (matchId: Match['id']): MatchDetails | null => {
+    const { filePath } = getPaths(`match_details/${matchId}.json`);
+
+    try {
+        return JSON.parse(loadData(filePath));
+    } catch (err) {
+        console.error('Ошибка чтения файла:', err);
+    }
+
+    return null;
+};
+
+export const saveMatchDetails = (matchId: Match['id'], data: MatchDetails) => {
+    const { dirPath, filePath } = getPaths(`match_details/${matchId}.json`);
+
+    saveData(filePath, dirPath, JSON.stringify(data));
+};
