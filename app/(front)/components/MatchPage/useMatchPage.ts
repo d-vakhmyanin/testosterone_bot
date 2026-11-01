@@ -43,14 +43,23 @@ export const useMatchPage = ({ match, nextMatchId }: MathPageProps) => {
             dispatch({ type: 'SET_CURRENT_TIME', payload: Date.now() });
         }, 30000);
 
+        const handle = (e: Event) => {
+            if (!hasStarted) {
+                e.preventDefault();
+            }
+        };
+
+        document.addEventListener('touchmove', handle, { passive: false });
+
         if (window.Telegram?.WebApp?.disableVerticalSwipes) {
             window.Telegram.WebApp.disableVerticalSwipes();
         }
 
         return () => {
+            document.removeEventListener('touchmove', handle);
             clearInterval(timer);
         };
-    }, []);
+    }, [hasStarted]);
 
     React.useEffect(() => {
         if (typeof window === 'undefined') {
