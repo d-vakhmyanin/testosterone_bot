@@ -9,12 +9,15 @@ import { matchPageInitialState, matchPagereducer } from './matchReducer';
 import { hockeyRoutes } from '../../utils/routes';
 import { MathPageProps } from './MatchPage';
 
-export const useMatchPage = ({ match, nextMatchId }: MathPageProps) => {
+export const useMatchPage = ({ match, details, nextMatchId }: MathPageProps) => {
     const { id, date } = match;
     const [state, dispatch] = React.useReducer(matchPagereducer, matchPageInitialState);
     const router = useRouter();
 
-    const hasStarted = React.useMemo(() => state.currentTime >= date, [state.currentTime, date]);
+    const hasStarted = React.useMemo(
+        () => state.currentTime >= date || (details?.events.length || 0) > 0,
+        [state.currentTime, details, date]
+    );
 
     const isButtonDisabled = React.useMemo(
         () =>
