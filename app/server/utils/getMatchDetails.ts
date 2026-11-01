@@ -44,6 +44,23 @@ const parseMatchDetails = (html: string): Partial<MatchDetails> | undefined => {
         guestTeam: [],
     };
 
+    const goalieTimes = new Map<string, string>();
+    const goaliesH3 = [...root.querySelectorAll('h3.tournament-title')].find(
+        (el) => el.textContent.trim().toLowerCase() === 'вратари'
+    );
+
+    for (const slide of goaliesH3?.parentNode?.querySelectorAll('.swiper-slide') ?? []) {
+        for (const tr of slide.querySelectorAll('tbody tr')) {
+            const name = tr.querySelector('.table-item__name')?.textContent.trim();
+            const time = tr.querySelector('td._right._bold')?.textContent.trim();
+
+            if (name && time) {
+                const prev = goalieTimes.get(name);
+                goalieTimes.set(name, prev ? `${prev}, ${time}` : time);
+            }
+        }
+    }
+
     const statsTab = root.querySelector('div.match-tabs__content[data-type="stats"]');
 
     if (statsTab) {
@@ -124,19 +141,20 @@ const parseMatchDetails = (html: string): Partial<MatchDetails> | undefined => {
 
                 const playersOf = (slide: HTMLElement | undefined) =>
                     [...(slide?.querySelectorAll('tbody tr') ?? [])].flatMap((tr) => {
-                        const name = tr.querySelector('.table-item__name')?.textContent.trim() ?? '';
+                        const name = tr.querySelector('.table-item__name')?.textContent.trim();
 
                         if (!name) {
                             return [];
                         }
 
-                        return [
-                            {
-                                number: tr.querySelector('td._num')?.textContent.trim() ?? '',
-                                position: tr.querySelector('.table-item__amplua')?.textContent.trim() ?? '',
-                                name,
-                            },
-                        ];
+                        const entry = {
+                            number: tr.querySelector('td._num')?.textContent.trim() ?? '',
+                            position: tr.querySelector('.table-item__amplua')?.textContent.trim() ?? '',
+                            name,
+                        };
+                        const time = goalieTimes.get(name);
+
+                        return [time ? { ...entry, time } : entry];
                     });
 
                 players.homeTeam.push(...playersOf(slides[0]));

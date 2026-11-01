@@ -37,6 +37,7 @@ type PLayer = {
     name: string;
     position: string;
     number: string;
+    time?: string;
 };
 
 export type MatchDetails = {
