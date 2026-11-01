@@ -13,6 +13,7 @@ import { useMatchPage } from './useMatchPage';
 import { NumberInput } from '../NumberInput/NumberInput';
 import { NumberSlider } from '../NumberSlider/NumberSlider';
 import { DateLabel } from '../DateLabel/DateLabel';
+import { DetailsTabs } from '../DetailsTabs/DetailsTabs';
 
 const periods = [
     { value: 'regulation', label: 'В основное время' },
@@ -33,6 +34,7 @@ export const MathPage: React.FC<MathPageProps> = (props) => {
         state,
         hasStarted,
         isButtonDisabled,
+        winType,
         closeModal,
         handleBetSubmit,
         handleTotalChange,
@@ -85,56 +87,53 @@ export const MathPage: React.FC<MathPageProps> = (props) => {
             );
         }
 
-        const title = isFinished ? 'Матч завершён' : 'Ставки сделаны, ставок больше нет';
-
-        const winType = (() => {
-            if (result?.winType === 'regulation') {
-                return 'Основное время';
-            } else if (result?.winType === 'overtime') {
-                return 'Овертайм';
-            } else if (result?.winType === 'shootout') {
-                return 'Буллиты';
-            }
-
-            return null;
-        })();
-
         return (
-            <div className={styles.matchStatus}>
-                <h3>{title}</h3>
-                {isFinished && result ? <div className={styles.resultInfo}>{winType}</div> : null}
-                {state.isBetLoaded ? (
-                    <>
-                        <div>Ваша ставка:</div>
-                        <BetFC bet={state.bet} homeTeam={homeTeam} guestTeam={guestTeam} result={result} />
-                    </>
-                ) : null}
-            </div>
+            <DetailsTabs
+                homeTeam={homeTeam}
+                guestTeam={guestTeam}
+                details={details}
+                bet={state.isBetLoaded ? { bet: state.bet, homeTeam, guestTeam, result } : undefined}
+            />
         );
     };
-
-    console.log({ match, details });
 
     return (
         <div className={styles.container}>
             <DateLabel date={match.date} />
+            {hasStarted ? (
+                <div className={`${styles.liveBadge} ${isFinished ? '' : styles.warning}`}>
+                    {details?.state || 'LIVE'}
+                </div>
+            ) : null}
 
             <div className={styles.matchHeader}>
                 <Team {...homeTeam} />
-                <div className={styles.score}>
-                    <NumberSlider
-                        initialValue={hasStarted ? result?.homeScore : state.bet.homeScore}
-                        isDisabled={hasStarted}
-                        onChange={handleHomeSliderChange}
-                    />
-                    <span className={styles.scoreDivider}>:</span>
-                    <NumberSlider
-                        initialValue={hasStarted ? result?.guestScore : state.bet.guestScore}
-                        isDisabled={hasStarted}
-                        onChange={handleGuestSliderChange}
-                    />
-                    {hasStarted && !isFinished ? <div className={styles.liveBadge}>LIVE</div> : null}
+
+                <div className={styles.scoreContainer}>
+                    <div className={styles.score}>
+                        <NumberSlider
+                            initialValue={
+                                hasStarted
+                                    ? details?.score?.homeScore || result?.homeScore
+                                    : state.bet.homeScore
+                            }
+                            isDisabled={hasStarted}
+                            onChange={handleHomeSliderChange}
+                        />
+                        <span className={styles.scoreDivider}>:</span>
+                        <NumberSlider
+                            initialValue={
+                                hasStarted
+                                    ? details?.score?.guestScore || result?.guestScore
+                                    : state.bet.guestScore
+                            }
+                            isDisabled={hasStarted}
+                            onChange={handleGuestSliderChange}
+                        />
+                    </div>
+                    {isFinished && result ? <div className={styles.resultInfo}>{winType}</div> : null}
                 </div>
+
                 <Team {...guestTeam} />
             </div>
 

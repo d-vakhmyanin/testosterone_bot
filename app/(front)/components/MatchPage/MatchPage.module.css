@@ -1,5 +1,10 @@
 .container {
-    padding: 16px;
+    width: 100%;
+    padding: 16px 0;
+    max-height: calc(100% - 32px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    mask-image: linear-gradient(to bottom, transparent 0%, var(--background) 8px, var(--background) 100%);
 }
 
 .modalButton {
@@ -11,9 +16,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 32px;
-    padding: 16px;
+    padding: 16px 0;
     border-radius: 8px;
+    margin-bottom: 16px;
 }
 
 .bet {
@@ -28,7 +33,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    flex: 1;
     position: relative;
 }
 
@@ -38,23 +42,27 @@
 }
 
 .liveBadge {
-    position: absolute;
-    top: -20px;
-    background-color: #e53935;
-    color: white;
+    width: fit-content;
+    margin: 16px auto 0;
+    color: var(--text-color);
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 0.8rem;
     font-weight: bold;
 }
 
-.matchStatus {
-    text-align: center;
+.warning {
+    background-color: var(--warning);
+}
+
+.scoreContainer {
+    flex: 1;
 }
 
 .resultInfo {
-    margin: 12px 0;
-    font-style: italic;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .radio {

@@ -22,7 +22,7 @@ type Stat = { name: string; homeTeam: number; guestTeam: number };
 type Event =
     | { type: 'period'; number: number }
     | { type: 'penalty'; team: 'home' | 'guest'; date: Date; player: string; reason: string; time: string }
-    | { type: 'penaltyShot'; team: 'home' | 'guest'; date: Date; result: string }
+    | { type: 'penaltyShot'; team: 'home' | 'guest'; date: Date; player: string; result: string }
     | { type: 'timeout'; team: 'home' | 'guest'; date: Date }
     | {
           type: 'goal';

@@ -26,19 +26,28 @@ export const useMatchPage = ({ match, nextMatchId }: MathPageProps) => {
         [state.bet]
     );
 
+    const winType = React.useMemo(() => {
+        if (match.result?.winType === 'regulation') {
+            return 'Основное время';
+        } else if (match.result?.winType === 'overtime') {
+            return 'Овертайм';
+        } else if (match.result?.winType === 'shootout') {
+            return 'Буллиты';
+        }
+
+        return '';
+    }, [match.result]);
+
     React.useLayoutEffect(() => {
         const timer = setInterval(() => {
             dispatch({ type: 'SET_CURRENT_TIME', payload: Date.now() });
         }, 30000);
 
-        const handle = (e: Event) => {
-            e.preventDefault();
-        };
-
-        document.addEventListener('touchmove', handle, { passive: false });
+        if (window.Telegram?.WebApp?.disableVerticalSwipes) {
+            window.Telegram.WebApp.disableVerticalSwipes();
+        }
 
         return () => {
-            document.removeEventListener('touchmove', handle);
             clearInterval(timer);
         };
     }, []);
@@ -108,6 +117,7 @@ export const useMatchPage = ({ match, nextMatchId }: MathPageProps) => {
         state,
         hasStarted,
         isButtonDisabled,
+        winType,
         closeModal,
         handleBetSubmit,
         handleTotalChange,

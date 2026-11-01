@@ -1,0 +1,36 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.tabs_container {
+    padding: 0 8px;
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex-wrap: nowrap;
+    touch-action: pan-x;
+    mask-image: linear-gradient(to right, transparent 0%, var(--background) 8px, var(--background) calc(100% - 8px), transparent 100%);
+}
+
+.tab {
+    flex-shrink: 0;
+    cursor: pointer;
+    padding: 8px;
+    background: transparent;
+    outline: none;
+    border: 0;
+    background-color: var(--background-secondary);
+    color: var(--text-color);
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.active {
+    background-color: var(--accent-color);
+}

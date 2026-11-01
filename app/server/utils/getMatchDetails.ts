@@ -79,20 +79,10 @@ const parseMatchDetails = (html: string): Partial<MatchDetails> | undefined => {
                         type: 'penaltyShot',
                         team: teamOf(row),
                         date: hasTime ? toDate(row) : new Date(base.getTime() + 65 * 60 * 1000),
+                        player:
+                            row.querySelector('.match-stat__info a[href*="/players/"]')?.textContent.trim() ??
+                            '',
                         result: isGoal ? 'Гол' : add?.textContent.trim() ?? 'Гола нет',
-                    });
-                }
-            } else if (title.includes('гол')) {
-                for (const row of rows) {
-                    events.push({
-                        type: 'goal',
-                        team: teamOf(row),
-                        date: toDate(row),
-                        author: row.querySelector('.match-stat__player')?.textContent.trim() ?? '',
-                        assistants: row
-                            .querySelectorAll('.match-stat__player2')
-                            .map((a) => a.textContent.trim()),
-                        players: row.querySelector('.match-stat__desc')?.textContent.trim() ?? '',
                     });
                 }
             } else if (title.includes('статистик')) {
@@ -151,12 +141,45 @@ const parseMatchDetails = (html: string): Partial<MatchDetails> | undefined => {
 
                 players.homeTeam.push(...playersOf(slides[0]));
                 players.guestTeam.push(...playersOf(slides[1]));
+            } else if (title.includes('тайм')) {
+                for (const row of rows) {
+                    events.push({
+                        type: 'timeout',
+                        team: teamOf(row),
+                        date: toDate(row),
+                    });
+                }
+            } else if (title.includes('гол')) {
+                for (const row of rows) {
+                    events.push({
+                        type: 'goal',
+                        team: teamOf(row),
+                        date: toDate(row),
+                        author: row.querySelector('.match-stat__player')?.textContent.trim() ?? '',
+                        assistants: row
+                            .querySelectorAll('.match-stat__player2')
+                            .map((a) => a.textContent.trim()),
+                        players: row.querySelector('.match-stat__desc')?.textContent.trim() ?? '',
+                    });
+                }
             }
         }
     }
 
     const timeOf = (e: MatchDetails['events'][number]): number => ('date' in e ? e.date.getTime() : 0);
-    events.sort((a, b) => timeOf(a) - timeOf(b));
+    const priority = (e: MatchDetails['events'][number]): number => {
+        if (e.type === 'goal') return 3;
+        if (e.type === 'penaltyShot') return 2;
+        if (e.type === 'penalty') return 1;
+
+        return 0;
+    };
+
+    events.sort((a, b) => {
+        const d = timeOf(a) - timeOf(b);
+        if (d !== 0) return d;
+        return priority(a) - priority(b);
+    });
 
     const withPeriods: typeof events = [];
     let lastPeriod = 0;
@@ -177,7 +200,7 @@ const parseMatchDetails = (html: string): Partial<MatchDetails> | undefined => {
     return { state, events: withPeriods, stats, players, score };
 };
 
-const THREE_HOURS = 3 * 1000 * 60 * 60;
+const ONE_DAY = 24 * 1000 * 60 * 60;
 
 export const getMatchDetails = async (match?: Match): Promise<MatchDetails | undefined> => {
     if (!match) {
@@ -186,7 +209,7 @@ export const getMatchDetails = async (match?: Match): Promise<MatchDetails | und
 
     const savedDetails = loadMatchDetails(match.id);
 
-    if (savedDetails && savedDetails.state === 'Окончен' && Math.abs(Date.now() - match.date) > THREE_HOURS) {
+    if (savedDetails && savedDetails.state === 'Окончен' && Math.abs(Date.now() - match.date) > ONE_DAY) {
         return savedDetails;
     }
 
