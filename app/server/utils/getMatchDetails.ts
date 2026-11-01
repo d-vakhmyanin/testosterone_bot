@@ -195,7 +195,7 @@ const parseMatchDetails = (html: string): Partial<MatchDetails> | undefined => {
     const priority = (e: MatchDetails['events'][number]): number => {
         if (e.type === 'goal') return 3;
         if (e.type === 'penaltyShot') return 2;
-        if (e.type === 'penalty') return 1;
+        if (e.type === 'timeout') return 1;
 
         return 0;
     };
