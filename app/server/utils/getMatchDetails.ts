@@ -29,9 +29,16 @@ const parseMatchDetails = (html: string): Partial<MatchDetails> | undefined => {
     base.setHours(0, 0, 0, 0);
 
     const toDate = (row: HTMLElement): Date => {
-        const m = /(\d{1,2}):(\d{2})/.exec(row.querySelector('.match-stat__main-value')?.textContent ?? '');
-
-        return m ? new Date(base.getTime() + (+m[1] * 60 + +m[2]) * 1000) : base;
+        const text = row.querySelector('.match-stat__main-value')?.textContent ?? '';
+        const full = /(\d{1,2}):(\d{2})/.exec(text);
+        if (full) {
+            return new Date(base.getTime() + (+full[1] * 60 + +full[2]) * 1000);
+        }
+        const mins = /(\d{1,2})'/.exec(text);
+        if (mins) {
+            return new Date(base.getTime() + +mins[1] * 60 * 1000);
+        }
+        return base;
     };
 
     const teamOf = (row: HTMLElement) =>
